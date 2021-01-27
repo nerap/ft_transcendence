@@ -24,6 +24,8 @@ default: &default
 development:
   <<: *default
   database: server_development
+  username: postgres
+  password: root
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -58,8 +60,10 @@ development:
 test:
   <<: *default
   database: server_test
+  username: postgres
+  password: root
 
-# As with config/credentials.yml, you never want to store sensitive information,
+ # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
 #
@@ -82,5 +86,5 @@ test:
 production:
   <<: *default
   database: server_production
-  username: server
-  password: <%= ENV['SERVER_DATABASE_PASSWORD'] %>
+  username: postgres
+  password: root
