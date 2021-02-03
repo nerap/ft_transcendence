@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.7'
 
 gem 'rails-backbone'
 
+# For users management
 gem 'devise'
 
 # Use Active Storage variant
