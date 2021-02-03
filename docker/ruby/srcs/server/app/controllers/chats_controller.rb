@@ -24,12 +24,11 @@ class ChatsController < ApplicationController
   # POST /chats or /chats.json
   def create
     @chat = Chat.new(chat_params)
-
     respond_to do |format|
       if @chat.save
-        ActionCable.server.broadcast 'room_channel', content: @chat
-        # format.html { redirect_to @chat, notice: "Chat was successfully created." }
-        # format.json { render :show, status: :created, location: @chat }
+        ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username)
+        format.html { redirect_to @chat, notice: "Chat was successfully created." }
+        format.json { render :show, status: :created, location: @chat }
         format.js
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -68,6 +67,6 @@ class ChatsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def chat_params
-      params.require(:chat).permit(:message)
+      params.require(:chat).permit(:message, :user_id)
     end
 end
