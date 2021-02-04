@@ -1,4 +1,4 @@
-FROM ruby:2.7.1
+FROM ruby:2.5.1
 MAINTAINER "racohen"
 
 COPY srcs/ /data/
