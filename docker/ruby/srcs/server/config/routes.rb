@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :chatrooms
   resources :chats
   get 'users/index'
   devise_for :users
@@ -6,6 +7,6 @@ Rails.application.routes.draw do
   root "home#index"
   get "home", to: "home#index"
   match '/users',   to: 'users#index',   via: 'get'
-  get "chats/index"
+  get "chatrooms/index"
   # root 'chats#index'
 end

@@ -1,0 +1,17 @@
+<div class="mb-3">
+  <%= link_to new_chatroom_path, class: 'btn btn-primary' do %>
+    Create a chatroom
+  <% end %>
+</div>
+
+<% if @chatrooms.present? %>
+  <nav class="nav flex-column">
+    <% @chatrooms.each do |chatroom| %>
+      <%= link_to chatroom.name, chatroom_path(chatroom), class: 'nav-link chatroom-nav-link' %>
+    <% end %>
+  </nav>
+<% else %>
+  <div class="text-muted">
+    There are no chatrooms
+  </div>
+<% end %>

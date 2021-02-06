@@ -1,4 +1,5 @@
 class ChatsController < ApplicationController
+  before_action :load_entities
   before_action :set_chat, only: %i[ show edit update destroy ]
   before_action :authenticate_user!, only: [:index]
 
@@ -23,7 +24,7 @@ class ChatsController < ApplicationController
 
   # POST /chats or /chats.json
   def create
-    @chat = Chat.new(chat_params)
+    @chat = Chat.create(chat_params)
     respond_to do |format|
       if @chat.save
         ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username)
@@ -65,8 +66,12 @@ class ChatsController < ApplicationController
       @chat = Chat.find(params[:id])
     end
 
+    def load_entities
+      @chatroom = Chatroom.find params.dig(:chat, :chatroom_id)
+    end
+
     # Only allow a list of trusted parameters through.
     def chat_params
-      params.require(:chat).permit(:message, :user_id)
+      params.require(:chat).permit(:message, :user_id, :chatroom_id)
     end
 end
