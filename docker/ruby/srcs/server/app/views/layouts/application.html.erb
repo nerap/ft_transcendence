@@ -8,10 +8,17 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag 'icon.ico' %>
   </head>
 
   <body>
-	  <h1>Salut</h1>
-    <%= yield %>
+	  <div class="container">
+      <div class="row">
+        <div>
+          <%= render 'layouts/navbar'%>
+          <%= yield %>
+          </div>
+      </div>
+    </div>
   </body>
 </html>

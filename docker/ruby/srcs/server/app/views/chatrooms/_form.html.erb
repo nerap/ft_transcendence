@@ -1,0 +1,7 @@
+<%= form_with(model: @chatroom, remote: true, local: false) do |form| %>
+    <div class="field">
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+    </div>
+    <%= form.submit "Save", class: 'btn btn-success' %>
+<% end %>
