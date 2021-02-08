@@ -11,17 +11,11 @@
     </div>
   <% end %>
 
-  <% @chats.each do |chat| %>
-  <p><div class="usr"><%= chat.user.username %>:</div><br/>
-    <div class="msg"><%= chat.message %></div>
-  </p><br/>
-  <% end %>
-  <div id="new_message" ></div>
-
   <div class="field">
     <%= form.label :message %>
     <%= form.text_field :message %>
     <%= form.hidden_field :user_id, value: current_user.try(:id) %>
+    <%= form.hidden_field :chatroom_id, as: :hidden %>
   </div>
 
   <div class="actions">

@@ -1,38 +1,45 @@
-<h1>
-  <%= @chatroom.name %>
-</h1>
-<%= render 'chatrooms' %>
+<div id="main">
+    <h1>
+        <%= @chatroom.name %>
+    </h1>
 
-<% @chats.each do |chat| %>
-  <p><div class="usr"><%= chat.user.username %>:</div><br/>
-    <div class="msg"><%= chat.message %></div>
-  </p><br/>
-<% end %>
-<div id="new_message" ></div>
+    <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %> | 
+    <%= link_to 'Back', chatrooms_path %>
 
-<%= form_with(model: @chat, remote: true, local: false) do |form| %>
-  <% if @chat.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h2>
+    <div>
+        <div id="messages">
+            <% @chats.each do |chat| %>
+                <% if current_user == chat.user %>
+                    <p class="sent"><%= chat.message %></p><br/>
+                <% else %>
+                    <p class="received"><%= chat.message %></p><br/>
+                <% end %>
+            <% end %>
+        </div>
 
-      <ul>
-        <% @chat.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <div id="send_message">
+            <%= form_with(model: @chat, remote: true, local: false) do |form| %>
+              <% if @chat.errors.any? %>
+                <div id="error_explanation">
+                  <h2><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h2>
+
+                  <ul>
+                    <% @chat.errors.each do |error| %>
+                      <li><%= error.full_message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <%#= form.label :message %>
+              <%= form.text_field :message, value: nil, placeholder: 'New message...', class: 'field', id: 'field', required: true %>
+              <%= form.hidden_field :user_id, value: current_user.try(:id) %>
+
+              <%= form.submit "Send message", class: 'button' %>
+
+              <%= form.hidden_field :chatroom_id, as: :hidden %>
+              <% #hidden fild for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
+            <% end %>
+        </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :message %>
-    <%= form.text_field :message %>
-    <%= form.hidden_field :user_id, value: current_user.try(:id) %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Send message" %>
-  </div>
-
-  <%= form.hidden_field :chatroom_id, as: :hidden %>
-  <% #hidden fild for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
-<% end %>
+</div>

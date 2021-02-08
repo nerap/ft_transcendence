@@ -39,6 +39,7 @@ class ChatroomsController < ApplicationController
 
     def destroy
         @chatroom.destroy
+        render :index
     end
 
     protected

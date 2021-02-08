@@ -1,6 +1,6 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("RoomChannel", {
+const roomChannel = consumer.subscriptions.create("RoomChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
   },
@@ -10,18 +10,13 @@ consumer.subscriptions.create("RoomChannel", {
   },
 
   received(data) {
-    var node = document.createElement("P"); // Create a <p> element
-
-      var usernode = document.createTextNode(data.user);
-      var t = document.createTextNode(": ");
-      var textnode = document.createTextNode(data.content.message); 
-
-      node.appendChild(usernode);
-      node.appendChild(t);
-      node.appendChild(textnode); 
-
-      document.getElementById("new_message").appendChild(node);
-    document.getElementById('chat_message').value= ''
-    // Called when there's incoming data on the websocket for this channel
+    if (data.content.message) {
+      $('#messages').append('<p class="sent">' + data.content.message + '</p>')
+      $('#field').val('')
+    }
+    var chatHistory = document.getElementById("messages");
+    chatHistory.scrollTop = chatHistory.scrollHeight;
   }
 });
+
+export default roomChannel;
