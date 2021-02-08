@@ -1029,3 +1029,78 @@ Processing by Rails::WelcomeController#index as */*
 Completed 200 OK in 91ms (Views: 83.8ms | ActiveRecord: 0.0ms | Allocations: 344)
 
 
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_try_advisory_lock(4709995827031202925)[0m
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(4709995827031202925)[0m
+  [1m[35m (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:14:30 +0100
+  [1m[35m (2.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 40.2ms | Allocations: 444)
+Completed 200 OK in 147ms (Views: 79.0ms | ActiveRecord: 0.0ms | Allocations: 3697)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:15:01 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 46.7ms | Allocations: 214)
+Completed 200 OK in 77ms (Views: 63.8ms | ActiveRecord: 0.0ms | Allocations: 1219)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:15:31 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.4ms | Allocations: 43)
+Completed 200 OK in 5ms (Views: 3.9ms | ActiveRecord: 0.0ms | Allocations: 350)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:16:01 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.3ms | Allocations: 43)
+Completed 200 OK in 3ms (Views: 2.3ms | ActiveRecord: 0.0ms | Allocations: 347)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:16:32 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.4ms | Allocations: 43)
+Completed 200 OK in 2ms (Views: 1.8ms | ActiveRecord: 0.0ms | Allocations: 347)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:17:02 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.6ms | Allocations: 42)
+Completed 200 OK in 5ms (Views: 3.5ms | ActiveRecord: 0.0ms | Allocations: 342)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:17:32 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.5ms | Allocations: 42)
+Completed 200 OK in 3ms (Views: 2.4ms | ActiveRecord: 0.0ms | Allocations: 342)
+
+
+Started GET "/" for 127.0.0.1 at 2021-02-08 15:18:03 +0100
+Processing by Rails::WelcomeController#index as */*
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.8ms | Allocations: 42)
+Completed 200 OK in 8ms (Views: 4.4ms | ActiveRecord: 0.0ms | Allocations: 342)
+
+
+Started GET "/homes" for 172.18.0.1 at 2021-02-08 15:18:09 +0100
+Cannot render console from 172.18.0.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+ActionController::RoutingError (No route matches [GET] "/homes"):
+  
+Started GET "/" for 172.18.0.1 at 2021-02-08 15:18:13 +0100
+Cannot render console from 172.18.0.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /usr/local/bundle/gems/railties-6.1.1/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.4ms | Allocations: 42)
+Completed 200 OK in 6ms (Views: 3.5ms | ActiveRecord: 0.0ms | Allocations: 574)
+
+
