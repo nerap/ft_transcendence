@@ -1,0 +1,41 @@
+a faire pour transition mon ordi -> docker:
+changer les commentaires dans config/database.yml
+changer ruby version a 2.5.1 (ou 2.7.1) dans le gemfile
+
+Pour l'erreur "You must use Bundler 2 or greater with this lockfile" :
+gem install bundler -v 1.17.3
+gem uninstall bundler -v 2.2.6
+bundle update --bundler
+
+ou
+
+rm Gemfile.lock
+bundle _1.17.3_ install
+
+utiliser specifique version bundler:
+bundle _2.2.8_ -v
+
+lister les versions de bundle disponibles:
+gem list bundle -a
+
+Creer le chat:
+https://dev.to/timnans/simple-rails-6-chat-application-with-action-cable-1b6m
+https://iridakos.com/programming/2019/04/04/creating-chat-application-rails-websockets
+https://dev.to/nkemjiks/simple-chatroom-with-rails-6-and-actioncable-3bc3
+
+bin de postgres:
+/usr/lib/postgresql/12/bin/postgres
+
+pbs postgresql:
+https://stackoverflow.com/questions/60306594/failed-to-start-postgresql-cluster-10-main-when-booting
+
+POUR JQUERY:
+gem "jquery-rails"
+yarn add jquery (a peut etre rajouter dans le dockerfile)
+
+
+ruby version 2.7.1
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+rbenv global 2.7.1
+rbenv local 2.7.1
