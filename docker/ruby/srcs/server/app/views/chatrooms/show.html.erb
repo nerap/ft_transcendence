@@ -12,7 +12,7 @@
                 <% if current_user == chat.user %>
                   <p class="sent"><%= chat.message %></p><br/>
                 <% else %>
-                  <%= chat.user.username %>:<br/>
+                  <%= link_to chat.user.username, user_path(chat.user) %><br/>
                   <p class="received"><%= chat.message %></p><br/>
                 <% end %>
             <% end %>
@@ -32,7 +32,6 @@
                 </div>
               <% end %>
 
-              <%#= form.label :message %>
               <%= form.text_field :message, value: nil, placeholder: 'New message...', class: 'field', id: 'field', required: true %>
               <%= form.hidden_field :user_id, value: current_user.try(:id) %>
 

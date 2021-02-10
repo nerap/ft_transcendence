@@ -39,3 +39,9 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 rbenv global 2.7.1
 rbenv local 2.7.1
+
+manipuler database:
+rails db
+puis dans le terminal:
+\dt      pour lister databases
+SELECT * FROM dbname;      pour afficher tous les elements de la db

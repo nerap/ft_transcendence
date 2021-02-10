@@ -1,13 +1,14 @@
-<div id="posts"></div>
+<div id="server"></div>
 
 <script type="text/javascript">
-  $(function() {
+  function initServer() {
     // Blog is the app name
-    window.router = new Blog.Routers.PostsRouter({posts: <%= @posts.to_json.html_safe -%>});
+    window.router = new Server.Routers.ChatroomsRouter({posts: <%= @chatrooms.to_json.html_safe -%>});
     Backbone.history.start();
-  });
-</script>
+    console.log("Backbone history started")
+  };
 
-<div class="welcome">
-    <h1>FT_TRANSCENDENCE</h1>
+</script>
+<div>
+  <h1>FT_TRANSCENDENCE</h1>
 </div>
