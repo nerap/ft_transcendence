@@ -13,9 +13,9 @@
     margin-bottom: 20px;
   }
 
-  >div {
+  >div#room-content {
     height: 85vh;
-    background-color: black;
+    background-color: grey;
     width: 80%;
     margin: auto;
     border-radius: 5px;
@@ -37,8 +37,8 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         margin-bottom: 5px;
-        margin-top: 2px;
-        max-width: 70%;
+        margin-top: 3px;
+        max-width: 350px;
         width: max-content;
         overflow-wrap: break-word;
         font-size: 17px;
@@ -54,6 +54,46 @@
           align-self: flex-end;
         }
       }
+
+      td.user-message {
+        width: 100px;
+      }
+      div.user-menu {
+        display: none;
+
+        .menu-options {
+          width: 160px;
+          padding: 0;
+          box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+          background: white;
+          overflow: hidden;
+          border-radius: 5px;
+          white-space: nowrap;
+          border: 1px solid rgb(109, 109, 109);
+          font-family: sans-serif;
+          list-style: none;
+          color: black;
+          z-index: 1000;
+          position: relative;
+
+          .menu-option {
+            font-weight: 500;
+            font-size: 14px;
+            padding: 5px;
+            cursor: pointer;
+            transition: all .3s ease;
+            user-select: none;
+
+            &:hover {
+              background: rgba(0, 0, 0, 0.2);
+            }
+
+            &-link {
+              text-decoration: none;
+            }
+          }
+        }
+      }
     }
 
     div#send_message {
@@ -63,7 +103,7 @@
 
       .field {
         height: 30px;
-        width: 83%;
+        width: 88%;
         border-radius: 10px;
         border: 0;
         padding-left: 1%;
@@ -71,7 +111,7 @@
 
       .button {
           height: 35px;
-          width: 15%;
+          width: 10%;
           border-radius: 20px;
           border: 0;
           background-color: tomato;

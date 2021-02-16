@@ -1,4 +1,8 @@
 {
+  "Chatroom copy.js": "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js",
+  "Chatroom copy.js.map": "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js.map",
+  "Chatroom.js": "/packs/js/Chatroom-80e13e193fbbafb68f04.js",
+  "Chatroom.js.map": "/packs/js/Chatroom-80e13e193fbbafb68f04.js.map",
   "application.js": "/packs/js/application-1dc194f55b0573d0f9e1.js",
   "application.js.map": "/packs/js/application-1dc194f55b0573d0f9e1.js.map",
   "entrypoints": {
@@ -8,6 +12,22 @@
       ],
       "js.map": [
         "/packs/js/application-1dc194f55b0573d0f9e1.js.map"
+      ]
+    },
+    "Chatroom copy": {
+      "js": [
+        "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js"
+      ],
+      "js.map": [
+        "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js.map"
+      ]
+    },
+    "Chatroom": {
+      "js": [
+        "/packs/js/Chatroom-80e13e193fbbafb68f04.js"
+      ],
+      "js.map": [
+        "/packs/js/Chatroom-80e13e193fbbafb68f04.js.map"
       ]
     }
   }

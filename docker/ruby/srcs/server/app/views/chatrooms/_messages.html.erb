@@ -1,0 +1,19 @@
+<% @chats.each do |chat| %>
+    <% if current_user == chat.user %>
+          <p class="sent"><%= chat.message %></p>
+    <% else %>
+        <table>
+            <tr>
+                <td><div class="user-message"><%= chat.user.username %></div>
+                <div class="user-menu">
+                    <ul class="menu-options">
+                        <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">See profile</div><% end %></li>
+                        <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">Defy in Pong game</div><% end %></li>
+                        <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">Block user</div><% end %></li>
+                    </ul>
+                </div></td>
+                <td><p class="received"><%= chat.message %></p></td>
+            </tr>
+        </table>
+    <% end %>
+<% end %>

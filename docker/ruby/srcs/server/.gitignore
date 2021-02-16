@@ -35,4 +35,4 @@ yarn-debug.log*
 .yarn-integrity
 /vendor
 /ruby
-Gemfile.lock
+./Gemfile.lock

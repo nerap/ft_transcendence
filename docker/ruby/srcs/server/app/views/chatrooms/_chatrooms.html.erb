@@ -5,13 +5,11 @@
 </div>
 
 <% if @chatrooms.present? %>
-  <nav class="nav flex-column">
     <% @chatrooms.each do |chatroom| %>
       <%= link_to chatroom.name, chatroom_path(chatroom), class: 'nav-link chatroom-nav-link' %>
     <% end %>
-  </nav>
 <% else %>
-  <div class="text-muted">
+  <div>
     There are no chatrooms
   </div>
 <% end %>
