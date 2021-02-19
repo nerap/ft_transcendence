@@ -1,15 +1,58 @@
-<div class="mb-3">
-  <%= link_to new_chatroom_path, class: 'btn btn-primary' do %>
-    Create a chatroom
+<div id="main-chatrooms">
+
+  <div>
+    <%= link_to new_chatroom_path do %>
+      Create a chatroom
+    <% end %>
+  </div>
+
+  <% if @chatrooms.present? %>
+  <% else %>
+    <div>
+      There are no chatrooms
+    </div>
   <% end %>
+
+  <div>
+    <ul class="tabs">
+      <li class="active"><a href="#public" data-turbolinks="false">Public chatrooms</a></li>
+      <li><a href="#private" data-turbolinks="false">Private chatrooms</a></li>
+    </ul>
+    <div class="tabs-content">
+      <div class="tab-content active" id="public">
+        <table class="tab-content-list">
+          <tr>
+            <th>Chatroom name</th>
+            <th>Created by</th>
+          </tr>
+          <% @chatrooms.each do |chatroom| %>
+            <% if chatroom.chatroom_type == "public" %>
+              <tr>
+                <td class="tab-content-link"><%= link_to chatroom.name, chatroom_path(chatroom) %></td>
+                <td class="tab-content-link"><%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+      <div class="tab-content" id="private">
+        <table class="tab-content-list">
+          <tr>
+            <th>Chatroom name</th>
+            <th>Created by</th>
+          </tr>
+          <% @chatrooms.each do |chatroom| %>
+            <% if chatroom.chatroom_type == "private" %>
+              <tr>
+                <td class="tab-content-link"><%= link_to chatroom.name, chatroom_path(chatroom) %></td>
+                <td class="tab-content-link"><%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner) %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
-<% if @chatrooms.present? %>
-    <% @chatrooms.each do |chatroom| %>
-      <%= link_to chatroom.name, chatroom_path(chatroom), class: 'nav-link chatroom-nav-link' %>
-    <% end %>
-<% else %>
-  <div>
-    There are no chatrooms
-  </div>
-<% end %>
+<%= javascript_pack_tag 'Chatrooms.js' %>

@@ -1,33 +1,33 @@
 {
-  "Chatroom copy.js": "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js",
-  "Chatroom copy.js.map": "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js.map",
-  "Chatroom.js": "/packs/js/Chatroom-80e13e193fbbafb68f04.js",
-  "Chatroom.js.map": "/packs/js/Chatroom-80e13e193fbbafb68f04.js.map",
-  "application.js": "/packs/js/application-1dc194f55b0573d0f9e1.js",
-  "application.js.map": "/packs/js/application-1dc194f55b0573d0f9e1.js.map",
+  "Chatroom.js": "/packs/js/Chatroom-a23221088e9a653c1111.js",
+  "Chatroom.js.map": "/packs/js/Chatroom-a23221088e9a653c1111.js.map",
+  "Chatrooms.js": "/packs/js/Chatrooms-e552f3cd957784763ee1.js",
+  "Chatrooms.js.map": "/packs/js/Chatrooms-e552f3cd957784763ee1.js.map",
+  "application.js": "/packs/js/application-60caa461aef367b19172.js",
+  "application.js.map": "/packs/js/application-60caa461aef367b19172.js.map",
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/js/application-1dc194f55b0573d0f9e1.js"
+        "/packs/js/application-60caa461aef367b19172.js"
       ],
       "js.map": [
-        "/packs/js/application-1dc194f55b0573d0f9e1.js.map"
-      ]
-    },
-    "Chatroom copy": {
-      "js": [
-        "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js"
-      ],
-      "js.map": [
-        "/packs/js/Chatroom%20copy-06c145a9717b2b61e1d1.js.map"
+        "/packs/js/application-60caa461aef367b19172.js.map"
       ]
     },
     "Chatroom": {
       "js": [
-        "/packs/js/Chatroom-80e13e193fbbafb68f04.js"
+        "/packs/js/Chatroom-a23221088e9a653c1111.js"
       ],
       "js.map": [
-        "/packs/js/Chatroom-80e13e193fbbafb68f04.js.map"
+        "/packs/js/Chatroom-a23221088e9a653c1111.js.map"
+      ]
+    },
+    "Chatrooms": {
+      "js": [
+        "/packs/js/Chatrooms-e552f3cd957784763ee1.js"
+      ],
+      "js.map": [
+        "/packs/js/Chatrooms-e552f3cd957784763ee1.js.map"
       ]
     }
   }

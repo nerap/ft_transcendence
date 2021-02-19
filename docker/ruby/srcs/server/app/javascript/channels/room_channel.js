@@ -11,7 +11,8 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
 
   received(data) {
     if (data.content.message) {
-      $('#messages').append('<p class="sent">' + data.content.message + '</p>')
+      var textMessage = '<p class="sent">' + data.content.message + '</p>'
+      $('#messages').append(textMessage)
       $('#field').val('')
     }
     var chatHistory = document.getElementById("messages");

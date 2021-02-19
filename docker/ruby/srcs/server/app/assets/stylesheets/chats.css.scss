@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
-#main {
+#main-chats {
   height: 100vh;
   background-color: bisque;
   overflow: auto;
@@ -52,17 +52,27 @@
           border-bottom-left-radius: 10px;
           background-color: darkred;
           align-self: flex-end;
+          margin-right: 10px;
         }
       }
 
-      td.user-message {
-        width: 100px;
+      .user-avatar {
+        border-radius: 50%;
+        width: 30px;
+        cursor: pointer;
       }
+
+      div.user-message {
+        width: 30px;
+      }
+
       div.user-menu {
         display: none;
+        z-index: 100;
+        position: absolute;
 
         .menu-options {
-          width: 160px;
+          width: max-content;
           padding: 0;
           box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
           background: white;
@@ -73,8 +83,6 @@
           font-family: sans-serif;
           list-style: none;
           color: black;
-          z-index: 1000;
-          position: relative;
 
           .menu-option {
             font-weight: 500;

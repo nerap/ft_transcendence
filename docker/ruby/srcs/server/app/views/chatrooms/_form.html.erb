@@ -1,7 +1,31 @@
 <%= form_with(model: @chatroom, remote: true, local: false) do |form| %>
+    <% if @chatroom.errors.any? %>
+        <div id="error_explanation">
+            <h2><%= pluralize(@chatroom.errors.count, "error") %> prohibited this chatroom from being saved:</h2>
+
+            <ul>
+                <% @chatroom.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
     <div class="field">
+        <%= form.hidden_field :owner, value: current_user[:id] %>
         <%= form.label :name %>
-        <%= form.text_field :name %>
+        <%= form.text_field :name, autocomplete: :off %>
     </div>
-    <%= form.submit "Save", class: 'btn btn-success' %>
+    <div class="field-type">
+        <%= form.radio_button :chatroom_type, "public", checked: true %>
+        <%= form.label "Public" %>
+        <%= form.radio_button :chatroom_type, "private", checked: false %>
+        <%= form.label "Private" %>
+    </div>
+
+    <div class="field-password">
+        <%= form.label :password %>
+        <%= form.password_field :password, autocomplete: :off %>
+    </div>
+    <%= form.submit "Save", class: 'btn-save' %>
 <% end %>

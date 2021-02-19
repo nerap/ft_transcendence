@@ -1,10 +1,13 @@
-<div id="main">
+<div id="main-chats">
     <h1>
-        <%= @chatroom.name %>
+        <p><%= @chatroom.name %></p>
+        <p>Created by <%= @chatroom_owner.username %></p>
+        <p>Type: <%= @chatroom.chatroom_type %></p>
     </h1>
 
     <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %> | 
-    <%= link_to 'Back', chatrooms_path %>
+    <%= link_to 'Back', chatrooms_path(anchor: @chatroom.chatroom_type) %>
+    <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
 
     <div id="room-content">
         <div id="messages">
@@ -25,13 +28,13 @@
                 </div>
               <% end %>
 
-              <%= form.text_field :message, value: nil, placeholder: 'New message...', class: 'field', id: 'field', required: true %>
+              <%= form.text_field :message, value: nil, placeholder: 'New message...', autocomplete: :off, class: 'field', id: 'field', required: true %>
               <%= form.hidden_field :user_id, value: current_user.try(:id) %>
 
               <%= form.submit "Send", class: 'button' %>
 
               <%= form.hidden_field :chatroom_id, as: :hidden %>
-              <% #hidden fild for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
+              <% #hidden field for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
             <% end %>
         </div>
     </div>

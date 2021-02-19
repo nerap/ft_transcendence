@@ -12,9 +12,10 @@ for (var i = 0; i < menus.length; i++) {
     var menu = menus[i];
     var openMenu = function (e) {
         e.preventDefault();
+        const rect = this.nextElementSibling.getBoundingClientRect();
         const origin = {
-            left: e.pageX + "px",
-            top: e.pageY + "px"
+            left: e.clientX - 115,
+            top: e.clientY - 130
         };
         setPosition(this, origin);
         if (!menuVisible) {
@@ -37,3 +38,11 @@ document.addEventListener("click", e => {
         }
     }
 })
+
+// $(document).ready(function() {
+//     $('.user-message').hover(function() {
+//         $('#user-popup').show();
+//     }, function() {
+//         $('#user-popup').hide();
+//     });
+// });

@@ -42,6 +42,16 @@ rbenv local 2.7.1
 
 manipuler database:
 rails db
+password pour user postgres: root
 puis dans le terminal:
 \dt      pour lister databases
 SELECT * FROM dbname;      pour afficher tous les elements de la db
+
+interference turbolinks avec js:
+si c'est le cas, rajouter dans le lien par ex:
+<a href="/" data-turbolinks="false">...</a>
+            -----------------------
+ou dans une balise, ex:
+<div data-turbolinks="false"></div>
+
+auto-implementation dans fichiers: ctrl + shift + i
