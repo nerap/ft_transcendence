@@ -22,14 +22,14 @@
       <div class="tab-content active" id="public">
         <table class="tab-content-list">
           <tr>
-            <th>Chatroom name</th>
-            <th>Created by</th>
+            <th>CHATROOM NAME</th>
+            <th>CREATED BY</th>
           </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "public" %>
-              <tr>
-                <td class="tab-content-link"><%= link_to chatroom.name, chatroom_path(chatroom) %></td>
-                <td class="tab-content-link"><%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner) %></td>
+              <tr class="tab-content-options">
+                <td><%= link_to chatroom_path(chatroom), class: "tab-content-option-link" do %><div class="tab-content-option"><%= chatroom.name %></div><% end %></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-option-link" do %><div class="tab-content-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
               </tr>
             <% end %>
           <% end %>
@@ -37,15 +37,18 @@
       </div>
       <div class="tab-content" id="private">
         <table class="tab-content-list">
-          <tr>
-            <th>Chatroom name</th>
-            <th>Created by</th>
+          <tr class="tab-content-headers">
+            <th class="tab-content-header">CHATROOM NAME</th>
+            <th class="tab-content-header">CREATED BY</th>
           </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "private" %>
-              <tr>
-                <td class="tab-content-link"><%= link_to chatroom.name, chatroom_path(chatroom) %></td>
-                <td class="tab-content-link"><%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner) %></td>
+              <tr class="tab-content-options">
+                <td class="chatroom-link"><div id="tab-content-option-link" do %><div class="tab-content-option"><%= chatroom.name %></div></div></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-option-link" do %><div class="tab-content-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+                <!-- Modal -->
+                <%= render "login", chatroom: chatroom %>
+                <!-- End Modal -->
               </tr>
             <% end %>
           <% end %>

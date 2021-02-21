@@ -30,7 +30,7 @@ class ChatroomsController < ApplicationController
         @chatroom = Chatroom.find(params[:id])
         if @chatroom.update(permitted_parameters)
             flash[:success] = "Chatroom #{@chatroom.name} was updated successfully"
-            redirect_to chatrooms_path
+            redirect_to @chatroom
         else
             render :new
         end
@@ -44,7 +44,15 @@ class ChatroomsController < ApplicationController
 
     def destroy
         @chatroom.destroy
-        render :index
+        redirect_to chatrooms_path
+    end
+
+    def login
+        chatroom_id = params[:chatroom][:chatroom_id]
+        chatroom = Chatroom.find(chatroom_id)
+        if params[:chatroom][:chatroom_password] == chatroom.password
+            redirect_to chatroom_path(chatroom)
+        end
     end
 
     protected

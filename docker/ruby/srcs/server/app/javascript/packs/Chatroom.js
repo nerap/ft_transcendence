@@ -26,7 +26,7 @@ for (var i = 0; i < menus.length; i++) {
     menu.addEventListener("contextmenu", openMenu);
 }
 
-document.addEventListener("click", e => {
+document.addEventListener("click", function (e) {
     var button = e.which || e.button;
     if (button === 1) {
         if (menuVisible) {

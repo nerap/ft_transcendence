@@ -5,9 +5,11 @@
         <p>Type: <%= @chatroom.chatroom_type %></p>
     </h1>
 
-    <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %> | 
     <%= link_to 'Back', chatrooms_path(anchor: @chatroom.chatroom_type) %>
-    <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
+    <% if user_signed_in? && current_user.id == @chatroom.owner %>
+    | <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
+    | <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
 
     <div id="room-content">
         <div id="messages">
