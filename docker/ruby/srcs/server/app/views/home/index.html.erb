@@ -1,14 +1,3 @@
-<div id="server"></div>
-
-<script type="text/javascript">
-  function initServer() {
-    // Blog is the app name
-    window.router = new Server.Routers.ChatroomsRouter({posts: <%= @chatrooms.to_json.html_safe -%>});
-    Backbone.history.start();
-    console.log("Backbone history started")
-  };
-
-</script>
 <div>
   <h1>FT_TRANSCENDENCE</h1>
 </div>

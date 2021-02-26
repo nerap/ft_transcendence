@@ -1,45 +1,46 @@
 <div id="main-chats">
-    <h1>
-        <p><%= @chatroom.name %></p>
-        <p>Created by <%= @chatroom_owner.username %></p>
-        <p>Type: <%= @chatroom.chatroom_type %></p>
-    </h1>
+  <h1>
+      <p><%= @chatroom.name %></p>
+      <p>Created by <%= @chatroom_owner.username %></p>
+      <p>Type: <%= @chatroom.chatroom_type %></p>
+  </h1>
 
-    <%= link_to 'Back', chatrooms_path(anchor: @chatroom.chatroom_type) %>
-    <% if user_signed_in? && current_user.id == @chatroom.owner %>
-    | <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
-    | <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %>
-    <% end %>
+  <%= link_to 'Back', chatrooms_path(anchor: @chatroom.chatroom_type) %>
+  <% if user_signed_in? && current_user.id == @chatroom.owner %>
+  | <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
+  | <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
 
-    <div id="room-content">
-        <div id="messages">
-            <%= render 'messages' %>
-        </div>
-
-        <div id="send_message">
-            <%= form_with(model: @chat, remote: true, local: false) do |form| %>
-              <% if @chat.errors.any? %>
-                <div id="error_explanation">
-                  <h2><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h2>
-
-                  <ul>
-                    <% @chat.errors.each do |error| %>
-                      <li><%= error.full_message %></li>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
-
-              <%= form.text_field :message, value: nil, placeholder: 'New message...', autocomplete: :off, class: 'field', id: 'field', required: true %>
-              <%= form.hidden_field :user_id, value: current_user.try(:id) %>
-
-              <%= form.submit "Send", class: 'button' %>
-
-              <%= form.hidden_field :chatroom_id, as: :hidden %>
-              <% #hidden field for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
-            <% end %>
-        </div>
+  <div id="room-content">
+    <div id="messages">
+        <%= render 'messages' %>
     </div>
+    <div id="send_message">
+      <%= form_with(model: @chat, remote: true, local: false) do |form| %>
+        <% if @chat.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h2>
+            <ul>
+              <% @chat.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <table>
+          <tr>
+            <td class="text"><%= form.text_field :message, value: nil, placeholder: 'New message...', autocomplete: :off, class: 'text-field', id: 'text-field', required: true %></td>
+            <td class="button"><%= form.submit "Send", class: 'button-field' %></td>
+          </tr>
+        </table>
+        <%= form.hidden_field :user_id, value: current_user.try(:id) %>
+        <%= form.hidden_field :chatroom_id, as: :hidden %>
+        <% #hidden field for atribute chatroom_id so the value reaches the chats_controller once the form is submitted %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
+<%= content_tag :div, class: "current_user_id", data: {userid: @userid} do %>
+<% end %>
 <%= javascript_pack_tag 'Chatroom.js' %>

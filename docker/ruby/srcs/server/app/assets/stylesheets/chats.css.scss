@@ -4,7 +4,7 @@
 
 #main-chats {
   height: 100vh;
-  background-color: bisque;
+  background-color: rgb(233, 233, 233);
   overflow: auto;
 
   h1 {
@@ -14,19 +14,27 @@
   }
 
   >div#room-content {
-    height: 85vh;
-    background-color: grey;
-    width: 80%;
-    margin: auto;
-    border-radius: 5px;
-    overflow: auto;
+    // height: 55vh;
+    // background-color: rgb(233, 233, 233);
+    // width: 70%;
+    // margin: auto;
+    // border-radius: 5px;
+    // // overflow: auto;
+    // position: relative;
+    // box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.45);
+    width: 600px;
+    height: 70%;
+    border-radius: 0.2em;
     position: relative;
+    box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+    margin: auto;
 
     div#messages {
-      height: 90%;
-      width: 96%;
+      height: 100%;
+      width: 100%;
       color: white;
-      margin: 14px auto;
+      margin: 0;
       overflow: auto;
       display: flex;
       flex-direction: column;
@@ -41,89 +49,145 @@
         max-width: 350px;
         width: max-content;
         overflow-wrap: break-word;
-        font-size: 17px;
+        font-size: 20px;
 
         &.received {
-          background-color: chocolate;
+          background-color: rgb(105, 166, 168);
           border-bottom-right-radius: 10px;
+          margin-left: 10px;
+
+          .message-header-received {
+            font-size: 11px;
+          }
+          .message-footer-received {
+            font-size: 9px;
+            font-style: italic;
+            float: right;
+            margin-top: 5px;
+          }
+          .user-avatar-received {
+            vertical-align: middle;
+            border-radius: 50%;
+            width: 20px;
+            cursor: pointer;
+          }
         }
 
         &.sent {
           border-bottom-left-radius: 10px;
-          background-color: darkred;
+          background-color: rgb(53, 129, 143);
           align-self: flex-end;
           margin-right: 10px;
-        }
-      }
 
-      .user-avatar {
-        border-radius: 50%;
-        width: 30px;
-        cursor: pointer;
-      }
+          .message-header-sent {
+            float: right;
+            font-size: 11px;
+          }
+          .message-footer-sent {
+            font-size: 9px;
+            font-style: italic;
+          }
 
-      div.user-message {
-        width: 30px;
-      }
-
-      div.user-menu {
-        display: none;
-        z-index: 100;
-        position: absolute;
-
-        .menu-options {
-          width: max-content;
-          padding: 0;
-          box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-          background: white;
-          overflow: hidden;
-          border-radius: 5px;
-          white-space: nowrap;
-          border: 1px solid rgb(109, 109, 109);
-          font-family: sans-serif;
-          list-style: none;
-          color: black;
-
-          .menu-option {
-            font-weight: 500;
-            font-size: 14px;
-            padding: 5px;
-            cursor: pointer;
-            transition: all .3s ease;
-            user-select: none;
-
-            &:hover {
-              background: rgba(0, 0, 0, 0.2);
-            }
-
-            &-link {
-              text-decoration: none;
-            }
+          .user-avatar-sent {
+            vertical-align: middle;
+            border-radius: 50%;
+            width: 20px;
           }
         }
       }
     }
 
     div#send_message {
-      width: 95%;
-      margin: auto;
-      overflow-wrap: break-word;
+      position: relative;
+      width: 100%;
+      height: 40px;
 
-      .field {
-        height: 30px;
-        width: 88%;
-        border-radius: 10px;
-        border: 0;
-        padding-left: 1%;
+      table {
+        width: 100%;
+        height: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0;
+        border-collapse: collapse;
+        
+        tr {
+          height: 100%;
+          td {
+            &.text {
+              background-color: white;
+              border-bottom-left-radius: 5px;
+              padding: 0;
+              .text-field {
+                height: 40px;
+                width: 100%;
+                border-bottom-left-radius: 5px;
+                border: none;
+                padding-left: 1%;
+                padding-right: 1%;
+                vertical-align: top;
+                outline: none;
+                box-shadow: none;
+              }
+            }
+            &.button {
+              background-color: white;
+              border-bottom-right-radius: 5px;
+              width: 10%;
+              padding: 0;
+              border: solid;
+              border: 1px;
+              .button-field {
+                border-bottom-right-radius: 5px;
+                height: 100%;
+                width: 100%;
+                color: black;
+                font-size: 20px;
+                background-color: white;
+                &:hover {
+                  background: rgba(0, 0, 0, 0.2);
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+div.user-menu {
+  display: none;
+  z-index: 100;
+  position: absolute;
+
+  .menu-options {
+    width: max-content;
+    padding: 0;
+    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+    background: white;
+    overflow: hidden;
+    border-radius: 5px;
+    white-space: nowrap;
+    border: 1px solid rgb(109, 109, 109);
+    font-family: sans-serif;
+    list-style: none;
+    color: black;
+
+    .menu-option {
+      font-weight: 500;
+      font-size: 14px;
+      padding: 5px;
+      cursor: pointer;
+      transition: all .3s ease;
+      user-select: none;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.2);
       }
 
-      .button {
-          height: 35px;
-          width: 10%;
-          border-radius: 20px;
-          border: 0;
-          background-color: tomato;
-          color: white;
+      &-link {
+        text-decoration: none;
       }
     }
   }

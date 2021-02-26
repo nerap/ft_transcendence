@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   get "home", to: "home#index"
 
   resources :chatrooms do
-    post 'login'
+    member do
+      post 'login'
+    end
   end
 
   resources :chats

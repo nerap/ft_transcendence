@@ -11,9 +11,11 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
 
   received(data) {
     if (data.content.message) {
-      var textMessage = '<p class="sent">' + data.content.message + '</p>'
+      let currentUser = sessionStorage.getItem('chat_userid')
+      let msg_class = currentUser == data.content.user_id ? "sent" : "received"
+      var textMessage = `<p class='${msg_class}'>` + data.content.message + '</p>'
       $('#messages').append(textMessage)
-      $('#field').val('')
+      $('#text-field').val('')
     }
     var chatHistory = document.getElementById("messages");
     chatHistory.scrollTop = chatHistory.scrollHeight;

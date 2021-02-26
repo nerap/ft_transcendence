@@ -1,6 +1,7 @@
 class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
+    before_action :check_if_private, only: [:show]
 
     def index
         @chatrooms = Chatroom.all.order(:name)
@@ -37,6 +38,7 @@ class ChatroomsController < ApplicationController
     end
 
     def show
+        @userid = current_user.id
         @chat = Chat.new chatroom: @chatroom
         @chats = @chatroom.chat.includes(:user)
         find_owner
@@ -68,5 +70,9 @@ class ChatroomsController < ApplicationController
     def find_owner
         @chatroom = Chatroom.find(params[:id])
         @chatroom_owner = User.find(@chatroom.owner)
+    end
+
+    def check_if_private
+        # redirect_to chatrooms_path
     end
 end

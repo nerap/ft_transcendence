@@ -31,7 +31,7 @@
     hashChange()
 
     var modals = document.querySelectorAll("#password-modal")
-    var links = document.querySelectorAll("#tab-content-option-link")
+    var links = document.querySelectorAll("#tab-content-list-option-link-room")
     var span = document.querySelectorAll(".close")
     
     for (var i = 0; i < links.length; i++) {
@@ -45,7 +45,7 @@
         })
     }
     window.addEventListener('click', function (e) {
-        for (var i = 0; i < links.length; i++) {
+        for (var i = 0; i < modals.length; i++) {
             modal = modals[i]
             if (e.target == modal)
                 modal.style.display = "none";

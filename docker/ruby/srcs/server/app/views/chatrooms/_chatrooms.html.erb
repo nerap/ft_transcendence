@@ -27,9 +27,9 @@
           </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "public" %>
-              <tr class="tab-content-options">
-                <td><%= link_to chatroom_path(chatroom), class: "tab-content-option-link" do %><div class="tab-content-option"><%= chatroom.name %></div><% end %></td>
-                <td><%= link_to User.find(chatroom.owner), class: "tab-content-option-link" do %><div class="tab-content-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+              <tr class="tab-content-list-options">
+                <td><%= link_to chatroom_path(chatroom), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= chatroom.name %></div><% end %></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
               </tr>
             <% end %>
           <% end %>
@@ -43,9 +43,9 @@
           </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "private" %>
-              <tr class="tab-content-options">
-                <td class="chatroom-link"><div id="tab-content-option-link" do %><div class="tab-content-option"><%= chatroom.name %></div></div></td>
-                <td><%= link_to User.find(chatroom.owner), class: "tab-content-option-link" do %><div class="tab-content-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+              <tr class="tab-content-list-options">
+                <td><div id="tab-content-list-option-link-room"><div class="tab-content-list-option"><%= chatroom.name %></div></div></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
                 <!-- Modal -->
                 <%= render "login", chatroom: chatroom %>
                 <!-- End Modal -->
