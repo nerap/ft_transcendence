@@ -38,10 +38,12 @@ class ChatroomsController < ApplicationController
     end
 
     def show
+        @chatroom = Chatroom.find(params[:id])
+        @chatroom_owner = User.find(@chatroom.owner)
         @userid = current_user.id
+        @roomid = @chatroom.id
         @chat = Chat.new chatroom: @chatroom
         @chats = @chatroom.chat.includes(:user)
-        find_owner
     end
 
     def destroy
@@ -65,11 +67,6 @@ class ChatroomsController < ApplicationController
 
     def permitted_parameters
         params.require(:chatroom).permit(:name, :chatroom_type, :password, :owner)
-    end
-
-    def find_owner
-        @chatroom = Chatroom.find(params[:id])
-        @chatroom_owner = User.find(@chatroom.owner)
     end
 
     def check_if_private

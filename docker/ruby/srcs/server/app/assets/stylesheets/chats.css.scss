@@ -49,7 +49,7 @@
         max-width: 350px;
         width: max-content;
         overflow-wrap: break-word;
-        font-size: 20px;
+        font-size: 18px;
 
         &.received {
           background-color: rgb(105, 166, 168);
@@ -57,7 +57,8 @@
           margin-left: 10px;
 
           .message-header-received {
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: bold;
           }
           .message-footer-received {
             font-size: 9px;
@@ -81,17 +82,21 @@
 
           .message-header-sent {
             float: right;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: bold;
           }
           .message-footer-sent {
             font-size: 9px;
             font-style: italic;
           }
-
           .user-avatar-sent {
             vertical-align: middle;
             border-radius: 50%;
             width: 20px;
+          }
+          .message-content {
+            float: left;
+            word-break: break-all;
           }
         }
       }

@@ -41,6 +41,8 @@
   </div>
 </div>
 
-<%= content_tag :div, class: "current_user_id", data: {userid: @userid} do %>
+<%= content_tag :div, class: "current_user_id", data: { userid: @userid } do %>
+<% end %>
+<%= content_tag :div, class: "current_chatroom_id", data: { roomid: @roomid } do %>
 <% end %>
 <%= javascript_pack_tag 'Chatroom.js' %>

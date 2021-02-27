@@ -10,10 +10,20 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
   },
 
   received(data) {
-    if (data.content.message) {
+    let currentRoom = sessionStorage.getItem('chat_roomid')
+    if (data.content.message && currentRoom == data.content.chatroom_id) {
       let currentUser = sessionStorage.getItem('chat_userid')
       let msg_class = currentUser == data.content.user_id ? "sent" : "received"
-      var textMessage = `<p class='${msg_class}'>` + data.content.message + '</p>'
+      var textMessage1 = `<p class="${msg_class}">`
+      if (msg_class == "sent") {
+        var textMessage2 = `<span class="message-header-${msg_class}">` + data.user + ` <img class="user-avatar-${msg_class}" src="/assets/blank-profile-picture.jpg" /></span><br/>`
+      } else {
+        var textMessage2 = `<span class="message-header-${msg_class}"><img class="user-avatar-${msg_class}" src="/assets/blank-profile-picture.jpg" /> ` + data.user + `</span><br/>`
+      }
+      var textMessage3 = `<span class="message-content">` + data.content.message + `</span><br/>` +
+      `<span class="message-footer-${msg_class}">` + data.content.created_at + `</span>` +
+      `</p>`;
+      var textMessage = textMessage1 + textMessage2 + textMessage3;
       $('#messages').append(textMessage)
       $('#text-field').val('')
     }

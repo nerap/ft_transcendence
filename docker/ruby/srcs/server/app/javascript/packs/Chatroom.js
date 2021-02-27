@@ -1,7 +1,10 @@
 let userId = $('.current_user_id').data('userid')
 sessionStorage.setItem("chat_userid", userId)
+let roomId = $('.current_chatroom_id').data('roomid')
+sessionStorage.setItem("chat_roomid", roomId)
 
-// document.getElementById('messages').scrollTop = 1000;
+var element = document.getElementById('messages');
+element.scrollTop = element.scrollHeight - element.clientHeight;
 
 let menuVisible = false;
 var menus = document.querySelectorAll(".user-avatar-received");
@@ -11,39 +14,41 @@ const setPosition = (el, { top, left }) => {
     el.style.top = `${top}px`;
 };
 
-function setContextMenuPostion(event, contextMenu) {
+function setContextMenuPosition(event, contextMenu) {
 
     var mousePosition = {};
-    var menuPostion = {};
+    var menuPosition = {};
     var menuDimension = {};
 
-    menuDimension.x = contextMenu.outerWidth;
-    menuDimension.y = contextMenu.outerHeight;
+    let room = document.querySelector('#room-content');
+    menuDimension.x = room.offsetWidth;
+    menuDimension.y = room.offsetHeight;
     mousePosition.x = event.pageX;
     mousePosition.y = event.pageY;
+    // if (mousePosition.x + menuDimension.x > $(window).width() + $(window).scrollLeft()) {
+        // menuPosition.x = mousePosition.x - menuDimension.x;
 
-    if (mousePosition.x + menuDimension.x > $(window).width() + $(window).scrollLeft()) {
-        menuPostion.x = mousePosition.x - menuDimension.x;
-    } else {
-        menuPostion.x = mousePosition.x;
-    }
+    // } else {
+        // menuPosition.x = mousePosition.x;
+    // }
 
-    if (mousePosition.y + menuDimension.y > $(window).height() + $(window).scrollTop()) {
-        menuPostion.y = mousePosition.y - menuDimension.y;
-    } else {
-        menuPostion.y = mousePosition.y;
-    }
-
-    return menuPostion;
+    // if (mousePosition.y + menuDimension.y > $(window).height() + $(window).scrollTop()) {
+        // menuPosition.y = mousePosition.y - menuDimension.y;
+    // } else {
+        // menuPosition.y = mousePosition.y;
+    // }
+    menuPosition.x = mousePosition.x - ($(window).width() - menuDimension.x) / 2;
+    menuPosition.y = mousePosition.y;
+    return menuPosition;
 }
 
 for (var i = 0; i < menus.length; i++) {
     var menu = menus[i];
     var openMenu = function (e) {
         e.preventDefault();
-        let pos = setContextMenuPostion(e, this.parentNode.parentNode.nextElementSibling)
+        let pos = setContextMenuPosition(e, this.parentNode.parentNode.nextElementSibling)
         const origin = {
-            left: pos.x - 120,
+            left: pos.x,
             top: pos.y - 200
         };
         setPosition(this.parentNode.parentNode.nextElementSibling, origin);
