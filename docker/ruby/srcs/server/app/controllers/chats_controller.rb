@@ -27,7 +27,7 @@ class ChatsController < ApplicationController
     @chat = Chat.create(chat_params)
     respond_to do |format|
       if @chat.save
-        ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username)
+        ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username), created_at: @chat.created_at.to_s
         format.html { redirect_to @chat, notice: "Chat was successfully created." }
         format.json { render :show, status: :created, location: @chat }
         format.js

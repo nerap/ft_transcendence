@@ -55,3 +55,15 @@ ou dans une balise, ex:
 <div data-turbolinks="false"></div>
 
 auto-implementation dans fichiers: ctrl + shift + i
+
+SI PB AVEC JS (NE DETECTE PAS LE FICHIER JS AU BON ENDROIT):
+bundle exec rails webpacker:install
+PUIS AJOUTER DANS config/webpack/environment.js ENTRE LES 2 LIGNES:
+const webpack = require('webpack')
+environment.plugins.prepend('Provide',
+  new webpack.ProvidePlugin({
+    $: 'jquery/src/jquery',
+    jQuery: 'jquery/src/jquery'
+  })
+)
+https://www.botreetechnologies.com/blog/introducing-jquery-in-rails-6-using-webpacker/

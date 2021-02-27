@@ -3,7 +3,7 @@
             <p class="sent">
                 <span class="message-header-sent"><%= chat.user.username %> <%= image_tag ("blank-profile-picture.jpg"), class: "user-avatar-sent" %></span><br/>
                 <span class="message-content"><%= chat.message %></span><br/>
-                <span class="message-footer-sent"><%= chat.created_at %></span>
+                <span class="message-footer-sent"><%= chat.created_at.to_s %></span>
             </p>
     <% else %>
         <p class="received">
