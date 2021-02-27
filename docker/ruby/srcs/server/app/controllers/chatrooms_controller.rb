@@ -25,6 +25,9 @@ class ChatroomsController < ApplicationController
     end
 
     def edit
+        if (current_user.id != @chatroom.owner)
+            redirect_to chatrooms_path
+        end
     end
 
     def update
@@ -59,6 +62,26 @@ class ChatroomsController < ApplicationController
         end
     end
 
+    def set_admin
+        user = params[:userid].to_i
+        chatroom = Chatroom.find(params[:id])
+        chatroom.admin.push(user)
+        chatroom.save
+    end
+
+    def unset_admin
+        user = params[:userid].to_i
+        chatroom = Chatroom.find(params[:id])
+        chatroom.admin.delete(user)
+        chatroom.save
+    end
+
+    def ban_user
+    end
+
+    def unban_user
+    end
+
     protected
     def load_entities
         @chatrooms = Chatroom.all.order(:name)
@@ -69,7 +92,7 @@ class ChatroomsController < ApplicationController
         params.require(:chatroom).permit(:name, :chatroom_type, :password, :owner)
     end
 
-    def check_if_private
+    def check_access
         # redirect_to chatrooms_path
     end
 end

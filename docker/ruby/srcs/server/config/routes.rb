@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   resources :chatrooms do
     member do
       post 'login'
+      put 'set_admin'
+      delete 'unset_admin'
+      put 'ban_user'
+      delete 'unban_user'
     end
   end
 
