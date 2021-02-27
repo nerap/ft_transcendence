@@ -1,7 +1,7 @@
 class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
-    before_action :check_if_private, only: [:show]
+    before_action :check_access, only: [:show]
 
     def index
         @chatrooms = Chatroom.all.order(:name)
