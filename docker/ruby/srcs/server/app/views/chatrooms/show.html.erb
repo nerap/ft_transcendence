@@ -49,6 +49,19 @@
   </div>
 </div>
 
+<div id="flash-admin-message">
+  <div class="flash-background">
+    <div class="flash-header">
+      <img class="admin-image" src="/assets/admin.png"><br/>
+      You have been promoted admin of this chatroom!
+    </div>
+    <div class="flash-content">
+      You can now mute and ban users from this chatroom.<br/><br/>
+      <button class="flash-button"><%= link_to "Continue", @chatroom, class: "flash-button-link" %></button>
+    </div>
+  </div>
+</div>
+
 <%= content_tag :div, class: "current_user_id", data: { userid: @userid } do %>
 <% end %>
 <%= content_tag :div, class: "current_chatroom_id", data: { roomid: @roomid } do %>

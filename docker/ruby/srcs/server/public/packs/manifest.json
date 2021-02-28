@@ -3,15 +3,15 @@
   "Chatroom.js.map": "/packs/js/Chatroom-7f058bc8cf8c1628f423.js.map",
   "Chatrooms.js": "/packs/js/Chatrooms-73818009f682b93593e3.js",
   "Chatrooms.js.map": "/packs/js/Chatrooms-73818009f682b93593e3.js.map",
-  "application.js": "/packs/js/application-1df9cd81fa8ddb584d8c.js",
-  "application.js.map": "/packs/js/application-1df9cd81fa8ddb584d8c.js.map",
+  "application.js": "/packs/js/application-48a0adce851122d9c678.js",
+  "application.js.map": "/packs/js/application-48a0adce851122d9c678.js.map",
   "entrypoints": {
     "application": {
       "js": [
-        "/packs/js/application-1df9cd81fa8ddb584d8c.js"
+        "/packs/js/application-48a0adce851122d9c678.js"
       ],
       "js.map": [
-        "/packs/js/application-1df9cd81fa8ddb584d8c.js.map"
+        "/packs/js/application-48a0adce851122d9c678.js.map"
       ]
     },
     "Chatroom": {

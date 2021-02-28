@@ -26,17 +26,19 @@ class ChatroomsController < ApplicationController
 
     def edit
         if (current_user.id != @chatroom.owner)
-            redirect_to chatrooms_path
+            redirect_to @chatroom
         end
     end
 
     def update
         @chatroom = Chatroom.find(params[:id])
-        if @chatroom.update(permitted_parameters)
-            flash[:success] = "Chatroom #{@chatroom.name} was updated successfully"
-            redirect_to @chatroom
-        else
-            render :new
+        if (current_user.id == @chatroom.owner)
+            if @chatroom.update(permitted_parameters)
+                flash[:success] = "Chatroom #{@chatroom.name} was updated successfully"
+                redirect_to @chatroom
+            else
+                render :new
+            end
         end
     end
 
@@ -67,6 +69,10 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         chatroom.admin.push(user)
         chatroom.save
+        if @chatroom.save
+            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user
+            redirect_to @chatroom
+        end
     end
 
     def unset_admin
@@ -74,6 +80,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         chatroom.admin.delete(user)
         chatroom.save
+        redirect_to @chatroom
     end
 
     def ban_user
