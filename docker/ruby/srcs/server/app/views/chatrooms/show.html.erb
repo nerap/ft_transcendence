@@ -57,7 +57,7 @@
     </div>
     <div class="flash-content">
       You can now mute and ban users from this chatroom.<br/><br/>
-      <button class="flash-button"><%= link_to "Continue", @chatroom, class: "flash-button-link" %></button>
+      <%= link_to @chatroom, class: "flash-button-link" do %><button class="flash-button">Continue</button><% end %>
     </div>
   </div>
 </div>
