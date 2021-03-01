@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       delete 'unset_admin'
       put 'ban_user'
       delete 'unban_user'
+      get 'psswd', to: "chatrooms#show"
+      put 'new_owner'
     end
   end
 

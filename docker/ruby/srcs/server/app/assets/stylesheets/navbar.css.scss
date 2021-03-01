@@ -1,0 +1,41 @@
+nav#navbar {
+    overflow: hidden;
+    background-color: rgb(32, 32, 32);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 100;    
+    table.navbar-options {
+        border-collapse: collapse;
+        width: 90%;
+        height: 100%;
+        table-layout: auto;
+        tr {
+            height: 100%;
+            td {
+                padding: 0;
+                text-align: center;
+                .navbar-option {
+                    width: auto;
+                    height: 100%;
+                    color: white;
+                    font-size: 18px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    font-variant: small-caps;
+                    &-link {
+                        text-decoration: none;
+                    }
+                    &:hover {
+                        background-color: rgb(3, 139, 180);
+                    }
+                }
+                // &:hover {
+                //     background-color: rgb(3, 139, 180);
+                // }
+            }
+        }
+    }
+}

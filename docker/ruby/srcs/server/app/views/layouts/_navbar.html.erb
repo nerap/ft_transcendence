@@ -1,13 +1,16 @@
-<nav>
-    <%= link_to "FT_TRANSCENDENCE", home_path %>
-    <% if user_signed_in? %>
-        <%= link_to "Account", user_path(current_user) %>
-        <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "nav-item nav-link" %>
-        <% # guilds list %>
-        <%= link_to "Chatrooms", chatrooms_path, class: "nav-item nav-link" %>
-        <%= link_to "Users list", users_path %>
-    <% else %>
-        <%= link_to "Sign in", new_user_session_path, class: "nav-item nav-link" %>
-        <%= link_to "Sign up", new_user_registration_path, class: "nav-item nav-link" %>
-    <% end %>
+<nav id="navbar">
+    <table class="navbar-options">
+        <tr>
+            <td><%= link_to home_path, class: "navbar-option-link" do %><div class="navbar-option">FT_TRANSCENDENCE</div><% end %></td>
+            <% if user_signed_in? %>
+                <td><%= link_to user_path(current_user), class: "navbar-option-link" do %><div class="navbar-option">account</div><% end %></td>
+                <td><%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %><div class="navbar-option">log out</div><% end %></td>
+                <td><%= link_to chatrooms_path, class: "navbar-option-link" do %><div class="navbar-option">chatrooms</div><% end %></td>
+                <td><%= link_to users_path, class: "navbar-option-link" do %><div class="navbar-option">members</div><% end %></td>
+            <% else %>
+                <td><%= link_to "Sign in", new_user_session_path, class: "nav-item nav-link" %></td>
+                <td><%= link_to "Sign up", new_user_registration_path, class: "nav-item nav-link" %></td>
+            <% end %>
+        </tr>
+    </table>
 </nav>

@@ -17,7 +17,8 @@ consumer.subscriptions.create("FlashAdminChannel", {
       function showFlashMessage(element) {
         element.style.display = "block";
       };
-      var flashMessages = document.getElementById('flash-admin-message');
+      var elem = `flash-${data.type}-message`
+      var flashMessages = document.getElementById(elem);
       showFlashMessage(flashMessages);
     }
   }

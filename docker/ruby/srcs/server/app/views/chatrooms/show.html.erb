@@ -9,14 +9,14 @@
   <% if user_signed_in? && current_user.id == @chatroom.owner %>
   | <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
   | <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %>
+  | <a id="link-to-new-owner">Leave <%= @chatroom.name %></a>
+  <%= render 'new_owner', chatroom: @chatroom %>
   <% end %>
-
+  <br/>
   <% if current_user == @chatroom_owner %>
     TEST OWNER
   <% end %>
-  <% if current_user == @chatroom_owner || @chatroom.admin.detect{ |e| e == current_user.id }  %>
-    <%= puts "hello " %>
-    <%= puts @chatroom.admin.detect{ |e| e == current_user.id } %>
+  <% if @chatroom.admin.detect{ |e| e == current_user.id }  %>
     TEST ADMIN
   <% end %>
   <div id="room-content">
@@ -52,12 +52,38 @@
 <div id="flash-admin-message">
   <div class="flash-background">
     <div class="flash-header">
-      <img class="admin-image" src="/assets/admin.png"><br/>
+      <img class="flash-image" src="/assets/admin.png"><br/>
       You have been promoted admin of this chatroom!
     </div>
     <div class="flash-content">
       You can now mute and ban users from this chatroom.<br/><br/>
       <%= link_to @chatroom, class: "flash-button-link" do %><button class="flash-button">Continue</button><% end %>
+    </div>
+  </div>
+</div>
+
+<div id="flash-owner-message">
+  <div class="flash-background">
+    <div class="flash-header">
+      <img class="flash-image" src="/assets/key.png"><br/>
+      You are the new owner of this chatroom!
+    </div>
+    <div class="flash-content">
+      You can now promote, mute and ban users from this chatroom.<br/><br/>
+      <%= link_to @chatroom, class: "flash-button-link" do %><button class="flash-button">Continue</button><% end %>
+    </div>
+  </div>
+</div>
+
+<div id="flash-ban-message">
+  <div class="flash-background">
+    <div class="flash-header">
+      <img class="flash-image" src="/assets/block.png"><br/>
+      You have been banned from this chatroom!
+    </div>
+    <div class="flash-content">
+      You have no longer access to this chatroom.<br/><br/>
+      <%= link_to chatrooms_path, class: "flash-button-link" do %><button class="flash-button">Continue</button><% end %>
     </div>
   </div>
 </div>

@@ -2,6 +2,7 @@ class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
     before_action :check_access, only: [:show]
+    before_action :banned_from_chatroom?, only: [:show]
 
     def index
         @chatrooms = Chatroom.all.order(:name)
@@ -68,9 +69,8 @@ class ChatroomsController < ApplicationController
         user = params[:userid].to_i
         chatroom = Chatroom.find(params[:id])
         chatroom.admin.push(user)
-        chatroom.save
-        if @chatroom.save
-            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user
+        if chatroom.save
+            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
             redirect_to @chatroom
         end
     end
@@ -84,9 +84,35 @@ class ChatroomsController < ApplicationController
     end
 
     def ban_user
+        user = params[:userid].to_i
+        chatroom = Chatroom.find(params[:id])
+        chatroom.banned.push(user)
+        chatroom.admin.delete(user)
+        if chatroom.save
+            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
+            redirect_to @chatroom
+        end
     end
 
     def unban_user
+        user = params[:userid].to_i
+        chatroom = Chatroom.find(params[:id])
+        chatroom.banned.delete(user)
+        chatroom.save
+        redirect_to @chatroom
+    end
+
+    def new_owner
+        if (current_user.id == @chatroom.owner && (newowner = User.where(username: params[:chatroom][:owner]).first))
+            @chatroom.owner = newowner.id
+            if @chatroom.admin.detect{ |e| e == newowner.id }
+                @chatroom.admin.delete(newowner.id)
+            end
+            if @chatroom.save
+                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: newowner.id, type: "owner"
+                redirect_to @chatroom
+            end
+        end
     end
 
     protected
@@ -100,6 +126,15 @@ class ChatroomsController < ApplicationController
     end
 
     def check_access
+        if @chatroom.chatroom_type == "private"
         # redirect_to chatrooms_path
+        end
+    end
+
+    def banned_from_chatroom?
+        if @chatroom.banned.detect{ |e| e == current_user.id }
+            # ActionCable.server.broadcast 'flash_banned_channel', chatroom: @chatroom, user: current_user.id
+            redirect_to chatrooms_path
+        end
     end
 end

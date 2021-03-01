@@ -16,8 +16,10 @@
       <div class="row">
         <div>
           <%= render 'layouts/navbar'%>
-          <%= yield %>
+          <div id="main-body">
+            <%= yield %>
           </div>
+        </div>
       </div>
     </div>
   </body>
