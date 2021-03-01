@@ -237,6 +237,9 @@ div#flash-admin-message, div#flash-ban-message, div#flash-owner-message {
         width: 40px;
         height: 40px;
       }
+      .banned {
+        color: red;
+      }
     }
     .flash-content {
       margin: auto;

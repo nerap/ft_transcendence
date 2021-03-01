@@ -25,6 +25,7 @@ nav#navbar {
                     padding: 10px;
                     box-sizing: border-box;
                     font-variant: small-caps;
+                    white-space: nowrap;
                     &-link {
                         text-decoration: none;
                     }

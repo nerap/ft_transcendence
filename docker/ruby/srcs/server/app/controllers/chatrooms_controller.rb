@@ -66,42 +66,50 @@ class ChatroomsController < ApplicationController
     end
 
     def set_admin
-        user = params[:userid].to_i
         chatroom = Chatroom.find(params[:id])
-        chatroom.admin.push(user)
-        if chatroom.save
-            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
-            redirect_to @chatroom
+        if current_user.id == chatroom.owner
+            user = params[:userid].to_i
+            chatroom.admin.push(user)
+            if chatroom.save
+                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
+                redirect_to @chatroom
+            end
         end
     end
 
     def unset_admin
-        user = params[:userid].to_i
         chatroom = Chatroom.find(params[:id])
-        chatroom.admin.delete(user)
-        chatroom.save
-        redirect_to @chatroom
-    end
-
-    def ban_user
-        user = params[:userid].to_i
-        chatroom = Chatroom.find(params[:id])
-        chatroom.banned.push(user)
-        if chatroom.admin.detect{ |e| e == user }
+        if current_user.id == chatroom.owner
+            user = params[:userid].to_i
             chatroom.admin.delete(user)
-        end
-        if chatroom.save
-            ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
+            chatroom.save
             redirect_to @chatroom
         end
     end
 
-    def unban_user
-        user = params[:userid].to_i
+    def ban_user
         chatroom = Chatroom.find(params[:id])
-        chatroom.banned.delete(user)
-        chatroom.save
-        redirect_to @chatroom
+        if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
+            user = params[:userid].to_i
+            chatroom.banned.push(user)
+            if chatroom.admin.detect{ |e| e == user }
+                chatroom.admin.delete(user)
+            end
+            if chatroom.save
+                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
+                redirect_to @chatroom
+            end
+        end
+    end
+
+    def unban_user
+        chatroom = Chatroom.find(params[:id])
+        if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
+            user = params[:userid].to_i
+            chatroom.banned.delete(user)
+            chatroom.save
+            redirect_to @chatroom
+        end
     end
 
     def new_owner
