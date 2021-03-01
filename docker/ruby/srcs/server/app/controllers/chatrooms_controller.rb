@@ -87,7 +87,9 @@ class ChatroomsController < ApplicationController
         user = params[:userid].to_i
         chatroom = Chatroom.find(params[:id])
         chatroom.banned.push(user)
-        chatroom.admin.delete(user)
+        if chatroom.admin.detect{ |e| e == user }
+            chatroom.admin.delete(user)
+        end
         if chatroom.save
             ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
             redirect_to @chatroom
