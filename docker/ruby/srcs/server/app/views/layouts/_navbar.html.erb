@@ -6,6 +6,7 @@
         <% # guilds list %>
         <%= link_to "Chatrooms", chatrooms_path, class: "nav-item nav-link" %>
         <%= link_to "Users list", users_path %>
+        <%= link_to "Friends", friends_path %>
     <% else %>
         <%= link_to "Sign in", new_user_session_path, class: "nav-item nav-link" %>
         <%= link_to "Sign up", new_user_registration_path, class: "nav-item nav-link" %>

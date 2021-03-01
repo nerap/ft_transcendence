@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :friends
   resources :chatrooms
   resources :chats
   get 'users/index'
