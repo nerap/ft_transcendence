@@ -33,3 +33,12 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+/vendor
+/ruby
+./Gemfile.lock
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

@@ -10,22 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_024653) do
+ActiveRecord::Schema.define(version: 2021_02_28_132140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "chatrooms", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "chatroom_type", null: false
+    t.string "password"
+    t.bigint "owner", null: false
+    t.bigint "admin", default: [], array: true
+    t.bigint "banned", default: [], array: true
     t.index ["name"], name: "index_chatrooms_on_name", unique: true
+    t.index ["owner"], name: "index_chatrooms_on_owner"
   end
 
   create_table "chats", force: :cascade do |t|
     t.string "message"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", precision: 0, null: false
+    t.datetime "updated_at", precision: 0, null: false
     t.bigint "user_id"
     t.bigint "chatroom_id"
     t.index ["chatroom_id"], name: "index_chats_on_chatroom_id"
@@ -55,10 +61,13 @@ ActiveRecord::Schema.define(version: 2021_02_20_024653) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "username"
+    t.string "avatar"
+    t.bigint "block_list", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chatrooms", "users", column: "owner"
   add_foreign_key "chats", "chatrooms"
   add_foreign_key "chats", "users"
 end

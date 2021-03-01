@@ -1,0 +1,17 @@
+<div id="password-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2><%= chatroom.name %></h2>
+        </div>
+        <%= form_for(chatroom, url: login_chatroom_path(chatroom), html: { method: :post }) do |form| %>
+        <div class="modal-body">
+            <%= form.hidden_field :chatroom_id, value: chatroom.id %>
+            <%= form.password_field :chatroom_password, placeholder: "Enter password..." %>
+        </div>
+        <div class="modal-footer">
+            <%= form.button "Submit", class: "button-password" %>
+        </div>
+        <% end %>
+    </div>
+</div>

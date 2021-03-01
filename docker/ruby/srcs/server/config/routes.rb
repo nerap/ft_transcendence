@@ -1,13 +1,24 @@
 Rails.application.routes.draw do
   resources :friends
   resources :chatrooms
-  resources :chats
-  get 'users/index'
-  devise_for :users
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root "home#index"
   get "home", to: "home#index"
-  match '/users',   to: 'users#index',   via: 'get'
-  get "chatrooms/index"
-  # root 'chats#index'
+
+  resources :chatrooms do
+    member do
+      post 'login'
+      put 'set_admin'
+      delete 'unset_admin'
+      put 'ban_user'
+      delete 'unban_user'
+    end
+  end
+
+  resources :chats
+
+  devise_for :users
+  resources :users
+  get "users", to: "users#index"
+
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

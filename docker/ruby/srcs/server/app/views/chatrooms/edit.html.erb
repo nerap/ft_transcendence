@@ -2,4 +2,4 @@
   Editing room <%= @chatroom.name %>
 </h1>
 
-<%= render partial: 'form' %>
+<%= render 'form', chatroom: @chatroom  %>

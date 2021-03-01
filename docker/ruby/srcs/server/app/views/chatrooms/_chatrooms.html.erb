@@ -1,17 +1,61 @@
-<div class="mb-3">
-  <%= link_to new_chatroom_path, class: 'btn btn-primary' do %>
-    Create a chatroom
+<div id="main-chatrooms">
+
+  <div>
+    <%= link_to new_chatroom_path do %>
+      Create a chatroom
+    <% end %>
+  </div>
+
+  <% if @chatrooms.present? %>
+  <% else %>
+    <div>
+      There are no chatrooms
+    </div>
   <% end %>
+
+  <div>
+    <ul class="tabs">
+      <li class="active"><a href="#public" data-turbolinks="false">Public chatrooms</a></li>
+      <li><a href="#private" data-turbolinks="false">Private chatrooms</a></li>
+    </ul>
+    <div class="tabs-content">
+      <div class="tab-content active" id="public">
+        <table class="tab-content-list">
+          <tr>
+            <th>CHATROOM NAME</th>
+            <th>CREATED BY</th>
+          </tr>
+          <% @chatrooms.each do |chatroom| %>
+            <% if chatroom.chatroom_type == "public" %>
+              <tr class="tab-content-list-options">
+                <td><%= link_to chatroom_path(chatroom), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= chatroom.name %></div><% end %></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+      <div class="tab-content" id="private">
+        <table class="tab-content-list">
+          <tr class="tab-content-headers">
+            <th class="tab-content-header">CHATROOM NAME</th>
+            <th class="tab-content-header">CREATED BY</th>
+          </tr>
+          <% @chatrooms.each do |chatroom| %>
+            <% if chatroom.chatroom_type == "private" %>
+              <tr class="tab-content-list-options">
+                <td><div id="tab-content-list-option-link-room"><div class="tab-content-list-option"><%= chatroom.name %></div></div></td>
+                <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+                <!-- Modal -->
+                <%= render "login", chatroom: chatroom %>
+                <!-- End Modal -->
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
-<% if @chatrooms.present? %>
-  <nav class="nav flex-column">
-    <% @chatrooms.each do |chatroom| %>
-      <%= link_to chatroom.name, chatroom_path(chatroom), class: 'nav-link chatroom-nav-link' %>
-    <% end %>
-  </nav>
-<% else %>
-  <div class="text-muted">
-    There are no chatrooms
-  </div>
-<% end %>
+<%= javascript_pack_tag 'Chatrooms.js' %>

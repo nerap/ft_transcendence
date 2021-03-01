@@ -1,0 +1,7 @@
+<div>
+    <% if @user == current_user %>
+        <%= render 'self_profile' %>
+    <% else %>
+        <%= render 'users/user_profile' %>
+    <% end %>
+</div>
