@@ -1,15 +1,16 @@
 <% @chats.each do |chat| %>
-    <% if current_user == chat.user %>
-        <p class="sent">
-            <span class="message-header-sent"><%= chat.user.username %> <%= image_tag ("blank-profile-picture.jpg"), class: "user-avatar-sent" %></span><br/>
+        <p class="<%= current_user == chat.user ? "sent" : "received" %>">
+            <span class="message-header">
+            <% if current_user != chat.user %>
+                <img class="user-avatar-<%= current_user == chat.user ? "sent" : "received" %>" src="/assets/blank-profile-picture.jpg" />
+            <% end %>
+            <%= chat.user.username %>
+            <% if current_user == chat.user %>
+                <img class="user-avatar-<%= current_user == chat.user ? "sent" : "received" %>" src="/assets/blank-profile-picture.jpg" />
+            <% end %>
+            </span><br/>
             <span class="message-content"><%= chat.message %></span><br/>
-            <span class="message-footer-sent"><%= chat.created_at.to_s %></span>
-        </p>
-    <% else %>
-        <p class="received">
-            <span class="message-header-received"><%= image_tag ("blank-profile-picture.jpg"), class: "user-avatar-received" %> <%= chat.user.username %></span><br/>
-            <span class="message-content"><%= chat.message %></span><br/>
-            <span class="message-footer-received"><%= chat.created_at %></span>
+            <span class="message-footer"><%= chat.created_at.to_s %></span>
         </p>
         <div class="user-menu" id="user-menu">
             <ul class="menu-options">
@@ -30,5 +31,4 @@
                 </div>
             </ul>
         </div>
-    <% end %>
 <% end %>

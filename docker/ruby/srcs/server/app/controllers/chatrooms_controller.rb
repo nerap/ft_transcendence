@@ -1,7 +1,7 @@
 class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
-    before_action :check_access, only: [:show]
+    before_action :check_if_member, only: [:show]
     before_action :banned_from_chatroom?, only: [:show]
 
     def index
@@ -26,9 +26,7 @@ class ChatroomsController < ApplicationController
     end
 
     def edit
-        if (current_user.id != @chatroom.owner)
-            redirect_to @chatroom
-        end
+        render :unauthorized, status: :forbidden if (current_user.id != @chatroom.owner)
     end
 
     def update
@@ -40,6 +38,8 @@ class ChatroomsController < ApplicationController
             else
                 render :new
             end
+        else
+            render :new, status: :forbidden
         end
     end
 
@@ -53,8 +53,12 @@ class ChatroomsController < ApplicationController
     end
 
     def destroy
-        @chatroom.destroy
-        redirect_to chatrooms_path
+        if @chatroom.owner == current_user.id
+            @chatroom.destroy
+            redirect_to chatrooms_path
+        else
+            render :unauthorized, status: :forbidden
+        end
     end
 
     def login
@@ -113,6 +117,7 @@ class ChatroomsController < ApplicationController
     end
 
     def new_owner
+        return render :unauthorized, status: :forbidden if current_user.id != @chatroom.owner
         if (current_user.id == @chatroom.owner && (newowner = User.where(username: params[:chatroom][:owner]).first))
             @chatroom.owner = newowner.id
             if @chatroom.admin.detect{ |e| e == newowner.id }
@@ -135,16 +140,13 @@ class ChatroomsController < ApplicationController
         params.require(:chatroom).permit(:name, :chatroom_type, :password, :owner)
     end
 
-    def check_access
-        if @chatroom.chatroom_type == "private"
-        # redirect_to chatrooms_path
-        end
+    def check_if_member
+        @chatroom = Chatroom.find(params[:id]) if params[:id]
+        redirect_to chatrooms_path if !@chatroom.members.detect{ |e| e == current_user.id }
     end
 
     def banned_from_chatroom?
-        if @chatroom.banned.detect{ |e| e == current_user.id }
-            # ActionCable.server.broadcast 'flash_banned_channel', chatroom: @chatroom, user: current_user.id
-            redirect_to chatrooms_path
-        end
+        # ActionCable.server.broadcast 'flash_banned_channel', chatroom: @chatroom, user: current_user.id
+        return render :index, status: :forbidden if @chatroom.banned.detect{ |e| e == current_user.id }
     end
 end

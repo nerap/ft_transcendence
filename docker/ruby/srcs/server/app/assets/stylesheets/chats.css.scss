@@ -52,11 +52,11 @@
           border-bottom-right-radius: 10px;
           margin-left: 10px;
 
-          .message-header-received {
+          .message-header {
             font-size: 12px;
             font-weight: bold;
           }
-          .message-footer-received {
+          .message-footer {
             font-size: 9px;
             font-style: italic;
             float: right;
@@ -68,6 +68,10 @@
             width: 20px;
             cursor: pointer;
           }
+          .message-content {
+            float: left;
+            word-break: break-all;
+          }
         }
 
         &.sent {
@@ -76,12 +80,12 @@
           align-self: flex-end;
           margin-right: 10px;
 
-          .message-header-sent {
+          .message-header {
             float: right;
             font-size: 12px;
             font-weight: bold;
           }
-          .message-footer-sent {
+          .message-footer {
             font-size: 9px;
             font-style: italic;
             float: left;
