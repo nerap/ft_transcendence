@@ -13,12 +13,15 @@
 
   <body>
 	  <div class="container">
-      <div class="row">
-        <div>
-          <%= render 'layouts/navbar'%>
-          <div id="main-body">
-            <%= yield %>
-          </div>
+      <div>
+        <%= render 'layouts/navbar'%>
+        <div id="main-body">
+          <% flash.each do |type, msg| %>
+            <div>
+              <%= content_tag :div, msg, class: type %>
+            </div>
+          <% end %>
+          <%= yield %>
         </div>
       </div>
     </div>

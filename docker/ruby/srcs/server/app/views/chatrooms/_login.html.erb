@@ -8,7 +8,7 @@
         <%= form_for(chatroom, url: login_chatroom_path(chatroom), html: { method: :post }) do |form| %>
             <div class="modal-body">
                 <%= form.hidden_field :chatroom_id, value: chatroom.id %>
-                <%= form.password_field :chatroom_password, placeholder: "Enter password...", class: "password-field", value: nil %><%= form.button "Submit", class: "button-password" %>
+                <%= form.password_field :chatroom_password, placeholder: "Enter password...", class: "password-field", value: nil %><%= form.button "Join", class: "button-password" %>
             </div>
         <% end %>
     </div>

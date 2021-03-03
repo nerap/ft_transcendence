@@ -53,19 +53,24 @@ class ChatroomsController < ApplicationController
     end
 
     def destroy
-        if @chatroom.owner == current_user.id
-            @chatroom.destroy
-            redirect_to chatrooms_path
-        else
-            render :unauthorized, status: :forbidden
-        end
+        # if @chatroom.owner == current_user.id
+        #     @chatroom.destroy
+        #     redirect_to chatrooms_path
+        # else
+        #     render :unauthorized, status: :forbidden
+        # end
+        @chatroom.destroy
     end
 
     def login
         chatroom_id = params[:chatroom][:chatroom_id]
         chatroom = Chatroom.find(chatroom_id)
         if params[:chatroom][:chatroom_password] == chatroom.password
-            redirect_to chatroom_path(chatroom)
+            chatroom.members.push(current_user.id)
+            if chatroom.save
+                redirect_to chatroom_path(chatroom)
+                flash[:success] = "You are now a member of #{@chatroom.name}!"
+            end
         end
     end
 
@@ -142,7 +147,9 @@ class ChatroomsController < ApplicationController
 
     def check_if_member
         @chatroom = Chatroom.find(params[:id]) if params[:id]
-        redirect_to chatrooms_path if !@chatroom.members.detect{ |e| e == current_user.id }
+        # redirect_to chatrooms_path if !@chatroom.members.detect{ |e| e == current_user.id }
+        @chatroom.members.delete(current_user.id)
+        @chatroom.save
     end
 
     def banned_from_chatroom?
