@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       delete 'unban_user'
       get 'psswd', to: "chatrooms#show"
       put 'new_owner'
+      put 'join'
+      delete 'unjoin'
     end
   end
 

@@ -1,8 +1,7 @@
 class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
-    before_action :check_if_member, only: [:show]
-    before_action :banned_from_chatroom?, only: [:show]
+    before_action :check_permission, only: [:show]
 
     def index
         @chatrooms = Chatroom.all.order(:name)
@@ -18,7 +17,7 @@ class ChatroomsController < ApplicationController
             @chatroom.password = nil
         end
         if @chatroom.save
-            flash[:success] = "Chatroom #{@chatroom.name} was created successfully"
+            flash[:notice] = "#{@chatroom.name} was created successfully"
             redirect_to chatrooms_path
         else
             render :new
@@ -33,7 +32,7 @@ class ChatroomsController < ApplicationController
         @chatroom = Chatroom.find(params[:id])
         if (current_user.id == @chatroom.owner)
             if @chatroom.update(permitted_parameters)
-                flash[:success] = "Chatroom #{@chatroom.name} was updated successfully"
+                flash[:notice] = "#{@chatroom.name} was updated successfully"
                 redirect_to @chatroom
             else
                 render :new
@@ -53,13 +52,13 @@ class ChatroomsController < ApplicationController
     end
 
     def destroy
-        # if @chatroom.owner == current_user.id
-        #     @chatroom.destroy
-        #     redirect_to chatrooms_path
-        # else
-        #     render :unauthorized, status: :forbidden
-        # end
-        @chatroom.destroy
+        if @chatroom.owner == current_user.id
+            @chatroom.destroy
+            flash[:deleted] = "#{@chatroom.name} was deleted successfully"
+            redirect_to chatrooms_path
+        else
+            render :unauthorized, status: :forbidden
+        end
     end
 
     def login
@@ -69,7 +68,7 @@ class ChatroomsController < ApplicationController
             chatroom.members.push(current_user.id)
             if chatroom.save
                 redirect_to chatroom_path(chatroom)
-                flash[:success] = "You are now a member of #{@chatroom.name}!"
+                flash[:notice] = "You are now a member of #{@chatroom.name} !"
             end
         end
     end
@@ -104,6 +103,9 @@ class ChatroomsController < ApplicationController
             if chatroom.admin.detect{ |e| e == user }
                 chatroom.admin.delete(user)
             end
+            if chatroom.members.detect{ |e| e == user }
+                chatroom.members.delete(user)
+            end
             if chatroom.save
                 ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
                 redirect_to @chatroom
@@ -135,6 +137,31 @@ class ChatroomsController < ApplicationController
         end
     end
 
+    def join
+        if @chatroom.chatroom_type == "public"
+            if !@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner && !@chatroom.banned.detect{ |e| e == current_user.id }
+                @chatroom.members.push(current_user.id)
+                if @chatroom.save
+                    flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                    redirect_to chatrooms_path
+                end
+            else
+                flash[:error] = "You are already a member of #{@chatroom.name} !"
+                redirect_to chatrooms_path
+            end
+        end
+    end
+
+    def unjoin
+        if @chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner
+            @chatroom.members.delete(current_user.id)
+            if @chatroom.save
+                flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
+                redirect_to chatrooms_path(anchor: @chatroom.chatroom_type)
+            end
+        end
+    end
+
     protected
     def load_entities
         @chatrooms = Chatroom.all.order(:name)
@@ -145,15 +172,12 @@ class ChatroomsController < ApplicationController
         params.require(:chatroom).permit(:name, :chatroom_type, :password, :owner)
     end
 
-    def check_if_member
+    def check_permission
         @chatroom = Chatroom.find(params[:id]) if params[:id]
-        # redirect_to chatrooms_path if !@chatroom.members.detect{ |e| e == current_user.id }
-        @chatroom.members.delete(current_user.id)
-        @chatroom.save
-    end
-
-    def banned_from_chatroom?
-        # ActionCable.server.broadcast 'flash_banned_channel', chatroom: @chatroom, user: current_user.id
-        return render :index, status: :forbidden if @chatroom.banned.detect{ |e| e == current_user.id }
+        if @chatroom.banned.detect{ |e| e == current_user.id } || (!@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner)
+            flash[:error] = "You are not a member of this chatroom!" if (!@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner)
+            flash[:error] = "You have been banned of this chatroom!" if @chatroom.banned.detect{ |e| e == current_user.id }
+            redirect_to chatrooms_path(anchor: @chatroom.chatroom_type)
+        end
     end
 end

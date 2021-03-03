@@ -31,9 +31,9 @@
     hashChange()
 
     var modals = document.querySelectorAll("#password-modal")
-    var links = document.querySelectorAll("#tab-content-list-option-link-room")
+    var links = document.querySelectorAll("#tab-content-private")
     var span = document.querySelectorAll(".close")
-    
+
     for (var i = 0; i < links.length; i++) {
         links[i].modal = modals[i];
         links[i].addEventListener('click', function (e) {
@@ -51,4 +51,23 @@
                 modal.style.display = "none";
         }
     })
+
+    $("tr[data-link]").click(function () {
+        window.location = $(this).data("link")
+    })
+
+    var joins = document.querySelectorAll('.tab-content-list-join')
+    var unjoins = document.querySelectorAll('.tab-content-list-unjoin')
+    var changeJoin = function (e1, e2) {
+        e1.classList.remove('active')
+        e2.classList.add('active')
+    }
+    for (let i = 0; i < joins.length; i++) {
+        joins[i].addEventListener("click", function (e) {
+            changeJoin(this, unjoins[i]);
+        });
+        unjoins[i].addEventListener("click", function (e) {
+            changeJoin(this, joins[i]);
+        });
+    }
 })()

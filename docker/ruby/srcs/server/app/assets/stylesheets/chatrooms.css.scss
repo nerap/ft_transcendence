@@ -41,6 +41,7 @@
     }
 
     .tabs-content {
+        width: auto;
         position: relative;
         z-index: 3;
         padding: 20px;
@@ -63,24 +64,75 @@
                 margin-right: auto;
                 width: 100%;
                 height: auto;
-                table-layout: fixed;
                 border-collapse: collapse;
 
-                td {
+                .tab-content-list-options {
                     background-color: whitesmoke;
-                    padding: 0;
-                    font-weight: 500;
-                    font-size: 16px;
-                    
-                    .tab-content-list-option {
-                        padding: 15px;
-                        overflow-wrap: break-word;
-                        &-link {
-                            text-decoration: none;
-                        }
-                        &:hover {
-                            cursor: pointer;
-                            background: rgba(0, 0, 0, 0.2);
+                    border-top: 1px solid rgba(0, 0, 0, 0.12);
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                    &:hover {
+                        cursor: pointer;
+                        background: rgba(0, 0, 0, 0.2);
+                    }
+                    td {
+                        padding: 0;
+                        font-weight: 500;
+                        font-size: 16px;
+                        .tab-content-list {
+                            padding-left: 15px;
+                            &.room {
+                                padding-top: 15px;
+                                font-size: 17px;
+                                font-weight: bold;
+                                text-align: left;
+                                overflow-wrap: break-word;
+                            }
+                            &.owner {
+                                padding-bottom: 15px;
+                                font-size: 12px;
+                                font-style: italic;
+                                text-align: left;
+                                overflow-wrap: break-word;
+                            }
+                            &-link {
+                                text-decoration: none;
+                            }
+                            &-image {
+                                padding: 5px;
+                                width: auto;
+                            }
+                            &-join {
+                                display: none;
+                                width: 70px;
+                                height: 40px;
+                                line-height: 40px;
+                                background-color: rgba(2, 125, 197, 0.8);
+                                color: white;
+                                border-radius: 5px;
+                                margin: auto;
+                                &.active {
+                                    display: block;
+                                }
+                                &-link {
+                                    text-decoration: none;
+                                }
+                            }
+                            &-unjoin {
+                                display: none;
+                                width: 70px;
+                                height: 40px;
+                                line-height: 40px;
+                                background-color: rgba(2, 125, 197, 0.3);
+                                color: white;
+                                border-radius: 5px;
+                                margin: auto;
+                                &.active {
+                                    display: block;
+                                }
+                                &-link {
+                                    text-decoration: none;
+                                }
+                            }
                         }
                     }
                 }

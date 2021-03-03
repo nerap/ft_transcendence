@@ -1,5 +1,53 @@
 div#main-body {
     padding-top: 40px;
+}
 
-    
+.flash-message {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: auto;
+    height: auto;
+    font-size: 15px;
+    text-align: center;
+    color: black;
+    z-index: 100;
+    .notice {
+        height: 100%;
+        width: auto;
+        padding: 10px;
+        background-color: rgba(108, 231, 91, 0.4);
+        border: 1px solid;
+        border-color: rgb(53, 116, 45);
+    }
+    .deleted {
+        height: 100%;
+        width: auto;
+        padding: 10px;
+        background-color: rgba(206, 111, 22, 0.4);
+        border: 1px solid;
+        border-color: rgb(129, 80, 16);
+    }
+    .error {
+        height: 100%;
+        width: auto;
+        padding: 10px;
+        background-color: rgba(218, 4, 4, 0.4);
+        border: 1px solid;
+        border-color: rgb(148, 4, 4);
+    }
+    .closebtn {
+        margin-left: 15px;
+        color: rgb(97, 97, 97);
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .closebtn:hover {
+        color: black;
+      }
 }
