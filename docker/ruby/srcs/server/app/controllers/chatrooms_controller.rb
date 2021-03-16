@@ -1,4 +1,5 @@
 class ChatroomsController < ApplicationController
+    respond_to :html, :json
     before_action :authenticate_user!
     before_action :load_entities
     before_action :check_permission, only: [:show]
@@ -18,9 +19,9 @@ class ChatroomsController < ApplicationController
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
-            redirect_to chatrooms_path
+            respond_with(@chatroom)
         else
-            render :new
+            respond_with(@chatroom, status: :unprocessable_entity)
         end
     end
 
@@ -75,8 +76,8 @@ class ChatroomsController < ApplicationController
 
     def set_admin
         chatroom = Chatroom.find(params[:id])
-        if current_user.id == chatroom.owner
-            user = params[:userid].to_i
+        user = params[:userid].to_i
+        if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user }
             chatroom.admin.push(user)
             if chatroom.save
                 ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
@@ -155,6 +156,9 @@ class ChatroomsController < ApplicationController
     def unjoin
         if @chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner
             @chatroom.members.delete(current_user.id)
+            if @chatroom.admin.detect{ |e| e == current_user.id }
+                @chatroom.admin.delete(current_user.id)
+            end
             if @chatroom.save
                 flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
                 redirect_to chatrooms_path(anchor: @chatroom.chatroom_type)

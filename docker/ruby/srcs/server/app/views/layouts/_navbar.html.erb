@@ -1,12 +1,12 @@
 <nav id="navbar">
     <table class="navbar-options">
         <tr>
-            <td><%= link_to home_path, class: "navbar-option-link" do %><div class="navbar-option">FT_TRANSCENDENCE</div><% end %></td>
+            <td><a href="#" class="navbar-option-link" ><div class="navbar-option">FT_TRANSCENDENCE</div></a></td>
             <% if user_signed_in? %>
                 <td><%= link_to user_path(current_user), class: "navbar-option-link" do %><div class="navbar-option">account</div><% end %></td>
                 <td><%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %><div class="navbar-option">log out</div><% end %></td>
-                <td><%= link_to chatrooms_path, class: "navbar-option-link" do %><div class="navbar-option">chatrooms</div><% end %></td>
-                <td><%= link_to users_path, class: "navbar-option-link" do %><div class="navbar-option">members</div><% end %></td>
+                <td><a href="#chatrooms" class="navbar-option-link"><div class="navbar-option">chatrooms</div></a></td>
+                <td><a href="#users" class="navbar-option-link"><div class="navbar-option">members</div></a></td>
             <% else %>
                 <td><%= link_to "Sign in", new_user_session_path, class: "nav-item nav-link" %></td>
                 <td><%= link_to "Sign up", new_user_registration_path, class: "nav-item nav-link" %></td>

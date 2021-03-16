@@ -28,6 +28,8 @@ gem 'jquery-rails'
 # For users management
 gem 'devise'
 
+gem 'js-routes'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

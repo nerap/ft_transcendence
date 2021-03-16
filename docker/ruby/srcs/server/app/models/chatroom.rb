@@ -6,4 +6,8 @@ class Chatroom < ApplicationRecord
     def check_if_private
         chatroom_type == "private"
     end
+
+    # def as_json(options = {})
+        # super(options.merge(:only => [ :id, :name, :chatroom_type, :owner ]))
+    # end
 end

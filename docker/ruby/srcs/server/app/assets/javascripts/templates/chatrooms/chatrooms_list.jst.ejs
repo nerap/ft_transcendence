@@ -1,0 +1,47 @@
+<div>
+    <ul class="tabs">
+        <li class="active"><a href="#public">Public chatrooms</a></li>
+        <li><a href="#private">Private chatrooms</a></li>
+        <li><a href="#member">My chatrooms</a></li>
+    </ul>
+    <div class="tabs-content">
+        <div class="tab-content active" id="public">
+            <table class="tab-content-list">
+                <% Transcendence.chatrooms.each(function(model) { %>
+                    <% if (model.escape('chatroom_type') == "public") { %>
+                        <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>" onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
+                            <td class="tab-content-list-image">
+                                <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
+                            </td>
+                            <td>
+                                <div class="tab-content-list room"><%= model.escape('name') %></div>
+                                <div class="tab-content-list owner">Owner: <a href="/users/<%= model.escape('owner') %>"
+                                        class="tab-content-list-link"><%= Transcendence.users.get(model.escape('owner')).toJSON().username %></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% }) %>
+            </table>
+        </div>
+        <div class="tab-content" id="private">
+            <table class="tab-content-list">
+                <% Transcendence.chatrooms.each(function(model) { %>
+                    <% if (model.escape('chatroom_type') == "private") { %>
+                        <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>" data-link="#chatrooms/<%= model.escape('id') %>">
+                            <td class="tab-content-list-image">
+                                <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/padlock.png">
+                            </td>
+                            <td>
+                                <div class="tab-content-list room"><%= model.escape('name') %></div>
+                                <div class="tab-content-list owner">Owner: <a href="/users/<%= model.escape('owner') %>"
+                                        class="tab-content-list-link"><%= Transcendence.users.get(model.escape('owner')).toJSON().username %></a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% } %>
+                <% }) %>
+            </table>
+        </div>
+    </div>
+</div>

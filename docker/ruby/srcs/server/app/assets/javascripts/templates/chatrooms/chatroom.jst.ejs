@@ -1,0 +1,32 @@
+<div id="main-chats">
+    <h1>
+        <%= chatroom.name %>
+        Created by <%= Transcendence.users.get(chatroom.owner).toJSON().username %>
+        Type: <%= chatroom.chatroom_type %>
+    </h1>
+    <button onclick="history.back()">Back</button>
+    <% if (chatroom.owner == Transcendence.current_user.id) { %>
+        | <a href="#chatrooms/<%= chatroom.id %>/edit">Edit</a>
+        | <a href="#chatrooms/<%= chatroom.id %>/destroy">Destroy</a>
+        | <a id="link-to-new-owner">Leave <%= chatroom.name %></a>
+    <% } %>
+    <br/>
+    <% if (chatroom.admin.includes(Transcendence.current_user.id)) { %>
+        TEST ADMIN
+    <% } %>
+    <div id="room-content">
+        <div id="messages"></div>
+        <div id="send_message">
+            <form action="" method="post">
+                <table>
+                    <tr>
+                        <td class="text"><input type="text" class="text-field" id="text-field"></td>
+                        <td class="button"><input type="submit" value="Send" class="button-field"></td>
+                    </tr>
+                </table>
+                <label></label>
+                <input>
+            </form>
+        </div>
+    </div>
+</div>
