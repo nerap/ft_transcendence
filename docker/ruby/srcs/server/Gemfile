@@ -30,6 +30,9 @@ gem 'devise'
 
 gem 'js-routes'
 
+gem 'redis'
+gem 'redis-rails'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

@@ -142,15 +142,22 @@ class ChatroomsController < ApplicationController
         if @chatroom.chatroom_type == "public"
             if !@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner && !@chatroom.banned.detect{ |e| e == current_user.id }
                 @chatroom.members.push(current_user.id)
-                if @chatroom.save
-                    flash[:notice] = "You are now a member of #{@chatroom.name} !"
-                    redirect_to chatrooms_path
+                respond_to do |format|
+                    if @chatroom.save
+                        ActionCable.server.broadcast 'chatrooms_channel', content: @chatroom, user: current_user
+                        flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                        format.json { render json: { chatroom: @chatroom }, status: :ok }
+                    end
                 end
             else
                 flash[:error] = "You are already a member of #{@chatroom.name} !"
-                redirect_to chatrooms_path
             end
         end
+        # respond_to do |format|
+            # ActionCable.server.broadcast "chatrooms_channel", type: "rooms", description: "join-public", user: current_user
+            # format.json { render chatroom_url, notice: 'Room Joined !' }
+            # format.json { render json: chatroom.id, status: :ok }
+        # end
     end
 
     def unjoin
@@ -160,8 +167,8 @@ class ChatroomsController < ApplicationController
                 @chatroom.admin.delete(current_user.id)
             end
             if @chatroom.save
+                ActionCable.server.broadcast "chatrooms_channel", content: @chatroom, user: current_user
                 flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
-                redirect_to chatrooms_path(anchor: @chatroom.chatroom_type)
             end
         end
     end

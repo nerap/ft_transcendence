@@ -103,34 +103,38 @@
                             }
                             &-join {
                                 display: none;
-                                width: 70px;
-                                height: 40px;
-                                line-height: 40px;
-                                background-color: rgba(2, 125, 197, 0.8);
-                                color: white;
-                                border-radius: 5px;
-                                margin: auto;
                                 &.active {
                                     display: block;
                                 }
-                                &-link {
+                                input[type=submit] {
+                                    font-size: 15px;
+                                    width: 70px;
+                                    height: 40px;
+                                    line-height: 40px;
+                                    background-color: rgba(2, 125, 197, 0.8);
+                                    color: white;
+                                    border-radius: 5px;
+                                    margin: auto;
                                     text-decoration: none;
+                                    border: none;
                                 }
                             }
                             &-unjoin {
                                 display: none;
-                                width: 70px;
-                                height: 40px;
-                                line-height: 40px;
-                                background-color: rgba(2, 125, 197, 0.3);
-                                color: white;
-                                border-radius: 5px;
-                                margin: auto;
                                 &.active {
                                     display: block;
                                 }
-                                &-link {
+                                input[type=submit] {
+                                    font-size: 15px;
+                                    width: 70px;
+                                    height: 40px;
+                                    line-height: 40px;
+                                    background-color: rgba(2, 125, 197, 0.3);
+                                    color: white;
+                                    border-radius: 5px;
+                                    margin: auto;
                                     text-decoration: none;
+                                    border: none;
                                 }
                             }
                         }
@@ -165,14 +169,14 @@
         border-radius: 10px;
         animation-name: animatetop;
         animation-duration: 0.6s;
-        .close {
+        #close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
+        #close:hover,
+        #close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
@@ -194,7 +198,7 @@
         .modal-body {
             padding-top: 10px;
             text-align: center;
-            .password-field {
+            input[type=password] {
                 background-color: white;
                 height: 38px;
                 width: 40%;

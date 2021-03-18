@@ -17,15 +17,13 @@
     <div id="room-content">
         <div id="messages"></div>
         <div id="send_message">
-            <form action="" method="post">
+            <form action="/chats" accept-charset="UTF-8" data-remote="true" method="post">
                 <table>
                     <tr>
-                        <td class="text"><input type="text" class="text-field" id="text-field"></td>
-                        <td class="button"><input type="submit" value="Send" class="button-field"></td>
+                        <td class="text"><input placeholder="New message..." autocomplete="off" type="text" class="text-field" id="text-field" required="required"></td>
+                        <td class="button"><input type="submit" value="Send" class="button-field" data-disable-with="Send"></td>
                     </tr>
                 </table>
-                <label></label>
-                <input>
             </form>
         </div>
     </div>

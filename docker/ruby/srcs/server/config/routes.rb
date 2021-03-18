@@ -2,17 +2,19 @@ Rails.application.routes.draw do
   root "home#index"
   get "home", to: "home#index"
 
-  resources :chatrooms do
-    member do
-      post 'login'
-      put 'set_admin'
-      delete 'unset_admin'
-      put 'ban_user'
-      delete 'unban_user'
-      get 'psswd', to: "chatrooms#show"
-      put 'new_owner'
-      put 'join'
-      delete 'unjoin'
+  scope "api" do
+    resources :chatrooms do
+      member do
+        post 'login'
+        put 'set_admin'
+        delete 'unset_admin'
+        put 'ban_user'
+        delete 'unban_user'
+        get 'psswd', to: "chatrooms#show"
+        put 'new_owner'
+        post 'join'
+        post 'unjoin'
+      end
     end
   end
 
