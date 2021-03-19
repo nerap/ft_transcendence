@@ -68,8 +68,9 @@ class ChatroomsController < ApplicationController
         if params[:chatroom][:chatroom_password] == chatroom.password
             chatroom.members.push(current_user.id)
             if chatroom.save
-                redirect_to chatroom_path(chatroom)
+                ActionCable.server.broadcast 'chatrooms_channel', content: @chatroom, user: current_user
                 flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                # format.json { render json: { chatroom: chatroom }, status: :ok }
             end
         end
     end

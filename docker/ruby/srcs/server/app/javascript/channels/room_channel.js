@@ -10,6 +10,7 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
   },
 
   received(data) {
+    Transcendence.chats.fetch();
     let currentRoom = sessionStorage.getItem('chat_roomid')
     if (data.content.message && currentRoom == data.content.chatroom_id) {
       let currentUser = sessionStorage.getItem('chat_userid')

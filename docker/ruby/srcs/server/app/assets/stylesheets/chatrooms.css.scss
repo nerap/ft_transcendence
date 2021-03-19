@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
-#chatrooms {
+#main-chatrooms {
     background-color: #EEE;
     font-family: sans-serif;
     padding: 50px;
@@ -117,6 +117,7 @@
                                     margin: auto;
                                     text-decoration: none;
                                     border: none;
+                                    cursor: pointer;
                                 }
                             }
                             &-unjoin {
@@ -135,6 +136,7 @@
                                     margin: auto;
                                     text-decoration: none;
                                     border: none;
+                                    cursor: pointer;
                                 }
                             }
                         }

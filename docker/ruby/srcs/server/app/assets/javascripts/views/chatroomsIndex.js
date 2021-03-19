@@ -1,16 +1,23 @@
 Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
     events: {
-        // "click .tab-content-list-join-link": 'flash',
-        // "click .tab-content-list-unjoin-link": 'update'
-        "click #tab-content-private": 'modal'
+        // "click .tab-content-list-join-link": 'join',
+        // "click .tab-content-list-unjoin-link": 'unjoin',
+        "click #tab-content-private": 'modal',
+        // "click .tabs a": 'displayTab'
     },
     initialize: function () {
         this.listenTo(this.collection, 'sync', this.render);
     },
     render: function () {
         this.$el.html(JST['templates/chatrooms/index']());
-        var chatroomView = JST['templates/chatrooms/chatrooms_list']();
+        if (window.location.hash == "#chatrooms/public") {
+            var chatroomView = JST['templates/chatrooms/public']();
+        } else if (window.location.hash == "#chatrooms/private") {
+            var chatroomView = JST['templates/chatrooms/private']();
+        }
         this.$('.chatrooms-list').append(chatroomView);
+        // var chatroomView = JST['templates/chatrooms/chatrooms_list']();
+        // this.$('.chatrooms-list').append(chatroomView);
         // this.collection.each(function(chatroom) {
         //     var chatroomView = new Transcendence.Views.ChatroomsList({ model: chatroom });
         //     self.$('.chatrooms-list').append(chatroomView.render().el);
@@ -34,62 +41,58 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
                 mod.style.display = "none";
             }
         })
-    }
-});
-
-(function () {
-    var displayTab = function (a) {
-        var li = a.parentNode
-        var div = a.parentNode.parentNode.parentNode
+    },
+    // join: function (e) {
+    //     e.currentTarget.parentNode.classList.remove('active')
+    //     e.currentTarget.parentNode.nextElementSibling.classList.add('active')
+    // },
+    // unjoin: function (e) {
+    //     e.currentTarget.parentNode.classList.remove('active')
+    //     e.currentTarget.parentNode.previousElementSibling.classList.add('active')
+    // },
+    displayTab: function (a) {
+        var li = a.currentTarget.parentNode
+        var div = a.currentTarget.parentNode.parentNode.parentNode
         if (li.classList.contains('active')) {
             return false
         }
         div.querySelector('.tabs .active').classList.remove('active')
         li.classList.add('active')
+    },
+});
 
-        div.querySelector(".tab-content.active").classList.remove('active')
-        div.querySelector(a.getAttribute('href')).classList.add('active')
-    }
+(function () {
+    // var displayTab = function (a) {
+    //     var li = a.parentNode
+    //     var div = a.parentNode.parentNode.parentNode
+    //     if (li.classList.contains('active')) {
+    //         return false
+    //     }
+    //     div.querySelector('.tabs .active').classList.remove('active')
+    //     li.classList.add('active')
+
+    //     div.querySelector(".tab-content.active").classList.remove('active')
+    //     div.querySelector(a.getAttribute('href')).classList.add('active')
+    // }
 
     // var tabs = document.querySelectorAll('.tabs a')
     // for (var i = 0; i < tabs.length; i++) {
-        // tabs[i].addEventListener('click', function (e) {
-            // console.log("1")
-            // displayTab(this)
-        // })
+    // tabs[i].addEventListener('click', function (e) {
+    // console.log("1")
+    // displayTab(this)
+    // })
     // }
 
-    var hashChange = function (e) {
-        var hash = window.location.hash
-        var a = document.querySelector('a[href="' + hash + '"]')
-        if (a !== null && !a.classList.contains('active')) {
-            displayTab(a, e !== undefined)
-        }
-    }
+    // var hashChange = function (e) {
+    //     var hash = window.location.hash
+    //     var a = document.querySelector('a[href="' + hash + '"]')
+    //     if (a !== null && !a.classList.contains('active')) {
+    //         displayTab(a, e !== undefined)
+    //     }
+    // }
 
-    window.addEventListener('hashchange', hashChange)
+    // window.addEventListener('hashchange', hashChange)
     // hashChange()
-
-    var modals = document.querySelectorAll("#password-modal")
-    var links = document.querySelectorAll("#tab-content-private")
-    var span = document.querySelectorAll(".close")
-    for (var i = 0; i < links.length; i++) {
-        links[i].modal = modals[i];
-        links[i].addEventListener('click', function (e) {
-            e.currentTarget.modal.style.display = "block";
-        })
-        span[i].modal = modals[i];
-        span[i].addEventListener('click', function (e) {
-            e.currentTarget.modal.style.display = "none";
-        })
-    }
-    window.addEventListener('click', function (e) {
-        for (var i = 0; i < modals.length; i++) {
-            modal = modals[i]
-            if (e.target == modal)
-                modal.style.display = "none";
-        }
-    })
 
     // var joins = document.querySelectorAll('.tab-content-list-join')
     // var unjoins = document.querySelectorAll('.tab-content-list-unjoin')

@@ -11,8 +11,8 @@ var Transcendence = {
     Views: {},
     Routers: {},
     initialize: function (data) {
-        this.chatrooms = new Transcendence.Collections.Chatrooms();
-        this.chatrooms.fetch();
+        this.chatrooms = new Transcendence.Collections.Chatrooms(data.chatrooms);
+        this.chats = new Transcendence.Collections.Chats(data.chats);
         this.users = new Transcendence.Collections.Users(data.users);
         this.current_user = new window.Transcendence.UserSession(data.current_user);
         new Transcendence.Routers.Home();

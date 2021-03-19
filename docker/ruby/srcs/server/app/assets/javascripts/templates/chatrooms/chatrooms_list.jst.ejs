@@ -47,7 +47,7 @@
             <table class="tab-content-list">
                 <% Transcendence.chatrooms.each(function(model) { %>
                     <% if (model.escape('chatroom_type') == "private") { %>
-                        <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>" data-link="#chatrooms/<%= model.escape('id') %>">
+                        <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>">
                             <td class="tab-content-list-image">
                                 <% if (model.escape('banned').includes(Transcendence.current_user.id)) { %>
                                     <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/block.png">
@@ -57,7 +57,7 @@
                                     <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
                                 <% } %>
                             </td>
-                            <td>
+                            <td onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
                                 <div class="tab-content-list room"><%= model.escape('name') %></div>
                                 <div class="tab-content-list owner">Owner: <a href="/users/<%= model.escape('owner') %>"
                                         class="tab-content-list-link"><%= Transcendence.users.get(model.escape('owner')).toJSON().username %></a>

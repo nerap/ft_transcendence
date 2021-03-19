@@ -1,5 +1,7 @@
 <script type="text/javascript">
     Transcendence.initialize({
+      chatrooms: <%== Chatroom.all.order(:name).to_json %>,
+      chats: <%== Chat.all.to_json %>,
       users: <%== User.all.to_json %>,
       current_user: <%== current_user.to_json %>,
     });

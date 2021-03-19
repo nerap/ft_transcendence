@@ -16,9 +16,11 @@ Rails.application.routes.draw do
         post 'unjoin'
       end
     end
+
+    resources :chats
   end
 
-  resources :chats
+  
 
   devise_for :users
   resources :users
