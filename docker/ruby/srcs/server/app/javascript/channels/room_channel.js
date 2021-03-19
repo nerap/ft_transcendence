@@ -22,14 +22,14 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
         var textMessage2 = `<span class="message-header"><img class="user-avatar-${msg_class}" src="/assets/blank-profile-picture.jpg" /> ` + data.user + `</span><br/>`
       }
       var textMessage3 = `<span class="message-content">` + data.content.message + `</span><br/>` +
-      `<span class="message-footer">` + data.created_at + `</span>` +
-      `</p>`;
+        `<span class="message-footer">` + data.created_at + `</span>` +
+        `</p>`;
       var textMessage = textMessage1 + textMessage2 + textMessage3;
       $('#messages').append(textMessage)
       $('#text-field').val('')
+      var chatHistory = document.getElementById("messages");
+      chatHistory.scrollTop = chatHistory.scrollHeight;
     }
-    var chatHistory = document.getElementById("messages");
-    chatHistory.scrollTop = chatHistory.scrollHeight;
   }
 });
 

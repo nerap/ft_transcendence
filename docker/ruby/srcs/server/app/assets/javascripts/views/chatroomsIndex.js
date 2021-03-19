@@ -3,7 +3,6 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
         // "click .tab-content-list-join-link": 'join',
         // "click .tab-content-list-unjoin-link": 'unjoin',
         "click #tab-content-private": 'modal',
-        // "click .tabs a": 'displayTab'
     },
     initialize: function () {
         this.listenTo(this.collection, 'sync', this.render);
@@ -16,16 +15,8 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
             var chatroomView = JST['templates/chatrooms/private']();
         }
         this.$('.chatrooms-list').append(chatroomView);
-        // var chatroomView = JST['templates/chatrooms/chatrooms_list']();
-        // this.$('.chatrooms-list').append(chatroomView);
-        // this.collection.each(function(chatroom) {
-        //     var chatroomView = new Transcendence.Views.ChatroomsList({ model: chatroom });
-        //     self.$('.chatrooms-list').append(chatroomView.render().el);
-        // });
         return this
     },
-    // flash: function () {
-    // },
     modal: function (e) {
         var a = e.currentTarget.getAttribute("data-id");
         var elem = "#password-modal-" + a;
@@ -50,18 +41,9 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
     //     e.currentTarget.parentNode.classList.remove('active')
     //     e.currentTarget.parentNode.previousElementSibling.classList.add('active')
     // },
-    displayTab: function (a) {
-        var li = a.currentTarget.parentNode
-        var div = a.currentTarget.parentNode.parentNode.parentNode
-        if (li.classList.contains('active')) {
-            return false
-        }
-        div.querySelector('.tabs .active').classList.remove('active')
-        li.classList.add('active')
-    },
 });
 
-(function () {
+// (function () {
     // var displayTab = function (a) {
     //     var li = a.parentNode
     //     var div = a.parentNode.parentNode.parentNode
@@ -108,4 +90,4 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
     //         changeJoin(this, joins[i]);
     //     });
     // }
-})()
+// })()

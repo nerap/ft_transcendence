@@ -3,6 +3,7 @@ class ChatroomsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_entities
     before_action :check_permission, only: [:show]
+    before_action { flash.clear }
 
     def index
         @chatrooms = Chatroom.all.order(:name)
@@ -67,10 +68,18 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(chatroom_id)
         if params[:chatroom][:chatroom_password] == chatroom.password
             chatroom.members.push(current_user.id)
-            if chatroom.save
-                ActionCable.server.broadcast 'chatrooms_channel', content: @chatroom, user: current_user
-                flash[:notice] = "You are now a member of #{@chatroom.name} !"
-                # format.json { render json: { chatroom: chatroom }, status: :ok }
+            respond_to do |format|
+                if chatroom.save
+                    flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    format.json { render json: { chatroom: @chatroom }, status: :ok }
+                end
+            end
+        else
+            respond_to do |format|
+                flash[:error] = "Wrong password !"
+                ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
             end
         end
     end
@@ -145,20 +154,19 @@ class ChatroomsController < ApplicationController
                 @chatroom.members.push(current_user.id)
                 respond_to do |format|
                     if @chatroom.save
-                        ActionCable.server.broadcast 'chatrooms_channel', content: @chatroom, user: current_user
                         flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                        ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
                         format.json { render json: { chatroom: @chatroom }, status: :ok }
                     end
                 end
-            else
-                flash[:error] = "You are already a member of #{@chatroom.name} !"
+            elsif @chatroom.banned.detect{ |e| e == current_user.id }
+                respond_to do |format|
+                    flash[:error] = "You are banned from #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    format.json { render json: { chatroom: @chatroom }, status: :forbidden }
+                end
             end
         end
-        # respond_to do |format|
-            # ActionCable.server.broadcast "chatrooms_channel", type: "rooms", description: "join-public", user: current_user
-            # format.json { render chatroom_url, notice: 'Room Joined !' }
-            # format.json { render json: chatroom.id, status: :ok }
-        # end
     end
 
     def unjoin
@@ -167,9 +175,20 @@ class ChatroomsController < ApplicationController
             if @chatroom.admin.detect{ |e| e == current_user.id }
                 @chatroom.admin.delete(current_user.id)
             end
-            if @chatroom.save
-                ActionCable.server.broadcast "chatrooms_channel", content: @chatroom, user: current_user
-                flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
+            respond_to do |format|
+                if @chatroom.save
+                    flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    format.json { render json: { chatroom: @chatroom }, status: :ok }
+                end
+            end
+        elsif current_user.id == @chatroom.owner
+            respond_to do |format|
+                if @chatroom.save
+                    flash[:error] = "You are the owner of #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+                end
             end
         end
     end

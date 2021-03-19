@@ -18,20 +18,8 @@
 	  <div>
       <div>
         <%= render 'layouts/navbar'%>
+        <div id="flash-message"></div>
         <div id="main-body">
-          <% flash.each do |type, msg| %>
-            <div class="flash-message">
-              <div class="<%= type %>">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                <%= msg %>
-              </div>
-            </div>
-            <script type="application/javascript">
-              $(function() {
-                setTimeout(function(){ $('.<%= type %>').slideUp(500); }, 3000);
-              });
-            </script>
-          <% end %>
           <%= yield %>
         </div>
       </div>
