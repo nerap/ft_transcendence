@@ -1,32 +1,37 @@
 <div id="main-chats">
-    <h1>
-        <%= chatroom.name %>
-        Created by <%= Transcendence.users.get(chatroom.owner).toJSON().username %>
-        Type: <%= chatroom.chatroom_type %>
-    </h1>
     <button onclick="history.back()">Back</button>
     <% if (chatroom.owner == Transcendence.current_user.id) { %>
-        | <a href="#chatrooms/<%= chatroom.id %>/edit">Edit</a>
-        | <a href="#chatrooms/<%= chatroom.id %>/destroy">Destroy</a>
-        | <a id="link-to-new-owner">Leave <%= chatroom.name %></a>
+    | <a href="#chatrooms/<%= chatroom.id %>/edit">Edit</a>
+    | <a href="#chatrooms/<%= chatroom.id %>/destroy">Destroy</a>
+    | <a id="link-to-new-owner">Leave <%= chatroom.name %></a>
     <% } %>
-    <br/>
+    <br />
     <% if (chatroom.admin.includes(Transcendence.current_user.id)) { %>
-        TEST ADMIN
+    TEST ADMIN
     <% } %>
-    <div id="room-content">
-        <div id="messages"></div>
-        <div id="send_message">
-            <form action="/api/chats" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                <table>
-                    <tr>
-                        <td class="text"><input placeholder="New message..." autocomplete="off" type="text" class="text-field" id="text-field" required="required" name="chat[message]"></td>
-                        <td class="button"><input type="submit" value="Send" class="button-field" data-disable-with="Send" name="commit"></td>
-                    </tr>
-                </table>
-                <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chat[user_id]" id="chat_user_id" />
-                <input as="hidden" type="hidden" value="<%= chatroom.id %>" name="chat[chatroom_id]" id="chat_chatroom_id" />
-            </form>
+    <div id="chatroom-contents">
+        <div id="members-content"></div><div id="room-content">
+            <div class="chatroom-title">
+                <%= chatroom.name %> (<%= chatroom.chatroom_type %>)
+            </div>
+            <div id="messages"></div>
+            <div id="send_message">
+                <form action="/api/chats" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden"
+                        name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    <table>
+                        <tr>
+                            <td class="text"><input placeholder="New message..." autocomplete="off" type="text"
+                                    class="text-field" id="text-field" required="required" name="chat[message]"></td>
+                            <td class="button"><input type="submit" value="Send" class="button-field"
+                                    data-disable-with="Send" name="commit"></td>
+                        </tr>
+                    </table>
+                    <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chat[user_id]"
+                        id="chat_user_id" />
+                    <input as="hidden" type="hidden" value="<%= chatroom.id %>" name="chat[chatroom_id]"
+                        id="chat_chatroom_id" />
+                </form>
+            </div>
         </div>
     </div>
 </div>

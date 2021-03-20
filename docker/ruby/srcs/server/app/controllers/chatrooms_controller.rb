@@ -49,8 +49,10 @@ class ChatroomsController < ApplicationController
         @chatroom_owner = User.find(@chatroom.owner)
         @userid = current_user.id
         @roomid = @chatroom.id
-        @chat = Chat.new chatroom: @chatroom
-        @chats = @chatroom.chat.includes(:user)
+        if @chatroom.members.detect{ |e| e == current_user }
+            @chat = Chat.new chatroom: @chatroom
+            @chats = @chatroom.chat.includes(:user)
+        end
     end
 
     def destroy
@@ -71,14 +73,15 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 if chatroom.save
                     flash[:notice] = "You are now a member of #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: @chatroom }, status: :ok }
                 end
             end
         else
             respond_to do |format|
                 flash[:error] = "Wrong password !"
-                ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                 format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
             end
         end
@@ -90,6 +93,7 @@ class ChatroomsController < ApplicationController
         if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user }
             chatroom.admin.push(user)
             if chatroom.save
+                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                 ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
                 redirect_to @chatroom
             end
@@ -118,6 +122,7 @@ class ChatroomsController < ApplicationController
                 chatroom.members.delete(user)
             end
             if chatroom.save
+                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                 ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
                 redirect_to @chatroom
             end
@@ -142,6 +147,7 @@ class ChatroomsController < ApplicationController
                 @chatroom.admin.delete(newowner.id)
             end
             if @chatroom.save
+                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                 ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: newowner.id, type: "owner"
                 redirect_to @chatroom
             end
@@ -155,14 +161,15 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if @chatroom.save
                         flash[:notice] = "You are now a member of #{@chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: @chatroom }, status: :ok }
                     end
                 end
             elsif @chatroom.banned.detect{ |e| e == current_user.id }
                 respond_to do |format|
                     flash[:error] = "You are banned from #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: @chatroom }, status: :forbidden }
                 end
             end
@@ -178,17 +185,16 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 if @chatroom.save
                     flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: @chatroom }, status: :ok }
                 end
             end
         elsif current_user.id == @chatroom.owner
             respond_to do |format|
-                if @chatroom.save
-                    flash[:error] = "You are the owner of #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel:#{current_user.id}", flash: flash
-                    format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
-                end
+                flash[:error] = "You are the owner of #{@chatroom.name} !"
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
             end
         end
     end
