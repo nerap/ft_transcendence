@@ -89,7 +89,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user]).id
-            if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
+            if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user } && chatroom.owner != user
                 chatroom.admin.push(user)
                 respond_to do |format|
                     if chatroom.save
@@ -132,7 +132,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user]).id
-            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && !chatroom.banned.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && !chatroom.banned.detect{ |e| e == user } && chatroom.owner != user && !chatroom.admin.detect{ |e| e == user }
                 chatroom.banned.push(user)
                 if chatroom.admin.detect{ |e| e == user }
                     chatroom.admin.delete(user)
@@ -181,7 +181,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user]).id
-            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && !chatroom.muted.detect{ |e| e == current_user.id }
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && chatroom.owner != user && !chatroom.muted.detect{ |e| e == current_user.id }
                 chatroom.muted.push(user)
                 respond_to do |format|
                     if chatroom.save
