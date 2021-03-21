@@ -73,82 +73,149 @@ class ChatroomsController < ApplicationController
                     flash[:notice] = "You are now a member of #{@chatroom.name} !"
                     ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                     ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                    format.json { render json: { chatroom: @chatroom }, status: :ok }
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
                 end
             end
         else
             respond_to do |format|
                 flash[:error] = "Wrong password !"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+                format.json { render json: { chatroom: chatroom }, status: :unprocessable_entity }
             end
         end
     end
 
     def set_admin
         chatroom = Chatroom.find(params[:id])
-        user = params[:chatroom][:userid].to_i
-        if User.find_by_id(user) && current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
-            chatroom.admin.push(user)
-            respond_to do |format|
-                if chatroom.save
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                    ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: @chatroom, user: user, type: "admin"
-                    format.json { render json: { chatroom: chatroom }, status: :ok }
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
+                chatroom.admin.push(user)
+                respond_to do |format|
+                    if chatroom.save
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: chatroom, user: user, type: "admin"
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
                 end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
             end
         end
     end
 
     def unset_admin
         chatroom = Chatroom.find(params[:id])
-        if current_user.id == chatroom.owner
-            user = params[:chatroom][:userid].to_i
-            chatroom.admin.delete(user)
-            respond_to do |format|
-                if chatroom.save
-                    flash[:deleted] = "You have been demoted as member in #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                    ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
-                    format.json { render json: { chatroom: chatroom }, status: :ok }
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if current_user.id == chatroom.owner && chatroom.admin.detect{ |e| e == user }
+                chatroom.admin.delete(user)
+                respond_to do |format|
+                    if chatroom.save
+                        flash[:deleted] = "You have been demoted as member in #{chatroom.name} !"
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
                 end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
             end
         end
     end
 
     def ban_user
         chatroom = Chatroom.find(params[:id])
-        if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
-            user = params[:chatroom][:userid].to_i
-            chatroom.banned.push(user)
-            if chatroom.admin.detect{ |e| e == user }
-                chatroom.admin.delete(user)
-            end
-            if chatroom.members.detect{ |e| e == user }
-                chatroom.members.delete(user)
-            end
-            respond_to do |format|
-                if chatroom.save
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                    ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: @chatroom, user: user, type: "ban"
-                    format.json { render json: { chatroom: chatroom }, status: :ok }
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && !chatroom.banned.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
+                chatroom.banned.push(user)
+                if chatroom.admin.detect{ |e| e == user }
+                    chatroom.admin.delete(user)
                 end
+                if chatroom.members.detect{ |e| e == user }
+                    chatroom.members.delete(user)
+                end
+                respond_to do |format|
+                    if chatroom.save
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: chatroom, user: user, type: "ban"
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
+                end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
             end
         end
     end
 
     def unban_user
         chatroom = Chatroom.find(params[:id])
-        if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
-            user = params[:chatroom][:userid].to_i
-            chatroom.banned.delete(user)
-            respond_to do |format|
-                if chatroom.save
-                    flash[:notice] = "You have been unbanned from #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                    ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
-                    format.json { render json: { chatroom: chatroom }, status: :ok }
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && chatroom.banned.detect{ |e| e == user }
+                chatroom.banned.delete(user)
+                respond_to do |format|
+                    if chatroom.save
+                        flash[:notice] = "You have been unbanned from #{chatroom.name} !"
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
                 end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
+            end
+        end
+    end
+
+    def mute_user
+        chatroom = Chatroom.find(params[:id])
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && !chatroom.muted.detect{ |e| e == current_user.id }
+                chatroom.muted.push(user)
+                respond_to do |format|
+                    if chatroom.save
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: chatroom, user: user, type: "mute"
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
+                end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
+            end
+        end
+    end
+
+    def unmute_user
+        chatroom = Chatroom.find(params[:id])
+        if User.find_by_username(params[:chatroom][:user])
+            user = User.find_by_username(params[:chatroom][:user]).id
+            if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id }) && chatroom.muted.detect{ |e| e == current_user.id }
+                chatroom.muted.delete(user)
+                respond_to do |format|
+                    if chatroom.save
+                        flash[:notice] = "You have been unmuted from #{chatroom.name} !"
+                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
+                        format.json { render json: { chatroom: chatroom }, status: :ok }
+                    end
+                end
+            end
+        else
+            respond_to do |format|
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
             end
         end
     end

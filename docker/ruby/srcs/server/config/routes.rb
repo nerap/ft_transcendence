@@ -10,6 +10,8 @@ Rails.application.routes.draw do
         post 'unset_admin'
         post 'ban_user'
         post 'unban_user'
+        post 'mute_user'
+        post 'unmute_user'
         get 'psswd', to: "chatrooms#show"
         put 'new_owner'
         post 'join'

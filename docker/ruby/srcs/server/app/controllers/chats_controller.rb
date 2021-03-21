@@ -24,16 +24,27 @@ class ChatsController < ApplicationController
 
   # POST /chats or /chats.json
   def create
-    @chat = Chat.create(chat_params)
-    respond_to do |format|
-      if @chat.save
-        ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username), created_at: @chat.created_at.to_s
-        format.html { redirect_to @chat, notice: "Chat was successfully created." }
-        format.json { render :show, status: :created, location: @chat }
-        format.js
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @chat.errors, status: :unprocessable_entity }
+    chatroomid = params[:chat][:chatroom_id].to_i
+    chatroom = Chatroom.find_by_id(chatroomid)
+    if (chatroom.members.detect{ |e| e == current_user.id } && !chatroom.muted.detect{ |e| e == current_user.id }) || chatroom.owner == current_user.id
+      @chat = Chat.create(chat_params)
+      respond_to do |format|
+        if @chat.save
+          ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username), created_at: @chat.created_at.to_s
+          format.html { redirect_to @chat, notice: "Chat was successfully created." }
+          format.json { render :show, status: :created, location: @chat }
+          format.js
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @chat.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+    if chatroom.muted.detect{ |e| e == current_user.id }
+      respond_to do |format|
+        flash[:deleted] = "You have been muted from #{chatroom.name} !"
+        ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+        format.json { render json: { chatroom: chatroom }, status: :forbidden }
       end
     end
   end

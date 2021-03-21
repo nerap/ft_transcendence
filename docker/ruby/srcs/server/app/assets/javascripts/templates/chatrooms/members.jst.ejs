@@ -48,9 +48,15 @@
     <% }) %>
     <% $.each(chatroom.members, function(i) { %>
         <% if (!chatroom.admin.includes(chatroom.members[i])) { %>
-            <li class="member-name">
-                <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
-            </li>
+            <% if (!chatroom.muted.includes(chatroom.members[i])) { %>
+                <li class="member-name">
+                    <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
+                </li>
+            <% } else { %>
+                <li class="member-muted">
+                    <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %> (muted)
+                </li>
+            <% } %>
             <div class="member-menu" id="member-menu">
                 <ul class="menu-options">
                     <li><a href="/#users/<%= chatroom.members[i] %>" class="menu-option-link">
@@ -58,7 +64,7 @@
                         </a>
                     </li>
                     <li>
-                        <div class="menu-option">Send private message</div>
+                        <div class="menu-option">Send PM</div>
                     </li>
                     <li>
                         <div class="menu-option">Defy in Pong game</div>

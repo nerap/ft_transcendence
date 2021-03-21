@@ -5,7 +5,7 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         "chatrooms/private": "index",
         "chatrooms/new": "new",
         "chatrooms/:id": "show",
-        "chatrooms/:id/edit": "edit",
+        "chatrooms/:id/admin": "admin",
     },
 
     index: function () {
@@ -41,13 +41,13 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
             }, 3000);
         }
     },
-    edit: function (id) {
+    admin: function (id) {
         if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)) {
-            var editChatroom = new Transcendence.Views.ChatroomEdit({
+            var adminChatroom = new Transcendence.Views.ChatroomAdmin({
                 model: Transcendence.chatrooms.get(id).toJSON(),
                 id: id,
             });
-            $('#main-body').html(editChatroom.render().$el);
+            $('#main-body').html(adminChatroom.render().$el);
         } else {
             loc = "#chatrooms/" + id;
             location.hash = loc;

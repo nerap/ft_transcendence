@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_02_184204) do
+ActiveRecord::Schema.define(version: 2021_03_21_172011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2021_03_02_184204) do
     t.bigint "admin", default: [], array: true
     t.bigint "banned", default: [], array: true
     t.bigint "members", default: [], array: true
+    t.bigint "muted", default: [], array: true
     t.index ["name"], name: "index_chatrooms_on_name", unique: true
     t.index ["owner"], name: "index_chatrooms_on_owner"
   end

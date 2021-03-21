@@ -1,4 +1,4 @@
-Transcendence.Views.ChatroomEdit = Backbone.View.extend({
+Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
     events: {
     },
     initialize: function () {
@@ -24,7 +24,8 @@ Transcendence.Views.ChatroomEdit = Backbone.View.extend({
             chatroom: this.model,
             members: this.model.members,
             admins: this.model.admin,
-            banned: this.model.banned
+            banned: this.model.banned,
+            muted: this.model.muted
         }));
         return this
     },

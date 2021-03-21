@@ -10,9 +10,9 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
   },
 
   received(data) {
-    Transcendence.chats.fetch();
     let currentRoom = sessionStorage.getItem('chat_roomid')
-    if (data.content.message && currentRoom == data.content.chatroom_id) {
+    var loc = "#chatrooms/" + currentRoom;
+    if (data.content.message && currentRoom == data.content.chatroom_id && location.hash == loc) {
       let currentUser = sessionStorage.getItem('chat_userid')
       let msg_class = currentUser == data.content.user_id ? "sent" : "received"
       var textMessage1 = `<p class="${msg_class}">`
