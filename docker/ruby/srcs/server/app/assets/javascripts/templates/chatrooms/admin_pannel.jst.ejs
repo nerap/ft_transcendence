@@ -1,0 +1,62 @@
+<div class="admin-panel">
+    <li class="set-as-admin">
+        <form action="/api/chatrooms/<%= chatroom.id %>/set_admin" type="submit"
+            method="post" data-remote="true">
+            <label>Type or select a member:</label>
+            <input type="text" name="chatroom[userid]">
+            <select name="chatroom[userid]" id="members-list">
+                <% $.each(members, function(i) { %>
+                <option value="<%= members[i] %>"><%= members[i] %></option>
+                <% }); %>
+                </select>
+            <input type="submit" name="members-list" value="Set as admin" class="admin-menu-submit">
+            <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+    </li>
+    <li class="unset-as-admin">
+        <form action="/api/chatrooms/<%= chatroom.id %>/unset_admin" type="submit"
+            method="post" data-remote="true">
+            <label>Type or select a member:</label>
+            <input type="text" name="chatroom[userid]">
+            <select name="chatroom[userid]" id="admins-list">
+                <% $.each(admins, function(i) { %>
+                <option value="<%= admins[i] %>"><%= admins[i] %></option>
+                <% }); %>
+                </select>
+            <input type="submit" name="members-list" value="Demote" class="admin-menu-submit">
+            <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+    </li>
+    <li class="ban-user">
+        <form action="/api/chatrooms/<%= chatroom.id %>/ban_user" type="submit"
+            method="post" data-remote="true">
+            <label>Type or select a member:</label>
+            <input type="text" name="chatroom[userid]">
+            <select name="chatroom[userid]" id="members-list">
+                <% $.each(members, function(i) { %>
+                <option value="<%= members[i] %>"><%= members[i] %></option>
+                <% }); %>
+                </select>
+            <input type="submit" name="members-list" value="Ban user" class="admin-menu-submit">
+            <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+    </li>
+    <li class="unban-user">
+        <form action="/api/chatrooms/<%= chatroom.id %>/unban_user" type="submit"
+            method="post" data-remote="true">
+            <label>Type or select a member:</label>
+            <input type="text" name="chatroom[userid]">
+            <select name="chatroom[userid]" id="banned-list">
+                <% $.each(banned, function(i) { %>
+                <option value="<%= banned[i] %>"><%= banned[i] %></option>
+                <% }); %>
+                </select>
+            <input type="submit" name="members-list" value="Unban user" class="admin-menu-submit">
+            <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+    </li>
+</div>

@@ -23,15 +23,14 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 collection: Transcendence.chats.where({ chatroom_id: parseInt(id) })
             });
             $('#main-body').html(showChatroom.render().$el);
-        }
-        else {
+        } else {
             if (Transcendence.chatrooms.get(id).toJSON().banned.includes(Transcendence.current_user.id)) {
                 msg = "You have been banned from this chatroom !"
             }
             else {
                 msg = "You are not a member of this chatroom !"
             }
-            window.history.back();
+            location.hash = "#chatrooms/public";
             var flash = `<div class="error">` +
                 `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
                 `${msg}` +
@@ -43,7 +42,23 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         }
     },
     edit: function (id) {
-        var editChatroom = new Transcendence.Views.ChatroomEdit();
-        $('#main-body').html(editChatroom.render().$el);
+        if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)) {
+            var editChatroom = new Transcendence.Views.ChatroomEdit({
+                model: Transcendence.chatrooms.get(id).toJSON(),
+                id: id,
+            });
+            $('#main-body').html(editChatroom.render().$el);
+        } else {
+            loc = "#chatrooms/" + id;
+            location.hash = loc;
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `You are not admin of this chatroom !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        }
     }
 });

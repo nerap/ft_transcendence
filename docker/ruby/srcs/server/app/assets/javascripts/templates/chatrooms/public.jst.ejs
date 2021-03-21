@@ -18,7 +18,7 @@
                     </td>
                     <td onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
                         <div class="tab-content-list room"><%= model.escape('name') %></div>
-                        <div class="tab-content-list owner">Owner: <a href="/users/<%= model.escape('owner') %>"
+                        <div class="tab-content-list owner">Owner: <a href="/#users/<%= model.escape('owner') %>"
                                 class="tab-content-list-link"><%= Transcendence.users.get(model.escape('owner')).toJSON().username %></a>
                         </div>
                     </td>

@@ -15,12 +15,8 @@ consumer.subscriptions.create("FlashAdminChannel", {
       let currentUser = sessionStorage.getItem('chat_userid');
       let currentChatroom = sessionStorage.getItem('chat_roomid')
       if (data.user == currentUser && data.chatroom.id == currentChatroom) {
-        function showFlashMessage(element) {
-          element.style.display = "block";
-        };
-        var elem = `flash-${data.type}-message`
-        var flashMessages = document.getElementById(elem);
-        showFlashMessage(flashMessages);
+        var elem = `#flash-${data.type}-message`
+        $(elem).show();
       }
     }
     else if (data.type == "flash" && data.flash) {

@@ -1,6 +1,5 @@
 Transcendence.Views.ChatroomShow = Backbone.View.extend({
     events: {
-        "click .flash-button-link": "modal",
         "click .member-name, .member-owner, .member-admin": "menu"
     },
     initialize: function () {
@@ -16,6 +15,8 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.members();
         var msgs = JST['templates/chatrooms/messages']({ chats: this.collection });
         this.$('#messages').append(msgs);
+        var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model });
+        this.$('#flash-messages').append(flashMsg);
         setTimeout(function () {
             let userId = $('.current_user_id').data('userid')
             sessionStorage.setItem("chat_userid", userId)
@@ -27,9 +28,6 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
     members: function () {
         var members = JST['templates/chatrooms/members']({ chatroom: this.model });
         this.$('#members-content').append(members);
-    },
-    modal: function () {
-        this.currentTarget.ParentNode.ParentNode.ParentNode.style.display = "none";
     },
     menu: function (e) {
         $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);

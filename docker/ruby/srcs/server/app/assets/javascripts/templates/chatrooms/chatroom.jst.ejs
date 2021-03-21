@@ -1,14 +1,9 @@
 <div id="main-chats">
-    <button onclick="history.back()">Back</button>
-    <% if (chatroom.owner == Transcendence.current_user.id) { %>
-    | <a href="#chatrooms/<%= chatroom.id %>/edit">Edit</a>
-    | <a href="#chatrooms/<%= chatroom.id %>/destroy">Destroy</a>
-    | <a id="link-to-new-owner">Leave <%= chatroom.name %></a>
+    <button onclick="history.back()">Back to index</button>
+    <% if (chatroom.owner == Transcendence.current_user.id || chatroom.admin.includes(Transcendence.current_user.id)) { %>
+    | <a href="#chatrooms/<%= chatroom.id %>/edit">Admin pannel</a>
     <% } %>
     <br />
-    <% if (chatroom.admin.includes(Transcendence.current_user.id)) { %>
-    TEST ADMIN
-    <% } %>
     <div id="chatroom-contents">
         <div id="members-content"></div><div id="room-content">
             <div class="chatroom-title">
@@ -38,3 +33,5 @@
 
 <div class="current_user_id" data-userid="<%= Transcendence.current_user.id %>"></div>
 <div class="current_chatroom_id" data-roomid="<%= chatroom.id %>"></div>
+
+<div id="flash-messages"></div>

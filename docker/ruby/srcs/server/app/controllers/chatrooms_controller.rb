@@ -49,10 +49,8 @@ class ChatroomsController < ApplicationController
         @chatroom_owner = User.find(@chatroom.owner)
         @userid = current_user.id
         @roomid = @chatroom.id
-        if @chatroom.members.detect{ |e| e == current_user }
-            @chat = Chat.new chatroom: @chatroom
-            @chats = @chatroom.chat.includes(:user)
-        end
+        @chat = Chat.new chatroom: @chatroom
+        @chats = @chatroom.chat.includes(:user)
     end
 
     def destroy
@@ -89,13 +87,15 @@ class ChatroomsController < ApplicationController
 
     def set_admin
         chatroom = Chatroom.find(params[:id])
-        user = params[:userid].to_i
-        if current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user }
+        user = params[:chatroom][:userid].to_i
+        if User.find_by_id(user) && current_user.id == chatroom.owner && chatroom.members.detect{ |e| e == user } && !chatroom.admin.detect{ |e| e == user }
             chatroom.admin.push(user)
-            if chatroom.save
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "admin"
-                redirect_to @chatroom
+            respond_to do |format|
+                if chatroom.save
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: @chatroom, user: user, type: "admin"
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
+                end
             end
         end
     end
@@ -103,17 +103,23 @@ class ChatroomsController < ApplicationController
     def unset_admin
         chatroom = Chatroom.find(params[:id])
         if current_user.id == chatroom.owner
-            user = params[:userid].to_i
+            user = params[:chatroom][:userid].to_i
             chatroom.admin.delete(user)
-            chatroom.save
-            redirect_to @chatroom
+            respond_to do |format|
+                if chatroom.save
+                    flash[:deleted] = "You have been demoted as member in #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
+                end
+            end
         end
     end
 
     def ban_user
         chatroom = Chatroom.find(params[:id])
         if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
-            user = params[:userid].to_i
+            user = params[:chatroom][:userid].to_i
             chatroom.banned.push(user)
             if chatroom.admin.detect{ |e| e == user }
                 chatroom.admin.delete(user)
@@ -121,10 +127,12 @@ class ChatroomsController < ApplicationController
             if chatroom.members.detect{ |e| e == user }
                 chatroom.members.delete(user)
             end
-            if chatroom.save
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: user, type: "ban"
-                redirect_to @chatroom
+            respond_to do |format|
+                if chatroom.save
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{user}", chatroom: @chatroom, user: user, type: "ban"
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
+                end
             end
         end
     end
@@ -132,10 +140,16 @@ class ChatroomsController < ApplicationController
     def unban_user
         chatroom = Chatroom.find(params[:id])
         if (current_user.id == chatroom.owner || chatroom.admin.detect{ |e| e == current_user.id })
-            user = params[:userid].to_i
+            user = params[:chatroom][:userid].to_i
             chatroom.banned.delete(user)
-            chatroom.save
-            redirect_to @chatroom
+            respond_to do |format|
+                if chatroom.save
+                    flash[:notice] = "You have been unbanned from #{@chatroom.name} !"
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{user}", type: "flash", flash: flash
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
+                end
+            end
         end
     end
 
