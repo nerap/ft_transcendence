@@ -71,6 +71,7 @@
                 <% }); %>
             </datalist>
             <input type="submit" name="members-list" value="Mute user" class="admin-menu-submit">
+            <input type="date" name="chatroom[end_date]"><input type="time" name="chatroom[end_time]">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>

@@ -2,6 +2,7 @@ class ChatsController < ApplicationController
   # before_action :load_entities
   before_action :set_chat, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
+  before_action :end_of_ban_mute
 
   # GET /chats or /chats.json
   def index
@@ -85,4 +86,23 @@ class ChatsController < ApplicationController
     def chat_params
       params.require(:chat).permit(:message, :user_id, :chatroom_id)
     end
+
+    def end_of_ban_mute
+      if bans = ChatroomBan.where("end_time < ?", DateTime.now)
+          bans.each do |ban|
+              ban.chatroom.banned.delete(ban.user_id)
+              ban.chatroom.save
+              ban.destroy
+              ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+          end
+      end
+      if mutes = ChatroomMute.where("end_time < ?", DateTime.now)
+          mutes.each do |mute|
+              mute.chatroom.muted.delete(mute.user_id)
+              mute.chatroom.save
+              mute.destroy
+              ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+          end
+      end
+  end
 end
