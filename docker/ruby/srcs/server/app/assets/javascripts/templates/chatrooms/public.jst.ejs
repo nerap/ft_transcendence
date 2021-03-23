@@ -29,13 +29,13 @@
                         <% join = ""; unjoin = "active" %>
                         <% } %>
                         <form action="/api/chatrooms/<%= model.escape('id') %>/join" type="submit" method="post"
-                            class="tab-content-list-join <%= join %>" data-remote="true">
+                            class="tab-content-list-join <%= join %>" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="join" class="tab-content-list-join-link">
                             <input type="hidden" name="authenticity_token"
                                 value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </form>
                         <form action="/api/chatrooms/<%= model.escape('id') %>/unjoin" type="submit" method="post"
-                            class="tab-content-list-unjoin <%= unjoin %>" data-remote="true">
+                            class="tab-content-list-unjoin <%= unjoin %>" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="unjoin" class="tab-content-list-unjoin-link">
                             <input type="hidden" name="authenticity_token"
                                 value="<%= $(`meta[name='csrf-token']`).attr('content') %>">

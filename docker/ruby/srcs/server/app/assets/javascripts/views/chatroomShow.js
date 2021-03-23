@@ -9,6 +9,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
             this.$('#members-content').empty();
             this.members();
         });
+        this.listenTo(Transcendence.chatrooms, 'remove', this.render);
     },
     render: function () {
         if (!Transcendence.chatrooms.get(this.id)) {
@@ -21,21 +22,21 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
             setTimeout(function () {
                 $(`.error`).slideUp(500);
             }, 3000);
-            return this;
+        } else {
+            this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model }));
+            this.members();
+            var msgs = JST['templates/chatrooms/messages']({ chats: this.collection });
+            this.$('#messages').append(msgs);
+            var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model });
+            this.$('#flash-messages').append(flashMsg);
+            setTimeout(function () {
+                let userId = $('.current_user_id').data('userid')
+                sessionStorage.setItem("chat_userid", userId)
+                let roomId = $('.current_chatroom_id').data('roomid')
+                sessionStorage.setItem("chat_roomid", roomId)
+            })
         }
-        this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model }));
-        this.members();
-        var msgs = JST['templates/chatrooms/messages']({ chats: this.collection });
-        this.$('#messages').append(msgs);
-        var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model });
-        this.$('#flash-messages').append(flashMsg);
-        setTimeout(function () {
-            let userId = $('.current_user_id').data('userid')
-            sessionStorage.setItem("chat_userid", userId)
-            let roomId = $('.current_chatroom_id').data('roomid')
-            sessionStorage.setItem("chat_roomid", roomId)
-        })
-        return this
+        return this;
     },
     members: function () {
         var members = JST['templates/chatrooms/members']({ chatroom: this.model });

@@ -3,7 +3,7 @@
     <% if (chatroom.owner == Transcendence.current_user.id) { %>
         <div class="set-as-admin">
         <form action="/api/chatrooms/<%= chatroom.id %>/set_admin" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <label>Type or select a member:</label>
             <input type="text" list="members-list" name="chatroom[user]" autocomplete="off">
             <datalist id="members-list">
@@ -16,7 +16,7 @@
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
         <form action="/api/chatrooms/<%= chatroom.id %>/unset_admin" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <input type="text" list="admin-list" name="chatroom[user]" autocomplete="off">
             <datalist id="admin-list">
                 <% $.each(admins, function(i) { %>
@@ -31,7 +31,7 @@
     <% } %>
     <div class="ban-user">
         <form action="/api/chatrooms/<%= chatroom.id %>/ban_user" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <label>Type or select a member:</label>
             <input type="text" list="members-list" name="chatroom[user]" autocomplete="off">
             <datalist id="members-list">
@@ -45,7 +45,7 @@
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
         <form action="/api/chatrooms/<%= chatroom.id %>/unban_user" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <input type="text" list="banned-list" name="chatroom[user]" autocomplete="off">
             <datalist id="banned-list">
                 <% $.each(banned, function(i) { %>
@@ -59,7 +59,7 @@
     </div>
     <div class="mute-user">
         <form action="/api/chatrooms/<%= chatroom.id %>/mute_user" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <label>Type or select a member:</label>
             <input type="text" list="members-list" name="chatroom[user]" autocomplete="off">
             <datalist id="members-list">
@@ -73,7 +73,7 @@
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
         <form action="/api/chatrooms/<%= chatroom.id %>/unmute_user" type="submit"
-            method="post" data-remote="true">
+            method="post" data-remote="true"><input type="hidden" name="_method" value="put">
             <input type="text" list="muted-list" name="chatroom[user]" autocomplete="off">
             <datalist id="muted-list">
                 <% $.each(muted, function(i) { %>

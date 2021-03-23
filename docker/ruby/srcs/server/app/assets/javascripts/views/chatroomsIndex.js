@@ -2,7 +2,7 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
     events: {
         // "click .tab-content-list-join-link": 'join',
         // "click .tab-content-list-unjoin-link": 'unjoin',
-        "click #tab-content-private": 'modal',
+        // "click #tab-content-private": 'modal',
     },
     initialize: function () {
         this.listenTo(this.collection, 'sync', this.render);

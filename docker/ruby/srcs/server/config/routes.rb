@@ -6,23 +6,20 @@ Rails.application.routes.draw do
     resources :chatrooms do
       member do
         post 'login'
-        post 'set_admin'
-        post 'unset_admin'
-        post 'ban_user'
-        post 'unban_user'
-        post 'mute_user'
-        post 'unmute_user'
-        get 'psswd', to: "chatrooms#show"
-        put 'new_owner'
-        post 'join'
-        post 'unjoin'
+        put 'set_admin'
+        put 'unset_admin'
+        put 'ban_user'
+        put 'unban_user'
+        put 'mute_user'
+        put 'unmute_user'
+        put 'leave'
+        put 'join'
+        put 'unjoin'
       end
     end
 
     resources :chats
   end
-
-  
 
   devise_for :users
   resources :users

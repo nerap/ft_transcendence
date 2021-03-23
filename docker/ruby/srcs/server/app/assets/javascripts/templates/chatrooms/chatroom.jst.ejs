@@ -1,7 +1,10 @@
 <div id="main-chats">
     <button onclick="history.back()">Back to index</button>
     <% if (chatroom.owner == Transcendence.current_user.id || chatroom.admin.includes(Transcendence.current_user.id)) { %>
-    | <a href="#chatrooms/<%= chatroom.id %>/admin">Admin panel</a>
+        | <a href="#chatrooms/<%= chatroom.id %>/admin">Admin panel</a>
+        <% if (chatroom.owner == Transcendence.current_user.id) { %>
+            | <a href="#chatrooms/<%= chatroom.id %>/edit">Edit panel</a>
+        <% } %>
     <% } %>
     <br />
     <div id="chatroom-contents">

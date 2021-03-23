@@ -18,20 +18,23 @@ class ChatroomsController < ApplicationController
         @chatroom = Chatroom.new permitted_parameters
         if @chatroom.chatroom_type == "public"
             @chatroom.password = nil
-        end
-        if @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
+        elsif @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
             @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
-            respond_with(@chatroom)
+            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+            ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
         else
-            respond_with(@chatroom, status: :unprocessable_entity)
+            respond_to do |format|
+                flash[:error] = "Information is missing"
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+            end
         end
     end
 
     def edit
-        render :unauthorized, status: :forbidden if (current_user.id != @chatroom.owner)
     end
 
     def update
@@ -47,6 +50,8 @@ class ChatroomsController < ApplicationController
             end
             if @chatroom.save
                 flash[:notice] = "#{@chatroom.name} was updated successfully"
+                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
             else
                 render :new
             end
@@ -65,14 +70,18 @@ class ChatroomsController < ApplicationController
     end
 
     def destroy
-        if @chatroom.owner == current_user.id
-            ChatroomBan.where(chatroom_id: @chatroom.id).destroy_all
-            ChatroomMute.where(chatroom_id: @chatroom.id).destroy_all
-            @chatroom.destroy
-            flash[:deleted] = "#{@chatroom.name} was deleted successfully"
-            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-        else
-            render :unauthorized, status: :forbidden
+        chatroom = Chatroom.find(params[:id])
+        if is_owner(current_user.id, chatroom)
+            ChatroomBan.where(chatroom_id: chatroom.id).destroy_all
+            ChatroomMute.where(chatroom_id: chatroom.id).destroy_all
+            name = chatroom.name
+            chatroom.destroy
+            respond_to do |format|
+                flash[:notice] = "#{name} was deleted successfully"
+                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                format.json { head :no_content }
+            end
         end
     end
 
@@ -282,17 +291,37 @@ class ChatroomsController < ApplicationController
         end
     end
 
-    def new_owner
-        return render :unauthorized, status: :forbidden if current_user.id != @chatroom.owner
-        if (current_user.id == @chatroom.owner && (newowner = User.where(username: params[:chatroom][:owner]).first))
-            @chatroom.owner = newowner.id
-            if @chatroom.admin.detect{ |e| e == newowner.id }
-                @chatroom.admin.delete(newowner.id)
+    def leave
+        chatroom = Chatroom.find(params[:id])
+        if is_owner(current_user.id, chatroom) \
+        && (newowner = User.find_by_username(params[:chatroom][:owner]))
+            chatroom.owner = newowner.id
+            if is_member(newowner.id, chatroom)
+                chatroom.members.delete(newowner.id)
             end
-            if @chatroom.save
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
-                ActionCable.server.broadcast 'flash_admin_channel', chatroom: @chatroom, user: newowner.id, type: "owner"
-                redirect_to @chatroom
+            if is_admin(newowner.id, chatroom)
+                chatroom.admin.delete(newowner.id)
+            end
+            if is_banned(newowner.id, chatroom)
+                chatroom.banned.delete(newowner.id)
+            end
+            if is_muted(newowner.id, chatroom)
+                chatroom.muted.delete(newowner.id)
+            end
+            ChatroomBan.where(chatroom_id: chatroom.id, user_id: newowner.id).destroy_all
+            ChatroomMute.where(chatroom_id: chatroom.id, user_id: newowner.id).destroy_all
+            respond_to do |format|
+                if chatroom.save
+                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "flash_admin_channel:#{newowner.id}", chatroom: chatroom, user: newowner.id, type: "owner"
+                    format.json { render json: { chatroom: chatroom }, status: :ok }
+                end
+            end
+        elsif !newowner
+            respond_to do |format|
+                flash[:error] = "User not found !"
+                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                format.json { render json: { chatroom: chatroom }, status: :not_found }
             end
         end
     end

@@ -14,7 +14,8 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         $('#main-body').html(viewIndex.render().$el);
     },
     new: function () {
-        alert("new!!")
+        var newChatroom = new Transcendence.Views.ChatroomNew();
+        $('#main-body').html(newChatroom.render().$el);
     },
     show: function (id) {
         if (!Transcendence.chatrooms.get(id)) {
@@ -55,43 +56,67 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         }
     },
     edit: function (id) {
-        if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner) {
-            var editChatroom = new Transcendence.Views.ChatroomEdit({
-                model: Transcendence.chatrooms.get(id).toJSON(),
-                id: id,
-            });
-            $('#main-body').html(editChatroom.render().$el);
-        } else {
-            loc = "#chatrooms/" + id;
-            location.hash = loc;
+        if (!Transcendence.chatrooms.get(id)) {
+            location.hash = "#chatrooms/public";
             var flash = `<div class="error">` +
                 `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `You are not the owner of this chatroom !` +
+                `This chatroom doesn't exist !` +
                 `</div>`
             $("#flash-message").append(flash);
             setTimeout(function () {
                 $(`.error`).slideUp(500);
             }, 3000);
+        } else {
+            if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner) {
+                var editChatroom = new Transcendence.Views.ChatroomEdit({
+                    model: Transcendence.chatrooms.get(id).toJSON(),
+                    id: id,
+                });
+                $('#main-body').html(editChatroom.render().$el);
+            } else {
+                loc = "#chatrooms/" + id;
+                location.hash = loc;
+                var flash = `<div class="error">` +
+                    `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                    `You are not the owner of this chatroom !` +
+                    `</div>`
+                $("#flash-message").append(flash);
+                setTimeout(function () {
+                    $(`.error`).slideUp(500);
+                }, 3000);
+            }
         }
     },
     admin: function (id) {
-        if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)) {
-            var adminChatroom = new Transcendence.Views.ChatroomAdmin({
-                model: Transcendence.chatrooms.get(id).toJSON(),
-                id: id,
-            });
-            $('#main-body').html(adminChatroom.render().$el);
-        } else {
-            loc = "#chatrooms/" + id;
-            location.hash = loc;
+        if (!Transcendence.chatrooms.get(id)) {
+            location.hash = "#chatrooms/public";
             var flash = `<div class="error">` +
                 `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `You are not admin of this chatroom !` +
+                `This chatroom doesn't exist !` +
                 `</div>`
             $("#flash-message").append(flash);
             setTimeout(function () {
                 $(`.error`).slideUp(500);
             }, 3000);
+        } else {
+            if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)) {
+                var adminChatroom = new Transcendence.Views.ChatroomAdmin({
+                    model: Transcendence.chatrooms.get(id).toJSON(),
+                    id: id,
+                });
+                $('#main-body').html(adminChatroom.render().$el);
+            } else {
+                loc = "#chatrooms/" + id;
+                location.hash = loc;
+                var flash = `<div class="error">` +
+                    `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                    `You are not admin of this chatroom !` +
+                    `</div>`
+                $("#flash-message").append(flash);
+                setTimeout(function () {
+                    $(`.error`).slideUp(500);
+                }, 3000);
+            }
         }
     }
 });
