@@ -11,6 +11,18 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         });
     },
     render: function () {
+        if (!Transcendence.chatrooms.get(this.id)) {
+            location.hash = "#chatrooms/public";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This chatroom doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+            return this;
+        }
         this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model }));
         this.members();
         var msgs = JST['templates/chatrooms/messages']({ chats: this.collection });

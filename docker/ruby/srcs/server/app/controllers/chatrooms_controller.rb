@@ -19,6 +19,9 @@ class ChatroomsController < ApplicationController
         if @chatroom.chatroom_type == "public"
             @chatroom.password = nil
         end
+        if @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
+            @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+        end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
             respond_with(@chatroom)
@@ -33,10 +36,17 @@ class ChatroomsController < ApplicationController
 
     def update
         @chatroom = Chatroom.find(params[:id])
+        parameters = params.require(:chatroom).permit(:name, :chatroom_type)
         if (current_user.id == @chatroom.owner)
-            if @chatroom.update(permitted_parameters)
+            @chatroom.assign_attributes(parameters)
+            if @chatroom.chatroom_type == "public"
+                @chatroom.password = nil
+            end
+            if @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
+                @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+            end
+            if @chatroom.save
                 flash[:notice] = "#{@chatroom.name} was updated successfully"
-                redirect_to @chatroom
             else
                 render :new
             end
@@ -56,9 +66,11 @@ class ChatroomsController < ApplicationController
 
     def destroy
         if @chatroom.owner == current_user.id
+            ChatroomBan.where(chatroom_id: @chatroom.id).destroy_all
+            ChatroomMute.where(chatroom_id: @chatroom.id).destroy_all
             @chatroom.destroy
             flash[:deleted] = "#{@chatroom.name} was deleted successfully"
-            redirect_to chatrooms_path
+            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
         else
             render :unauthorized, status: :forbidden
         end
@@ -67,7 +79,8 @@ class ChatroomsController < ApplicationController
     def login
         chatroom_id = params[:chatroom][:chatroom_id]
         chatroom = Chatroom.find(chatroom_id)
-        if params[:chatroom][:chatroom_password] == chatroom.password
+        passwd = BCrypt::Password.new(chatroom.password)
+        if passwd == params[:chatroom][:chatroom_password]
             chatroom.members.push(current_user.id)
             respond_to do |format|
                 if chatroom.save
@@ -148,7 +161,7 @@ class ChatroomsController < ApplicationController
             && !is_admin(user.id, chatroom) \
             && !is_banned(user.id, chatroom)
                 chatroom.banned.push(user.id)
-                if !params[:chatroom][:end_date].empty? && !params[:chatroom][:end_time].empty?
+                if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
                     end_ban = DateTime.parse(parse_time) - 1.hours
                     if !end_ban.past?
@@ -217,7 +230,7 @@ class ChatroomsController < ApplicationController
             && !is_admin(user.id, chatroom) \
             && !is_muted(user.id, chatroom)
                 chatroom.muted.push(user.id)
-                if !params[:chatroom][:end_date].empty? && !params[:chatroom][:end_time].empty?
+                if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
                     end_mute = DateTime.parse(parse_time) - 1.hours
                     if !end_mute.past?

@@ -1,0 +1,24 @@
+<form action="/api/chatrooms/<%= chatroom.id %>" accept-charset="UTF-8" method="post"><input type="hidden" name="_method" value="patch" />
+    <div class="field">
+        <input value="<%= chatroom.owner %>" type="hidden" name="chatroom[owner]" id="chatroom_owner" />
+        <label for="chatroom_name">Name</label>
+        <input autocomplete="off" type="text" value="<%= chatroom.name %>" name="chatroom[name]" id="chatroom_name" />
+    </div>
+    <div class="field-type">
+    <% if (chatroom.chatroom_type == "private") { %>
+        <input type="checkbox" value="public" name="chatroom[chatroom_type]" id="chatroom_chatroom_type_public" />
+        <label for="chatroom_Public">Change to public</label>
+        <label for="chatroom_password">Change password (leave blank if you don't want to change)</label>
+        <input autocomplete="off" type="password" name="chatroom[password]" id="chatroom_password" />
+    <% } else if (chatroom.chatroom_type == "public") { %>
+        <input type="checkbox" value="private" name="chatroom[chatroom_type]" id="chatroom_chatroom_type_private" />
+        <label for="chatroom_Private">Change to private</label>
+        <label for="chatroom_password">Password</label>
+        <input autocomplete="off" type="password" name="chatroom[password]" id="chatroom_password" />
+    <% } %>
+    </div>
+    <input type="submit" name="commit" value="Save" class="btn-save" data-disable-with="Save" />
+    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+</form>
+
+<a data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/api/chatrooms/<%= chatroom.id %>">Destroy</a>

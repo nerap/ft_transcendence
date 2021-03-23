@@ -51,10 +51,10 @@
                                     method="post" data-remote="true">
                                     <div class="modal-body">
                                         <input type="password" placeholder="Enter password..."
-                                            name="chatroom[chatroom_password]" id="chatroom_chatroom_password"><input
+                                            name="chatroom[chatroom_password]"><input
                                             type="submit" value="Join" class="button-password">
                                         <input value="<%= model.escape('id') %>" type="hidden"
-                                            name="chatroom[chatroom_id]" id="chatroom_chatroom_id">
+                                            name="chatroom[chatroom_id]">
                                         <input type="hidden" name="authenticity_token"
                                             value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                                     </div>

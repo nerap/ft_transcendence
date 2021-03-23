@@ -6,12 +6,10 @@
   </h1>
 
   <%= link_to 'Back', chatrooms_path(anchor: @chatroom.chatroom_type) %>
-  <% if user_signed_in? && current_user.id == @chatroom.owner %>
   | <%= link_to 'Edit', edit_chatroom_path(@chatroom) %>
   | <%= link_to 'Destroy', @chatroom, method: :delete, data: { confirm: 'Are you sure?' } %>
   | <a id="link-to-new-owner">Leave <%= @chatroom.name %></a>
   <%= render 'new_owner', chatroom: @chatroom %>
-  <% end %>
   <br/>
   <% if current_user == @chatroom_owner %>
     TEST OWNER

@@ -1,5 +1,7 @@
-<div id="admin-pannel">
-    <div class="set-as-admin">
+<div id="admin-panel">
+    <h1>Admin panel</h1>
+    <% if (chatroom.owner == Transcendence.current_user.id) { %>
+        <div class="set-as-admin">
         <form action="/api/chatrooms/<%= chatroom.id %>/set_admin" type="submit"
             method="post" data-remote="true">
             <label>Type or select a member:</label>
@@ -9,26 +11,24 @@
                 <option value="<%= Transcendence.users.get(members[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Set as admin" class="admin-menu-submit">
+            <input type="submit" value="Set as admin" class="admin-menu-submit">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
-    </div>
-    <div class="unset-as-admin">
         <form action="/api/chatrooms/<%= chatroom.id %>/unset_admin" type="submit"
             method="post" data-remote="true">
-            <label>Type or select a member:</label>
             <input type="text" list="admin-list" name="chatroom[user]" autocomplete="off">
             <datalist id="admin-list">
                 <% $.each(admins, function(i) { %>
                 <option value="<%= Transcendence.users.get(admins[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Demote" class="admin-menu-submit">
+            <input type="submit" value="Demote" class="admin-menu-submit">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
-    </div>
+        </div>
+    <% } %>
     <div class="ban-user">
         <form action="/api/chatrooms/<%= chatroom.id %>/ban_user" type="submit"
             method="post" data-remote="true">
@@ -39,23 +39,20 @@
                 <option value="<%= Transcendence.users.get(members[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Ban user" class="admin-menu-submit">
+            <input type="submit" value="Ban user" class="admin-menu-submit">
             <input type="date" name="chatroom[end_date]"><input type="time" name="chatroom[end_time]">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
-    </div>
-    <div class="unban-user">
         <form action="/api/chatrooms/<%= chatroom.id %>/unban_user" type="submit"
             method="post" data-remote="true">
-            <label>Type or select a member:</label>
             <input type="text" list="banned-list" name="chatroom[user]" autocomplete="off">
             <datalist id="banned-list">
                 <% $.each(banned, function(i) { %>
                 <option value="<%= Transcendence.users.get(banned[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Unban user" class="admin-menu-submit">
+            <input type="submit" value="Unban user" class="admin-menu-submit">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
@@ -70,23 +67,20 @@
                 <option value="<%= Transcendence.users.get(members[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Mute user" class="admin-menu-submit">
+            <input type="submit" value="Mute user" class="admin-menu-submit">
             <input type="date" name="chatroom[end_date]"><input type="time" name="chatroom[end_time]">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
-    </div>
-    <div class="unmute-user">
         <form action="/api/chatrooms/<%= chatroom.id %>/unmute_user" type="submit"
             method="post" data-remote="true">
-            <label>Type or select a member:</label>
             <input type="text" list="muted-list" name="chatroom[user]" autocomplete="off">
             <datalist id="muted-list">
                 <% $.each(muted, function(i) { %>
                 <option value="<%= Transcendence.users.get(muted[i]).toJSON().username %>"></option>
                 <% }); %>
             </datalist>
-            <input type="submit" name="members-list" value="Unmute user" class="admin-menu-submit">
+            <input type="submit" value="Unmute user" class="admin-menu-submit">
             <input value="<%= chatroom.id %>" type="hidden" name="chatroom[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
