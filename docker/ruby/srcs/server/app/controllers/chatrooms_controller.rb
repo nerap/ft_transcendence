@@ -165,7 +165,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id)) \
+            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && !is_owner(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
             && !is_banned(user.id, chatroom)
@@ -207,7 +207,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id)) \
+            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && is_banned(user.id, chatroom)
                 chatroom.banned.delete(user.id)
                 ChatroomBan.where(user_id: user.id, chatroom_id: chatroom.id).destroy_all
@@ -233,7 +233,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id)) \
+            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && is_member(user.id, chatroom) \
             && !is_owner(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
@@ -269,7 +269,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id)) \
+            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && is_muted(user.id, chatroom)
                 chatroom.muted.delete(user.id)
                 ChatroomMute.where(user_id: user.id, chatroom_id: chatroom.id).destroy_all

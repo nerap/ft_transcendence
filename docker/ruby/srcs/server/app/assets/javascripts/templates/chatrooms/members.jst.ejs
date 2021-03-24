@@ -1,6 +1,3 @@
-<div class="members-title">
-    Members
-</div>
 <ul class="members-list">
     <li class="member-owner">
         <%= Transcendence.users.get(chatroom.owner).toJSON().username %> (owner)
@@ -48,3 +45,24 @@
     <% } %>
     <% }) %>
 </ul>
+
+<div id="panels">
+    <table>
+        <tr>
+            <td class="admin-panel">
+                <% if (chatroom.owner == Transcendence.current_user.id || chatroom.admin.includes(Transcendence.current_user.id)) { %>
+                    <button onclick="document.location='#chatrooms/<%= chatroom.id %>/admin'">Admin panel</button>
+                <% } else { %>
+                    <button class="inactive">Admin panel</button>
+                <% } %>
+            </td>
+            <td class="edit-panel">
+                <% if (chatroom.owner == Transcendence.current_user.id) { %>
+                    <button onclick="document.location='#chatrooms/<%= chatroom.id %>/edit'">Edit panel</button>
+                <% } else { %>
+                    <button class="inactive">Edit panel</button>
+                <% } %>
+            </td>
+        </tr>
+    </table>
+</div>

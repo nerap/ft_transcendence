@@ -6,7 +6,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         // this.listenTo(Transcendence.chats, 'sync', this.render);
         this.listenTo(Transcendence.chatrooms, 'sync', function () {
             this.model = Transcendence.chatrooms.get(this.id).toJSON()
-            this.$('#members-content').empty();
+            this.$('#members').empty();
             this.members();
         });
         this.listenTo(Transcendence.chatrooms, 'remove', this.render);
@@ -40,7 +40,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
     },
     members: function () {
         var members = JST['templates/chatrooms/members']({ chatroom: this.model });
-        this.$('#members-content').append(members);
+        this.$('#members').append(members);
     },
     menu: function (e) {
         $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);

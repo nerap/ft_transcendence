@@ -6,7 +6,6 @@ environment.plugins.prepend('Provide',
     $: 'jquery/src/jquery',
     jQuery: 'jquery/src/jquery',
     Backbone: "backbone/backbone.js",
-    // _: 'underscore/underscore.js',
     Popper: ['popper.js', 'default']
   })
 )
