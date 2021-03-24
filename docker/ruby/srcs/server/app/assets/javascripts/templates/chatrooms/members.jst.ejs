@@ -1,79 +1,50 @@
 <div class="members-title">
     Members
 </div>
-<ul>
+<ul class="members-list">
     <li class="member-owner">
         <%= Transcendence.users.get(chatroom.owner).toJSON().username %> (owner)
     </li>
     <div class="member-menu" id="member-menu">
-        <ul class="menu-options">
-            <li>
-                <a href="/#users/<%= chatroom.owner %>" class="menu-option-link">
-                    <div class="menu-option">See profile</div>
-                </a>
-            </li>
-            <li>
-                <div class="menu-option">Send private message</div>
-            </li>
-            <li>
-                <div class="menu-option">Defy in Pong game</div>
-            </li>
-            <li>
-                <div class="menu-option">Block</div>
-            </li>
-        </ul>
+        <a href="/#users/<%= chatroom.owner %>" class="menu-option-link">
+            <div class="menu-option">See profile</div>
+        </a>
+        <div class="menu-option">Send private message</div>
+        <div class="menu-option">Defy in Pong game</div>
+        <div class="menu-option">Block</div>
     </div>
     <% $.each(chatroom.admin, function(i) { %>
-        <li class="member-admin">
-            <%= Transcendence.users.get(chatroom.admin[i]).toJSON().username %> (admin)
-        </li>
-        <div class="member-menu" id="member-menu">
-            <ul class="menu-options">
-                <li>
-                    <a href="/#users/<%= chatroom.admin[i] %>" class="menu-option-link">
-                        <div class="menu-option">See profile</div>
-                    </a>
-                </li>
-                <li>
-                    <div class="menu-option">Send private message</div>
-                </li>
-                <li>
-                    <div class="menu-option">Defy in Pong game</div>
-                </li>
-                <li>
-                    <div class="menu-option">Block</div>
-                </li>
-            </ul>
-        </div>
+    <li class="member-admin">
+        <%= Transcendence.users.get(chatroom.admin[i]).toJSON().username %> (admin)
+    </li>
+    <div class="member-menu" id="member-menu">
+        <a href="/#users/<%= chatroom.admin[i] %>" class="menu-option-link">
+            <div class="menu-option">See profile</div>
+        </a>
+        <div class="menu-option">Send private message</div>
+        <div class="menu-option">Defy in Pong game</div>
+        <div class="menu-option">Block</div>
+    </div>
     <% }) %>
     <% $.each(chatroom.members, function(i) { %>
-        <% if (!chatroom.admin.includes(chatroom.members[i])) { %>
-            <% if (!chatroom.muted.includes(chatroom.members[i])) { %>
-                <li class="member-name">
-                    <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
-                </li>
-            <% } else { %>
-                <li class="member-muted">
-                    <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %> (muted)
-                </li>
-            <% } %>
-            <div class="member-menu" id="member-menu">
-                <ul class="menu-options">
-                    <li><a href="/#users/<%= chatroom.members[i] %>" class="menu-option-link">
-                            <div class="menu-option">See profile</div>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="menu-option">Send PM</div>
-                    </li>
-                    <li>
-                        <div class="menu-option">Defy in Pong game</div>
-                    </li>
-                    <li>
-                        <div class="menu-option">Block</div>
-                    </li>
-                </ul>
-            </div>
-        <% } %>
+    <% if (!chatroom.admin.includes(chatroom.members[i])) { %>
+    <% if (!chatroom.muted.includes(chatroom.members[i])) { %>
+    <li class="member-name">
+        <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
+    </li>
+    <% } else { %>
+    <li class="member-muted">
+        <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %> (muted)
+    </li>
+    <% } %>
+    <div class="member-menu" id="member-menu">
+        <a href="/#users/<%= chatroom.members[i] %>" class="menu-option-link">
+            <div class="menu-option">See profile</div>
+        </a>
+        <div class="menu-option">Send PM</div>
+        <div class="menu-option">Defy in Pong game</div>
+        <div class="menu-option">Block</div>
+    </div>
+    <% } %>
     <% }) %>
 </ul>

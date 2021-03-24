@@ -43,7 +43,8 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 else {
                     msg = "You are not a member of this chatroom !"
                 }
-                location.hash = "#chatrooms/public";
+                hash = Transcendence.chatrooms.get(id).toJSON().chatroom_type
+                location.hash = "#chatrooms/" + hash;
                 var flash = `<div class="error">` +
                     `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
                     `${msg}` +
