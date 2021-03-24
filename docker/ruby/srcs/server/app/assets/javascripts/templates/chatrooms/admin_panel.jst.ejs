@@ -1,5 +1,6 @@
 <div id="admin-panel">
     <h1>Admin panel</h1>
+    <a href="#chatrooms/<%= chatroom.id %>">Back to <%= chatroom.name %></a><br/>
     <% if (chatroom.owner == Transcendence.current_user.id) { %>
     <table class="set-as-admin">
         <tr>
@@ -18,9 +19,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Members list</div>
-                <% $.each(members, function(i) { %>
-                <div class="option" onclick="$('#input-setadmin').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(members, function(i) { %>
+                    <div class="option" onclick="$('#input-setadmin').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>
@@ -42,9 +45,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Admins list</div>
-                <% $.each(admins, function(i) { %>
-                <div class="option" onclick="$('#input-unsetadmin').val($(this).text());"><%= Transcendence.users.get(admins[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(admins, function(i) { %>
+                    <div class="option" onclick="$('#input-unsetadmin').val($(this).text());"><%= Transcendence.users.get(admins[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>
@@ -67,9 +72,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Members list</div>
-                <% $.each(members, function(i) { %>
-                <div class="option" onclick="$('#input-ban').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(members, function(i) { %>
+                    <div class="option" onclick="$('#input-ban').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>
@@ -89,9 +96,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Banned users list</div>
-                <% $.each(banned, function(i) { %>
-                <div class="option" onclick="$('#input-unban').val($(this).text());"><%= Transcendence.users.get(banned[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(banned, function(i) { %>
+                    <div class="option" onclick="$('#input-unban').val($(this).text());"><%= Transcendence.users.get(banned[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>
@@ -113,9 +122,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Members list</div>
-                <% $.each(members, function(i) { %>
-                <div class="option" onclick="$('#input-mute').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(members, function(i) { %>
+                    <div class="option" onclick="$('#input-mute').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>
@@ -135,9 +146,11 @@
         <tr>
             <td class="members-list">
                 <div class="header">Muted users list</div>
-                <% $.each(muted, function(i) { %>
-                <div class="option" onclick="$('#input-unmute').val($(this).text());"><%= Transcendence.users.get(muted[i]).toJSON().username %></div>
-                <% }); %>
+                <div class="content">
+                    <% $.each(muted, function(i) { %>
+                    <div class="option" onclick="$('#input-unmute').val($(this).text());"><%= Transcendence.users.get(muted[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
             </td>
         </tr>
     </table>

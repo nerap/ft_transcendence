@@ -7,15 +7,17 @@
     .members-list {
         vertical-align: top;
         border: solid 1px rgb(54, 54, 54);
-        height: 110px;
+        height: 100px;
         width: auto;
         padding: 0;
         margin: 0;
         line-height: 14px;
         font-size: 14px;
-        overflow-y: auto;
-        overflow-x: hidden;
         box-shadow: inset 0px 0px 9px rgba(0, 0, 0, 0.2);
+        .content {
+            height: 100px;
+            overflow: auto;
+        }
         .header {
             background: rgb(54, 54, 54);
             color: white;
