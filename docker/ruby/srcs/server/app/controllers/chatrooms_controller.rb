@@ -53,10 +53,10 @@ class ChatroomsController < ApplicationController
                 ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
             else
-                render :new
+                render :edit, status: :unprocessable_entity
             end
         else
-            render :new, status: :forbidden
+            render :index, status: :forbidden
         end
     end
 

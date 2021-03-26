@@ -3,22 +3,17 @@ Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
     },
     initialize: function () {
         this.listenTo(Transcendence.chatrooms, 'sync', function () {
-            this.model = Transcendence.chatrooms.get(this.id).toJSON();
-            this.render()
+            if (Transcendence.chatrooms.get(this.id)) {
+                this.model = Transcendence.chatrooms.get(this.id).toJSON();
+                this.render();
+            } else {
+                this.remove();
+                location.hash = "#chatrooms/public"
+            }
         });
     },
     render: function () {
-        if (!Transcendence.chatrooms.get(this.id)) {
-            location.hash = "#chatrooms/public";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This chatroom doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
-        } else if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner && !Transcendence.chatrooms.get(this.id).toJSON().admin.includes(Transcendence.current_user.id)) {
+        if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner && !Transcendence.chatrooms.get(this.id).toJSON().admin.includes(Transcendence.current_user.id)) {
             var loc = "#chatrooms/" + this.id;
             location.hash = loc;
         } else {
@@ -30,6 +25,6 @@ Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
                 muted: this.model.muted
             }));
         }
-        return this
+        return this;
     },
 });

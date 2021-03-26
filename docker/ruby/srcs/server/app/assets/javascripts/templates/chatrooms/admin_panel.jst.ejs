@@ -1,8 +1,11 @@
 <div id="admin-panel">
-    <h1>Admin panel</h1>
-    <a href="#chatrooms/<%= chatroom.id %>">Back to <%= chatroom.name %></a><br/>
+    <div class="header">
+        <h1>Admin panel</h1>
+        <button onclick="document.location='#chatrooms/<%= chatroom.id %>'">Back to <%= chatroom.name %></button>
+    </div>
+    <br/>
     <% if (chatroom.owner == Transcendence.current_user.id) { %>
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/set_admin" type="submit" method="post"
@@ -28,7 +31,7 @@
         </tr>
     </table>
     &emsp;&emsp;
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/unset_admin" type="submit" method="post"
@@ -56,7 +59,7 @@
     <br/>
     <br/>
     <% } %>
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/ban_user" type="submit" method="post" data-remote="true">
@@ -81,7 +84,7 @@
         </tr>
     </table>
     &emsp;&emsp;
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/unban_user" type="submit" method="post" data-remote="true">
@@ -106,7 +109,7 @@
     </table>
     <br/>
     <br/>
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/mute_user" type="submit" method="post" data-remote="true"><input
@@ -131,7 +134,7 @@
         </tr>
     </table>
     &emsp;&emsp;
-    <table class="set-as-admin">
+    <table class="action-type">
         <tr>
             <td class="inputs">
                 <form action="/api/chatrooms/<%= chatroom.id %>/unmute_user" type="submit" method="post" data-remote="true">
