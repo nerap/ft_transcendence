@@ -234,7 +234,6 @@ class ChatroomsController < ApplicationController
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
             if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
-            && is_member(user.id, chatroom) \
             && !is_owner(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
             && !is_muted(user.id, chatroom)

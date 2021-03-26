@@ -1,19 +1,18 @@
 Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
-    events: {
-    },
     initialize: function () {
-        this.listenTo(Transcendence.chatrooms, 'sync', function () {
-            if (Transcendence.chatrooms.get(this.id)) {
+        this.listenTo(Transcendence.chatrooms.get(this.id), 'change remove', function () {
+            if (!Transcendence.chatrooms.get(this.id)) {
+                this.remove();
+                location.hash = "#chatrooms/public";
+            } else {
                 this.model = Transcendence.chatrooms.get(this.id).toJSON();
                 this.render();
-            } else {
-                this.remove();
-                location.hash = "#chatrooms/public"
             }
         });
     },
     render: function () {
         if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner && !Transcendence.chatrooms.get(this.id).toJSON().admin.includes(Transcendence.current_user.id)) {
+            this.remove();
             var loc = "#chatrooms/" + this.id;
             location.hash = loc;
         } else {

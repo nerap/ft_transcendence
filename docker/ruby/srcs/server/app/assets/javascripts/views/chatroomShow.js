@@ -3,21 +3,14 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         "click .member-name, .member-owner, .member-admin": "menu",
     },
     initialize: function () {
-        // this.listenTo(Transcendence.chats, 'sync', this.render);
-        // this.listenTo(Transcendence.chatrooms, 'remove', function () {
-            // Transcendence.chats.fetch();
-            // location.hash = "#chatrooms/public"
-            // this.model = undefined;
-            // this.render();
-        // });
-        this.listenTo(Transcendence.chatrooms, 'sync', function () {
-            if (Transcendence.chatrooms.get(this.id)) {
-                this.model = Transcendence.chatrooms.get(this.id).toJSON()
+        this.listenTo(Transcendence.chatrooms.get(this.id), 'change remove', function () {
+            if (!Transcendence.chatrooms.get(this.id)) {
+                this.remove();
+                location.hash = "#chatrooms/public";
+            } else {
+                this.model = Transcendence.chatrooms.get(this.id).toJSON();
                 this.$('#members').empty();
                 this.members();
-            } else {
-                this.remove();
-                location.hash = "#chatrooms/public"
             }
         });
     },
