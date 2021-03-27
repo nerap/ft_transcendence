@@ -2,29 +2,30 @@
     <ul class="navbar-options" style="text-align: center;">
         <% if user_signed_in? %>
             <li><a href="/#" style="width:100px;">home</a></li
-            ><li><a class="slide-down-menu menu-social" style="width:100px;">social</a>
-            <div class="slide-down-options option-social">
-                <a href="/#chatrooms/public">chatrooms</a>
-                <a>private messages</a>
+            ><li><a class="slide-down-menu" style="width:100px;">play</a>
+            <div class="slide-down-options option-pong">
+                <a>start pong game</a>
+                <a>tournament</a>
             </div></li
-            ><li><a class="slide-down-menu" style="width:100px;">members</a>
-            <div class="slide-down-options option-members">
-                <a href="/#users">members list</a>
-                <a>friends</a>
-            </div></li
-            ><li><a class="slide-down-menu" style="width:100px;">guilds</a>
-            <div class="slide-down-options option-guilds">
-                <a>guilds list</a>
-                <a>my guild</a>
-            </div></li
+            ><li><a href="/#chatrooms" class="slide-down-menu" style="width:100px;">social</a></li
+            ><li><a href="/#users" class="slide-down-menu" style="width:100px;">members</a></li
+            ><li><a class="slide-down-menu" style="width:100px;">guilds</a></li
             ><li><a class="slide-down-menu" style="padding-left:10px;padding-right:10px;"><%= truncate(current_user.username, length:15) %></a>
             <div class="slide-down-options option-user">
                 <a href="/#users/<%= current_user.id %>">see profile</a>
-                <%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %>log out<% end %>
+                <a>private messages</a>
+                <a>my friends</a>
+                <a>my guild</a>
+                <form action="/users/sign_out" method="post" data-remote="true">
+                    <input type="hidden" name="_method" value="delete">
+                    <input type="submit" name="commit" value="log out">
+                </form>
             </div></li>
         <% else %>
-            <li class="navbar-option"><%= link_to "Sign in", new_user_session_path, class: "navbar-option-link" %></li>
-            <li class="navbar-option"><%= link_to "Sign up", new_user_registration_path, class: "navbar-option-link" %></li>
+            <li><a href="/#" style="width:100px;">home</a></li
+            ><li><a href="/users/sign_in" style="width:100px">sign in</a></li
+            ><li><a href="/users/sign_up" style="width:100px">sign up</a></li
+            ><li></li>
         <% end %>
     </ul>
 </nav>
