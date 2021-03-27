@@ -1,16 +1,45 @@
 <nav id="navbar">
-    <table class="navbar-options">
-        <tr>
-            <td><a href="/#" class="navbar-option-link" ><div class="navbar-option">FT_TRANSCENDENCE</div></a></td>
-            <% if user_signed_in? %>
-                <td><a href="/#users/<%= current_user.id %>" class="navbar-option-link"><div class="navbar-option">account</div></a></td>
-                <td><%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %><div class="navbar-option">log out</div><% end %></td>
-                <td><a href="#chatrooms/public" class="navbar-option-link"><div class="navbar-option">chatrooms</div></a></td>
-                <td><a href="#users" class="navbar-option-link"><div class="navbar-option">members</div></a></td>
-            <% else %>
-                <td><%= link_to "Sign in", new_user_session_path, class: "nav-item nav-link" %></td>
-                <td><%= link_to "Sign up", new_user_registration_path, class: "nav-item nav-link" %></td>
-            <% end %>
-        </tr>
-    </table>
+    <ul class="navbar-options" style="text-align: center;">
+        <% if user_signed_in? %>
+            <li><a href="/#" style="width:100px;">home</a></li
+            ><li><a class="slide-down-menu menu-social" style="width:100px;">social</a>
+            <div class="slide-down-options option-social">
+                <a href="/#chatrooms/public">chatrooms</a>
+                <a>private messages</a>
+            </div></li
+            ><li><a class="slide-down-menu" style="width:100px;">members</a>
+            <div class="slide-down-options option-members">
+                <a href="/#users">members list</a>
+                <a>friends</a>
+            </div></li
+            ><li><a class="slide-down-menu" style="width:100px;">guilds</a>
+            <div class="slide-down-options option-guilds">
+                <a>guilds list</a>
+                <a>my guild</a>
+            </div></li
+            ><li><a class="slide-down-menu" style="padding-left:10px;padding-right:10px;"><%= truncate(current_user.username, length:15) %></a>
+            <div class="slide-down-options option-user">
+                <a href="/#users/<%= current_user.id %>">see profile</a>
+                <%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %>log out<% end %>
+            </div></li>
+        <% else %>
+            <li class="navbar-option"><%= link_to "Sign in", new_user_session_path, class: "navbar-option-link" %></li>
+            <li class="navbar-option"><%= link_to "Sign up", new_user_registration_path, class: "navbar-option-link" %></li>
+        <% end %>
+    </ul>
 </nav>
+
+<script type="text/javascript">
+    $(document).on("click", function () {
+        $(".slide-down-options").hide();
+    });
+    $(".slide-down-options").on("click", function (event) {
+        event.stopPropagation();
+    });
+    $(".slide-down-menu").on("click", function (event) {
+        if (!$(event.target).next(event.target.nextElementSibling).is(":visible"))
+            $(".slide-down-options").hide();
+        event.stopPropagation();
+        $(event.target).next(event.target.nextElementSibling).slideToggle("fast");
+    });
+</script>

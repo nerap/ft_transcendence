@@ -1,10 +1,19 @@
 #edit-panel {
+    padding: 20px;
     font-family: sans-serif;
     font-size: 16px;
     text-align: center;
     white-space: nowrap;
+    background-color: rgb(240, 240, 240);
+    width: 500px;
+    height: auto;
+    margin: auto;
 
     .header {
+        h1 {
+            margin: 0;
+            padding-bottom: 20px;
+        }
         button {
             vertical-align: middle;
             font-size: 16px;
@@ -42,19 +51,13 @@
         font-size: 15px;
         width: 100px;
         cursor: pointer;
-        &.save {
-            background: rgba(29, 172, 16, 0.7);
-            &:hover {
-                background: rgb(7, 110, 16);
-            }
-        }
         &.destroy {
             background: rgba(220, 20, 60, 0.7);
             &:hover {
                 background: rgb(168, 13, 44);
             }
         }
-        &.leave {
+        &.leave, &.save {
             background: rgba(54, 123, 145, 0.7);
             &:hover {
                 background: rgb(48, 109, 129);
