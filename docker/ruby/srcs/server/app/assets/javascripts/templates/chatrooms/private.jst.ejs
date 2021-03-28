@@ -6,8 +6,12 @@
     <div class="tabs-content">
         <div class="tab-content active" id="private">
             <table class="tab-content-list">
-                <% Transcendence.chatrooms.each(function(model) { %>
-                <% if (model.escape('chatroom_type') == "private") { %>
+                <% if (chatrooms.length == 0) { %>
+                    <tr>
+                        <td>There are no private chatrooms !</td>
+                    </tr>
+                <% } %>
+                <% chatrooms.forEach(function(model) { %>
                 <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>">
                     <td class="tab-content-list-image">
                         <% if (model.escape('banned').includes(Transcendence.current_user.id)) { %>
@@ -18,24 +22,24 @@
                         <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
                         <% } %>
                     </td>
-                    <td onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
+                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
                         <div class="tab-content-list room"><%= model.escape('name') %></div>
                         <div class="tab-content-list owner">Owner: <%= Transcendence.users.get(model.escape('owner')).toJSON().username %>
                         </div>
                     </td>
-                    <td>
+                    <td class="tab-content-list-join-unjoin">
                         <% if (!model.escape('members').includes(Transcendence.current_user.id) && Transcendence.current_user.id != model.escape('owner')) { %>
                         <% join = "active"; unjoin = "" %>
                         <% } else { %>
                         <% join = ""; unjoin = "active" %>
                         <% } %>
-                        <div class="tab-content-list-join <%= join %>" id="tab-content-private"
+                        <div class="join <%= join %>" id="tab-content-private"
                             data-id="<%= model.escape('id') %>"
                             onclick='$("#password-modal-<%= model.escape(`id`) %>").show()'>
                             <input type="submit" value="join" class="tab-content-list-join-link">
                         </div>
                         <form action="/api/chatrooms/<%= model.escape('id') %>/unjoin" type="submit" method="post"
-                            class="tab-content-list-unjoin <%= unjoin %>" data-remote="true"><input type="hidden" name="_method" value="put">
+                            class="unjoin <%= unjoin %>" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="unjoin" class="tab-content-list-unjoin-link">
                             <input type="hidden" name="authenticity_token"
                                 value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
@@ -63,7 +67,6 @@
                         </div>
                     </td>
                 </tr>
-                <% } %>
                 <% }) %>
             </table>
         </div>

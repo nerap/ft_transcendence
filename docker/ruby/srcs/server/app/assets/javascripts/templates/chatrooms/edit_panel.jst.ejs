@@ -58,7 +58,7 @@
                 <div class="modal-body">
                     <input autocomplete="off" placeholder="Enter user name..." type="text"
                         name="chatroom[owner]"><button name="button" type="submit"
-                        class="button-password">Submit</button>
+                        class="button-password" onclick='$("#leave-modal").hide()'>Submit</button>
                     <input value="<%= chatroom.id %>" type="hidden" name="chatroom[chatroom_id]">
                     <input type="hidden" name="authenticity_token"
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">

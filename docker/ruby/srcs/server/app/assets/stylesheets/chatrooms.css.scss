@@ -5,8 +5,27 @@
 #main-chatrooms {
     background-color: rgb(240, 240, 240);
     font-family: sans-serif;
-    padding: 50px;
+    padding: 40px;
 
+    .create-chatroom {
+        text-align: center;
+        padding: 0;
+        button.create {
+            padding: 10px;
+            white-space: nowrap;
+            height: auto;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 15px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(54, 123, 145, 0.7);
+            &:hover {
+                background: rgb(48, 109, 129);
+            }
+        }
+    }
     a {
         text-decoration: none;
         color: inherit;
@@ -65,7 +84,6 @@
                 width: 100%;
                 height: auto;
                 border-collapse: collapse;
-
                 .tab-content-list-options {
                     background-color: whitesmoke;
                     border-top: 1px solid rgba(0, 0, 0, 0.12);
@@ -76,32 +94,33 @@
                     }
                     td {
                         padding: 0;
-                        font-weight: 500;
-                        font-size: 16px;
-                        .tab-content-list {
-                            padding-left: 15px;
-                            &.room {
-                                padding-top: 15px;
+                    }
+                    td.tab-content-list {
+                        padding-left: 15px;
+                        &-main {
+                            padding-top: 15px;
+                            padding-bottom: 15px;
+                            padding-left: 5px;
+                            text-align: left;
+                            .room {
                                 font-size: 17px;
                                 font-weight: bold;
-                                text-align: left;
                                 overflow-wrap: break-word;
                             }
-                            &.owner {
-                                padding-bottom: 15px;
+                            .owner {
                                 font-size: 12px;
                                 font-style: italic;
-                                text-align: left;
                                 overflow-wrap: break-word;
                             }
-                            &-link {
-                                text-decoration: none;
-                            }
-                            &-image {
-                                padding: 5px;
-                                width: auto;
-                            }
-                            &-join {
+                        }
+                        &-image {
+                            padding: 0;
+                            width: 15%;
+                        }
+                        &-join-unjoin {
+                            width: 15%;
+                            padding: 0;
+                            .join {
                                 display: none;
                                 &.active {
                                     display: block;
@@ -120,7 +139,7 @@
                                     cursor: pointer;
                                 }
                             }
-                            &-unjoin {
+                            .unjoin {
                                 display: none;
                                 &.active {
                                     display: block;

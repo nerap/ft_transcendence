@@ -4,7 +4,7 @@ Transcendence.Views.ChatroomEdit = Backbone.View.extend({
     },
     initialize: function () {
         var self = this;
-        Transcendence.chatrooms.get(this.id).on("change:name change:chatroom_type", function () {
+        Transcendence.chatrooms.get(this.id).on("change:name change:chatroom_type change:owner", function () {
             self.model = Transcendence.chatrooms.get(this.id).toJSON();
             self.render();
         });
@@ -16,9 +16,14 @@ Transcendence.Views.ChatroomEdit = Backbone.View.extend({
         location.hash = "#chatrooms/public"
     },
     render: function () {
-        this.$el.html(JST['templates/chatrooms/edit_panel']({
-            chatroom: this.model,
-        }));
+        if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner) {
+            this.remove();
+            location.hash = "#chatrooms/public";
+        } else {
+            this.$el.html(JST['templates/chatrooms/edit_panel']({
+                chatroom: this.model,
+            }));
+        }
         return this;
     },
 });
