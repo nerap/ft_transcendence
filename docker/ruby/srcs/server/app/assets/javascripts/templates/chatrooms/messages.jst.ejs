@@ -3,30 +3,30 @@
     element.scrollTop = element.scrollHeight - element.clientHeight;
 </script>
 
-<% $.each(chats, function() { %>
-<% if (!Transcendence.current_user.toJSON().block_list.includes(this.attributes.user_id)) { %>
-<table class="<%= Transcendence.current_user.id == this.attributes.user_id ? 'sent' : 'received' %>">
+<% $.each(chat, function() { %>
+<% if (!Transcendence.current_user.toJSON().block_list.includes(this.user_id)) { %>
+<table class="<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>">
     <tr>
         <td class="message-header">
-            <% if (Transcendence.current_user.id != this.attributes.user_id) { %>
-            <img class="user-avatar-<%= Transcendence.current_user.id == this.attributes.user_id ? 'sent' : 'received' %>"
+            <% if (Transcendence.current_user.id != this.user_id) { %>
+            <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
                 src="/assets/blank-profile-picture.jpg" />
             <% } %>
-            <%= Transcendence.users.get(this.attributes.user_id).toJSON().username %>
-            <% if (Transcendence.current_user.id == this.attributes.user_id) { %>
-            <img class="user-avatar-<%= Transcendence.current_user.id == this.attributes.user_id ? 'sent' : 'received' %>"
+            <%= Transcendence.users.get(this.user_id).toJSON().username %>
+            <% if (Transcendence.current_user.id == this.user_id) { %>
+            <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
                 src="/assets/blank-profile-picture.jpg" />
             <% } %>
         </td>
     </tr>
     <tr>
-        <td class="message-content"><%= this.attributes.message %></td>
+        <td class="message-content"><%= this.message %></td>
     </tr>
     <tr>
-        <td class="message-footer"><%= this.attributes.created_at %></td>
+        <td class="message-footer"><%= this.created_at %></td>
     </tr>
 </table>
 <% } else { %>
-    <span style="color:black;font-style:italic;">&emsp;You have blocked <%= Transcendence.users.get(this.attributes.user_id).toJSON().username %>.</span>
+    <span style="color:black;font-style:italic;">&emsp;You have blocked <%= Transcendence.users.get(this.user_id).toJSON().username %>.</span>
 <% } %>
 <% }) %>

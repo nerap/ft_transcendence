@@ -3,12 +3,12 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         "click .member-name, .member-owner, .member-admin": "menu",
     },
     initialize: function () {
-        this.listenTo(Transcendence.chatrooms.get(this.id), 'change remove', function () {
+        this.listenTo(Transcendence.chatrooms.get(this.id), 'change:members remove', function () {
             if (!Transcendence.chatrooms.get(this.id)) {
                 this.remove();
                 location.hash = "#chatrooms/public";
             } else {
-                this.model = Transcendence.chatrooms.get(this.id).toJSON();
+                this.model = Transcendence.chatrooms.get(this.id);
                 this.$('#members').empty();
                 this.members();
             }
@@ -16,11 +16,11 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.listenTo(Transcendence.current_user, 'sync', this.render);
     },
     render: function () {
-        this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model }));
+        this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model.toJSON() }));
         this.members();
-        var msgs = JST['templates/chatrooms/messages']({ chats: this.collection });
+        var msgs = JST['templates/chatrooms/messages']({ chat: this.model.toJSON().chat });
         this.$('#messages').append(msgs);
-        var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model });
+        var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model.toJSON() });
         this.$('#flash-messages').append(flashMsg);
         setTimeout(function () {
             let userId = $('.current_user_id').data('userid')
@@ -31,7 +31,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         return this;
     },
     members: function () {
-        var members = JST['templates/chatrooms/members']({ chatroom: this.model });
+        var members = JST['templates/chatrooms/members']({ chatroom: this.model.toJSON() });
         this.$('#members').append(members);
     },
     menu: function (e) {

@@ -42,8 +42,7 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 this.cleanUp();
                 this.view = new Transcendence.Views.ChatroomShow({
                     id: id,
-                    model: Transcendence.chatrooms.get(id).toJSON(),
-                    collection: Transcendence.chats.where({ chatroom_id: parseInt(id) })
+                    model: Transcendence.chatrooms.get(id)
                 });
                 $('#main-body').html(this.view.render().$el);
             } else {

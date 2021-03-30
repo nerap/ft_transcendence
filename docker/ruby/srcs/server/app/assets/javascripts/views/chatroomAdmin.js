@@ -1,6 +1,6 @@
 Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
     initialize: function () {
-        this.listenTo(Transcendence.chatrooms.get(this.id), 'change remove', function () {
+        this.listenTo(Transcendence.chatrooms.get(this.id), 'change:admin change:banned change:muted remove', function () {
             if (!Transcendence.chatrooms.get(this.id)) {
                 this.remove();
                 location.hash = "#chatrooms/public";

@@ -10,7 +10,7 @@ const roomChannel = consumer.subscriptions.create("RoomChannel", {
   },
 
   received(data) {
-    // Transcendence.chats.fetch();
+    Transcendence.chatrooms.get(data.content.chatroom_id).fetch();
     let currentRoom = sessionStorage.getItem('chat_roomid')
     var loc = "#chatrooms/" + currentRoom;
     if (data.content.message && currentRoom == data.content.chatroom_id && location.hash == loc) {

@@ -1,10 +1,9 @@
 class UsersController < ApplicationController
-  # before_action :authenticate_user!, only: [:index] # demande de log in pour pouvoir consulter la page
-  before_action :load_entities, only: [ :show ]
+  before_action :authenticate_user!
   before_action { flash.clear }
 
   def index
-    @users = User.all
+    @users = User.all.order(:username)
   end
 
   def show
@@ -44,11 +43,6 @@ class UsersController < ApplicationController
   end
 
   protected
-  def load_entities
-    @users = User.all
-    @user = User.find(params[:id]) if params[:id]
-  end
-
   # utils
   def is_blocked(user, targetuserid)
     if user.block_list.detect{ |e| e == targetuserid }

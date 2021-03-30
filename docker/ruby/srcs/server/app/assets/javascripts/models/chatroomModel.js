@@ -3,6 +3,7 @@ var Chatroom = Backbone.Model.extend({
         id: "",
         name: "",
         chatroom_type: "",
-        owner: ""
-    }
+        owner: "",
+    },
+    urlRoot: "/api/chatrooms"
 });

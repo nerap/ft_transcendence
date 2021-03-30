@@ -61,12 +61,12 @@ class ChatroomsController < ApplicationController
     end
 
     def show
-        @chatroom = Chatroom.find(params[:id])
-        @chatroom_owner = User.find(@chatroom.owner)
-        @userid = current_user.id
-        @roomid = @chatroom.id
-        @chat = Chat.new chatroom: @chatroom
-        @chats = @chatroom.chat.includes(:user)
+        # @chatroom = Chatroom.find(params[:id])
+        # @chatroom_owner = User.find(@chatroom.owner)
+        # @userid = current_user.id
+        # @roomid = @chatroom.id
+        # @chat = Chat.new chatroom: @chatroom
+        # @chats = @chatroom.chat.includes(:user)
     end
 
     def destroy

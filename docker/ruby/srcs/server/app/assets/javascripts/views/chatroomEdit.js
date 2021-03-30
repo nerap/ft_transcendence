@@ -3,13 +3,14 @@ Transcendence.Views.ChatroomEdit = Backbone.View.extend({
         "submit #destroy-chatroom": "destroy"
     },
     initialize: function () {
-        var self = this;
-        Transcendence.chatrooms.get(this.id).on("change:name change:chatroom_type change:owner", function () {
-            self.model = Transcendence.chatrooms.get(this.id).toJSON();
-            self.render();
-        });
-        this.listenTo(Transcendence.chatrooms.get(this.id), "remove", function () {
-            this.remove();
+        this.listenTo(Transcendence.chatrooms.get(this.id), "change:name change:chatroom_type change:owner remove", function () {
+            if (!Transcendence.chatrooms.get(this.id)) {
+                this.remove();
+                location.hash = "#chatrooms/public";
+            } else {
+                this.model = Transcendence.chatrooms.get(this.id).toJSON();
+                this.render();
+            }
         })
     },
     destroy: function () {
