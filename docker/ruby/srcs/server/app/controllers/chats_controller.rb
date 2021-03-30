@@ -1,5 +1,4 @@
 class ChatsController < ApplicationController
-  # before_action :load_entities
   before_action :set_chat, only: %i[ show edit update destroy ]
   before_action :authenticate_user!
   before_action :end_of_ban_mute
@@ -76,10 +75,6 @@ class ChatsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
       @chat = Chat.find(params[:id])
-    end
-
-    def load_entities
-      @chatroom = Chatroom.find params.dig(:chat, :chatroom_id)
     end
 
     # Only allow a list of trusted parameters through.

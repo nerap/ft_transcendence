@@ -13,6 +13,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
                 this.members();
             }
         });
+        this.listenTo(Transcendence.current_user, 'sync', this.render);
     },
     render: function () {
         this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model }));
@@ -34,6 +35,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.$('#members').append(members);
     },
     menu: function (e) {
-        $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);
+        if (Transcendence.current_user.toJSON().id != $(e.currentTarget).attr('id'))
+            $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);
     },
 });

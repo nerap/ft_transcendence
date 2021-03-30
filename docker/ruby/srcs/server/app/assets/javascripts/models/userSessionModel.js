@@ -1,4 +1,6 @@
 window.Transcendence.UserSession = Backbone.Model.extend({
-    urlRoot: "/session"
+    url: function () {
+      return "/users/" + this.id
+    }
   });
   

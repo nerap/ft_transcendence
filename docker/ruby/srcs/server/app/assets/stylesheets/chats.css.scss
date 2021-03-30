@@ -85,10 +85,6 @@
         &.member-name {
           font-size: 15px;
         }
-        &.member-muted {
-          font-size: 15px;
-          color: orange;
-        }
       }
       #panels {
         height: 40px;
@@ -311,8 +307,18 @@ div.member-menu {
   overflow: hidden;
   white-space: nowrap;
   color: black;
+  button {
+    color: black;
+    display: block;
+    background: rgba(255, 255, 255, 0);
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+  .block {
+    color: red;
+  }
   .menu-option {
-    font-weight: 500;
     font-size: 14px;
     padding: 2px;
     cursor: pointer;

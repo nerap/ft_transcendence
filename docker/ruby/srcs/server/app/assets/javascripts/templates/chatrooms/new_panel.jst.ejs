@@ -11,7 +11,7 @@
         <input type="hidden" value="public" name="chatroom[chatroom_type]">
         <br/><br/>
         <input type="checkbox" value="private" name="chatroom[chatroom_type]" onclick='$("#edit-password-field").toggle();'> Private chatroom<br/>
-        <input id="edit-password-field" autocomplete="off" type="password" name="chatroom[password]" placeholder="Type password..."><br/>
+        <input id="edit-password-field" autocomplete="off" type="password" name="chatroom[password]" placeholder="Type password..."><br/><br/>
         <button type="submit" name="commit" class="edit save" data-disable-with="Save">Save</button>
         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
     </form>

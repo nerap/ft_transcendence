@@ -1,47 +1,75 @@
 <ul class="members-list">
-    <li class="member-owner">
+    <li class="member-owner" id="<%= chatroom.owner %>">
         <%= Transcendence.users.get(chatroom.owner).toJSON().username %> (owner)
     </li>
     <div class="member-menu" id="member-menu">
         <a href="/#users/<%= chatroom.owner %>" class="menu-option-link">
-            <div class="menu-option">See profile</div>
+            <div class="menu-option">see profile</div>
         </a>
-        <div class="menu-option">Send private message</div>
-        <div class="menu-option">Defy in Pong game</div>
-        <div class="menu-option">Block</div>
+        <div class="menu-option">send private message</div>
+        <div class="menu-option">defy in Pong game</div>
+        <% if (Transcendence.current_user.toJSON().block_list.includes(chatroom.owner)) { %>
+            <% var action = "unblock" %>
+        <% } else { %>
+            <% var action = "block" %>
+        <% } %>
+        <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
+            <input type="hidden" name="_method" value="put">
+            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+            <input value="<%= chatroom.owner %>" type="hidden" name="chatroom[user_id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
     </div>
     <% $.each(chatroom.admin, function(i) { %>
-    <li class="member-admin">
+    <li class="member-admin" id="<%= chatroom.admin[i] %>">
         <%= Transcendence.users.get(chatroom.admin[i]).toJSON().username %> (admin)
     </li>
     <div class="member-menu" id="member-menu">
         <a href="/#users/<%= chatroom.admin[i] %>" class="menu-option-link">
-            <div class="menu-option">See profile</div>
+            <div class="menu-option">see profile</div>
         </a>
-        <div class="menu-option">Send private message</div>
-        <div class="menu-option">Defy in Pong game</div>
-        <div class="menu-option">Block</div>
+        <div class="menu-option">send private message</div>
+        <div class="menu-option">defy in Pong game</div>
+        <% if (Transcendence.current_user.toJSON().block_list.includes(chatroom.admin[i])) { %>
+            <% var action = "unblock" %>
+        <% } else { %>
+            <% var action = "block" %>
+        <% } %>
+        <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
+            <input type="hidden" name="_method" value="put">
+            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+            <input value="<%= chatroom.admin[i] %>" type="hidden" name="chatroom[user_id]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
     </div>
     <% }) %>
     <% $.each(chatroom.members, function(i) { %>
     <% if (!chatroom.admin.includes(chatroom.members[i])) { %>
-    <% if (!chatroom.muted.includes(chatroom.members[i])) { %>
-    <li class="member-name">
-        <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
-    </li>
-    <% } else { %>
-    <li class="member-muted">
-        <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %> (muted)
-    </li>
-    <% } %>
-    <div class="member-menu" id="member-menu">
-        <a href="/#users/<%= chatroom.members[i] %>" class="menu-option-link">
-            <div class="menu-option">See profile</div>
-        </a>
-        <div class="menu-option">Send PM</div>
-        <div class="menu-option">Defy in Pong game</div>
-        <div class="menu-option">Block</div>
-    </div>
+        <li class="member-name" id="<%= chatroom.members[i] %>">
+            <% if (!chatroom.muted.includes(chatroom.members[i])) { %>
+                <%= Transcendence.users.get(chatroom.members[i]).toJSON().username %>
+            <% } else { %>
+                <span style="color: orange"><%= Transcendence.users.get(chatroom.members[i]).toJSON().username %> (muted)</span>
+            <% } %>
+        </li>
+        <div class="member-menu" id="member-menu">
+            <a href="/#users/<%= chatroom.members[i] %>" class="menu-option-link">
+                <div class="menu-option">see profile</div>
+            </a>
+            <div class="menu-option">send PM</div>
+            <div class="menu-option">defy in Pong game</div>
+            <% if (Transcendence.current_user.toJSON().block_list.includes(chatroom.members[i])) { %>
+                <% var action = "unblock" %>
+            <% } else { %>
+                <% var action = "block" %>
+            <% } %>
+            <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
+                <input type="hidden" name="_method" value="put">
+                <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+                <input value="<%= chatroom.members[i] %>" type="hidden" name="chatroom[user_id]">
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        </div>
     <% } %>
     <% }) %>
 </ul>
