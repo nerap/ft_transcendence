@@ -11,7 +11,6 @@ var Transcendence = {
   Views: {},
   Routers: {},
   initialize: function (data) {
-    // this.chats = new Transcendence.Collections.Chats(data.chats).toJSON();
     this.chatrooms = new Transcendence.Collections.Chatrooms(data.chatrooms);
     this.users = new Transcendence.Collections.Users(data.users);
     this.current_user = new window.Transcendence.UserSession(data.current_user);
@@ -21,21 +20,3 @@ var Transcendence = {
     Backbone.history.start();
   }
 };
-
-jQuery.each(["put", "delete"], function (i, method) {
-  jQuery[method] = function (url, data, callback, type) {
-    if (jQuery.isFunction(data)) {
-      type = type || callback;
-      callback = data;
-      data = undefined;
-    }
-
-    return jQuery.ajax({
-      url: url,
-      type: method,
-      dataType: type,
-      data: data,
-      success: callback
-    });
-  };
-});

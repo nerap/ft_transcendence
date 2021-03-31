@@ -16,10 +16,7 @@
                 <a>private messages</a>
                 <a>my friends</a>
                 <a>my guild</a>
-                <form action="/users/sign_out" method="post" data-remote="true">
-                    <input type="hidden" name="_method" value="delete">
-                    <input type="submit" name="commit" value="log out">
-                </form>
+                <a href="/users/sign_out" data-method="delete" rel="nofollow" style="border-top:solid 2px rgb(54, 54, 54);">log out</a>
             </div></li>
         <% else %>
             <li><a href="/#" style="width:100px;">home</a></li
@@ -33,9 +30,6 @@
 <script type="text/javascript">
     $(document).on("click", function () {
         $(".slide-down-options").hide();
-    });
-    $(".slide-down-options").on("click", function (event) {
-        event.stopPropagation();
     });
     $(".slide-down-menu").on("click", function (event) {
         if (!$(event.target).next(event.target.nextElementSibling).is(":visible"))
