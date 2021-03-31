@@ -5,7 +5,7 @@
     </tr>
     <% Transcendence.users.each(function(model) { %>
         <tr>
-            <td><a href="<%= model.escape('id') %>"><%= model.escape('username') %></a></td>
+            <td><a href="/#users/<%= model.escape('id') %>"><%= model.escape('username') %></a></td>
             <td><%= model.escape('email') %></td>
             <td>Send PM</td>
         </tr>

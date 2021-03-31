@@ -9,7 +9,7 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         $('#main-body').html(viewIndex.render().$el);
     },
     profile: function (id) {
-        var viewProfile = new Transcendence.Views.UserProfile({ collection: Transcendence.users });
+        var viewProfile = new Transcendence.Views.UserProfile({ model: Transcendence.users.get(id) });
         $('#main-body').html(viewProfile.render().$el);
     }
 });

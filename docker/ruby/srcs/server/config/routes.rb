@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     put '/users/unblock_user'
 
     resources :chats
+  
+    resources :private_rooms
+    resources :private_messages
   end
 
   devise_for :users

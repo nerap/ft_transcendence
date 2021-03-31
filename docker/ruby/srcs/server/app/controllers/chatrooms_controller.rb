@@ -23,7 +23,7 @@ class ChatroomsController < ApplicationController
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
-            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+            ActionCable.server.broadcast "chatrooms_channel", content: "create_chatroom", userid: current_user.id
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
         else
             respond_to do |format|
@@ -72,8 +72,6 @@ class ChatroomsController < ApplicationController
     def destroy
         chatroom = Chatroom.find(params[:id])
         if is_owner(current_user.id, chatroom)
-            ChatroomBan.where(chatroom_id: chatroom.id).destroy_all
-            ChatroomMute.where(chatroom_id: chatroom.id).destroy_all
             name = chatroom.name
             chatroom.destroy
             respond_to do |format|

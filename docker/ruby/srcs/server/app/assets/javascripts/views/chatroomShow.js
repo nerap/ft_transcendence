@@ -1,6 +1,7 @@
 Transcendence.Views.ChatroomShow = Backbone.View.extend({
     events: {
         "click .member-name, .member-owner, .member-admin": "menu",
+        "click #send-pm": "sendPM"
     },
     initialize: function () {
         this.listenTo(Transcendence.chatrooms.get(this.id), 'change:members change:admin change:muted remove', function () {
@@ -38,4 +39,19 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         if (Transcendence.current_user.toJSON().id != $(e.currentTarget).attr('id'))
             $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);
     },
+    sendPM: function (e) {
+        var pr1 = Transcendence.private_rooms.findWhere({
+            user1: Transcendence.current_user.id,
+            user2: parseInt($(e.currentTarget).attr('class'))
+        })
+        var pr2 = Transcendence.private_rooms.findWhere({
+            user1: parseInt($(e.currentTarget).attr('class')),
+            user2: Transcendence.current_user.id
+        })
+        if (pr1) {
+            location.hash = "#private_rooms/" + pr1.id;
+        } else if (pr2) {
+            location.hash = "#private_rooms/" + pr2.id;
+        }
+    }
 });

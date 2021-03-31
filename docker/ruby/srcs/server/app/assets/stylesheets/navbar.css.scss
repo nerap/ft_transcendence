@@ -6,6 +6,7 @@ nav#navbar {
     width: 100%;
     height: 40px;
     z-index: 100;
+    white-space: nowrap;
     ul li {
         display: inline;
     }
@@ -59,5 +60,4 @@ nav#navbar {
     li:last-child {
         float: right;
     }
-    
 }
