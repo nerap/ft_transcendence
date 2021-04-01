@@ -170,7 +170,7 @@ class ChatroomsController < ApplicationController
                 chatroom.banned.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
-                    end_ban = DateTime.parse(parse_time) - 1.hours
+                    end_ban = DateTime.parse(parse_time) - 2.hours
                     if !end_ban.past?
                         chatroom_ban = ChatroomBan.new(user_id: user.id, chatroom_id: chatroom.id, end_time: end_ban)
                         chatroom_ban.save
@@ -238,7 +238,7 @@ class ChatroomsController < ApplicationController
                 chatroom.muted.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
-                    end_mute = DateTime.parse(parse_time) - 1.hours
+                    end_mute = DateTime.parse(parse_time) - 2.hours
                     if !end_mute.past?
                         chatroom_mute = ChatroomMute.new(user_id: user.id, chatroom_id: chatroom.id, end_time: end_mute)
                         chatroom_mute.save

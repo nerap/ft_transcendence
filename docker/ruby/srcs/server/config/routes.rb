@@ -20,10 +20,10 @@ Rails.application.routes.draw do
     put '/users/block_user'
     put '/users/unblock_user'
 
-    resources :chats
+    post '/chats', to: "chats#create"
   
     resources :private_rooms
-    resources :private_messages
+    post '/private_messages', to: "private_messages#create"
   end
 
   devise_for :users
