@@ -1,14 +1,21 @@
 class PrivateRoomsController < ApplicationController
     before_action :authenticate_user!
-    before_action :load_entities
+    before_action :load_entities, only: [:index, :show]
     before_action { flash.clear }
 
     def index
     end
 
+    def show
+    end
+
     def create
         if !pr_exists(params[:private_room][:user1], params[:private_room][:user2])
-            private_room = PrivateRoom.new permitted_parameters
+            private_room = PrivateRoom.new
+            user1 = params[:private_room][:user1]
+            user2 = params[:private_room][:user2]
+            private_room.users.push(user1)
+            private_room.users.push(user2)
             if private_room.save
                 ActionCable.server.broadcast "private_room_channel", roomid: private_room.id, userid: current_user.id
             else
@@ -38,11 +45,11 @@ class PrivateRoomsController < ApplicationController
         @private_room = PrivateRoom.find(params[:id]) if params[:id]
     end
     def permitted_parameters
-        params.require(:private_room).permit(:user1, :user2)
+        params.require(:private_room).permit(:users)
     end
     def pr_exists(user_1, user_2)
-        if (!PrivateRoom.where(user1: user_1, user2: user_2).empty? \
-        || !PrivateRoom.where(user1: user_2, user2: user_1).empty?)
+        if (!PrivateRoom.where(users: [user_1, user_2]).empty? \
+        || !PrivateRoom.where(users: [user_2, user_1]).empty?)
             return 1
         end
         return nil

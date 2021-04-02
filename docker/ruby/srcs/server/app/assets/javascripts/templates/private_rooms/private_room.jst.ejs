@@ -1,6 +1,6 @@
 <div id="private-room">
     <div id="pr-content">
-        <div id="pm-header">Discussion with <%= (pr.user1 == Transcendence.current_user.id) ? Transcendence.users.get(pr.user2).toJSON().username : Transcendence.users.get(pr.user1).toJSON().username %></div>
+        <div id="pm-header">Discussion with </div>
         <div id="private-messages"></div>
         <div id="send-private-message">
             <form action="/api/private_messages" accept-charset="UTF-8" data-remote="true" method="post">
@@ -8,7 +8,7 @@
                 <table>
                     <tr>
                         <td class="text"><input placeholder="New message..." autocomplete="off" type="text"
-                                class="text-field" id="text-field" required="required" name="pm[message]"></td>
+                                class="text-field" id="text-pm-field" required="required" name="pm[message]"></td>
                         <td class="button"><input type="submit" value="Send" class="button-field"
                                 data-disable-with="Send" name="commit"></td>
                     </tr>
@@ -18,7 +18,5 @@
             </form>
         </div>
     </div>
-    <%= pr.user1 %>
-    <%= pr.user2 %>
     <a href="/api/private_rooms/<%= pr.id %>" data-method="delete" rel="nofollow">Destroy</a>
 </div>

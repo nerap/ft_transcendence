@@ -15,7 +15,7 @@
             <td id="room-content">
                 <div id="messages"></div>
                 <div id="send_message">
-                    <form action="/api/chats" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden"
+                    <form action="/api/chats" class="send-message-field" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden"
                             name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         <table>
                             <tr>

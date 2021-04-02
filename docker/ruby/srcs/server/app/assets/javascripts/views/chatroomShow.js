@@ -4,6 +4,11 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         "click #send-pm": "sendPM"
     },
     initialize: function () {
+        this.listenTo(this.model, "change:chat add:chat", function () {
+            this.$('#messages').empty();
+            var msgs = JST['templates/chatrooms/messages']({ chat: this.model.toJSON().chat });
+            this.$('#messages').append(msgs);
+        });
         this.listenTo(Transcendence.chatrooms.get(this.id), 'change:members change:admin change:muted remove', function () {
             if (!Transcendence.chatrooms.get(this.id)) {
                 this.remove();
@@ -23,12 +28,12 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.$('#messages').append(msgs);
         var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model.toJSON() });
         this.$('#flash-messages').append(flashMsg);
-        setTimeout(function () {
-            let userId = $('.current_user_id').data('userid')
-            sessionStorage.setItem("chat_userid", userId)
-            let roomId = $('.current_chatroom_id').data('roomid')
-            sessionStorage.setItem("chat_roomid", roomId)
-        })
+        // setTimeout(function () {
+            // let userId = $('.current_user_id').data('userid')
+            // sessionStorage.setItem("chat_userid", userId)
+            // let roomId = $('.current_chatroom_id').data('roomid')
+            // sessionStorage.setItem("chat_roomid", roomId)
+        // })
         return this;
     },
     members: function () {
@@ -40,18 +45,12 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
             $(e.currentTarget).next(e.currentTarget.nextElementSibling).slideToggle(300);
     },
     sendPM: function (e) {
-        var pr1 = Transcendence.private_rooms.findWhere({
-            user1: Transcendence.current_user.id,
-            user2: parseInt($(e.currentTarget).attr('class'))
-        })
-        var pr2 = Transcendence.private_rooms.findWhere({
-            user1: parseInt($(e.currentTarget).attr('class')),
-            user2: Transcendence.current_user.id
-        })
-        if (pr1) {
-            location.hash = "#private_rooms/" + pr1.id;
-        } else if (pr2) {
-            location.hash = "#private_rooms/" + pr2.id;
+        pr = Transcendence.private_rooms.find(function (pr) {
+            return (pr.toJSON().users.includes(Transcendence.current_user.id)
+            && pr.toJSON().users.includes(parseInt($(e.currentTarget).attr('class'))));
+        });
+        if (pr) {
+            location.hash = "#private_rooms/" + pr.id;
         }
     }
 });
