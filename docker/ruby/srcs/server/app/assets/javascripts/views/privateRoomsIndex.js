@@ -9,7 +9,10 @@ Transcendence.Views.PrivateRoomsIndex = Backbone.View.extend({
         // });
     },
     render: function () {
-        this.$el.html(JST['templates/private_rooms/index']({ prs: this.collection.toJSON() }));
+        var prs = this.collection.filter(function(pr){
+            return pr.toJSON().users.includes(Transcendence.current_user.id);
+        });
+        this.$el.html(JST['templates/private_rooms/index']({ prs: prs }));
         return this;
     },
 });

@@ -1,9 +1,16 @@
 #user-profile {
     height: 100vh;
-    background-color: rgb(174, 248, 244);
+    background-color: rgb(240, 240, 240);
     overflow: auto;
     white-space: nowrap;
 
+    img {
+        border-radius: 50%;
+        width: 150px;
+        display: block;
+        margin: auto;
+        padding: 15px;
+    }
     h1 {
         font-size: 50px;
         text-align: center;

@@ -1,6 +1,6 @@
 <div id="private-room">
     <div id="pr-content">
-        <div id="pm-header">Discussion with </div>
+        <div id="pm-header">Discussion with <%= to_user.username %></div>
         <div id="private-messages"></div>
         <div id="send-private-message">
             <form action="/api/private_messages" accept-charset="UTF-8" data-remote="true" method="post">
