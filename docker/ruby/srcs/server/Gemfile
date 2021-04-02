@@ -28,6 +28,14 @@ gem 'jquery-rails'
 # For users management
 gem 'devise'
 
+gem 'js-routes'
+
+gem 'redis'
+gem 'redis-rails'
+
+# for encrypting passwords
+gem 'bcrypt'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

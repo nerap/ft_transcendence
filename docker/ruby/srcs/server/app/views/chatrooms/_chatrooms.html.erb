@@ -1,4 +1,4 @@
-<div id="main-chatrooms">
+<div id="chatrooms">
 
   <div>
     <%= link_to new_chatroom_path do %>
@@ -15,21 +15,34 @@
 
   <div>
     <ul class="tabs">
-      <li class="active"><a href="#public" data-turbolinks="false">Public chatrooms</a></li>
-      <li><a href="#private" data-turbolinks="false">Private chatrooms</a></li>
+      <li class="active"><a href="#public">Public chatrooms</a></li>
+      <li><a href="#private">Private chatrooms</a></li>
+      <li><a href="#member">My chatrooms</a></li>
     </ul>
     <div class="tabs-content">
       <div class="tab-content active" id="public">
         <table class="tab-content-list">
-          <tr>
-            <th>CHATROOM NAME</th>
-            <th>CREATED BY</th>
-          </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "public" %>
-              <tr class="tab-content-list-options">
-                <td><%= link_to chatroom_path(chatroom), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= chatroom.name %></div><% end %></td>
-                <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
+              <tr class="tab-content-list-options" id="chatroom_<%= chatroom.id %>" data-link="<%= chatroom_path(chatroom) %>">
+                <td class="tab-content-list-image">
+                  <% if chatroom.banned.detect{ |e| e == current_user.id } %>
+                    <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/block.png">
+                  <% else %>
+                    <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
+                  <% end %>
+                </td>
+                <td><div class="tab-content-list room"><%= chatroom.name %></div>
+                <div class="tab-content-list owner">Owner: <%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner), class: "tab-content-list-link" %></div></td>
+                <td>
+                  <% if !chatroom.members.detect{ |e| e == current_user.id } && current_user.id != chatroom.owner %>
+                    <% join = "active"; unjoin = "" %>
+                  <% else %>
+                    <% join = ""; unjoin = "active" %>
+                  <% end %>
+                  <div class="tab-content-list-join <%= join %>"><%= link_to join_chatroom_path(chatroom), method: :put do %><div class="tab-content-list-join-link">join</div><% end %></div>
+                  <div class="tab-content-list-unjoin <%= unjoin %>"><%= link_to unjoin_chatroom_path(chatroom), method: :delete do %><div class="tab-content-list-unjoin-link">unjoin</div><% end %></div>
+                </td>
               </tr>
             <% end %>
           <% end %>
@@ -37,18 +50,44 @@
       </div>
       <div class="tab-content" id="private">
         <table class="tab-content-list">
-          <tr class="tab-content-headers">
-            <th class="tab-content-header">CHATROOM NAME</th>
-            <th class="tab-content-header">CREATED BY</th>
-          </tr>
           <% @chatrooms.each do |chatroom| %>
             <% if chatroom.chatroom_type == "private" %>
-              <tr class="tab-content-list-options">
-                <td><div id="tab-content-list-option-link-room"><div class="tab-content-list-option"><%= chatroom.name %></div></div></td>
+              <tr class="tab-content-list-options" id="chatroom_<%= chatroom.id %>" data-link="<%= chatroom_path(chatroom) %>">
+                <td class="tab-content-list-image">
+                    <% if chatroom.banned.detect{ |e| e == current_user.id } %>
+                      <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/block.png">
+                    <% elsif !chatroom.members.detect{ |e| e == current_user.id } && current_user.id != chatroom.owner %>
+                      <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/padlock.png">
+                    <% else %>
+                      <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
+                    <% end %>
+                </td>
+                <td><div class="tab-content-list room"><%= chatroom.name %></div>
+                <div class="tab-content-list owner">Owner: <%= link_to User.find(chatroom.owner).username, User.find(chatroom.owner), class: "tab-content-list-link" %></div></td>
+                <td>
+                  <% if !chatroom.members.detect{ |e| e == current_user.id } && current_user.id != chatroom.owner %>
+                    <% join = "active"; unjoin = "" %>
+                  <% else %>
+                    <% join = ""; unjoin = "active" %>
+                  <% end %>
+                  <div class="tab-content-list-join <%= join %>" id="tab-content-private"><%= link_to join_chatroom_path(chatroom), method: :put do %><div class="tab-content-list-join-link">join</div><% end %></div>
+                  <div class="tab-content-list-unjoin <%= unjoin %>"><%= link_to unjoin_chatroom_path(chatroom), method: :delete do %><div class="tab-content-list-unjoin-link">unjoin</div><% end %></div>
+                </td>
+              </tr>
+              <!-- Modal -->
+              <%= render "login", chatroom: chatroom %>
+              <!-- End Modal -->
+            <% end %>
+          <% end %>
+        </table>
+      </div>
+      <div class="tab-content" id="member">
+        <table class="tab-content-list">
+          <% @chatrooms.each do |chatroom| %>
+            <% if chatroom.members.detect{ |e| e == current_user.id } || current_user.id == chatroom.owner %>
+              <tr class="tab-content-list-options" id="chatroom_<%= chatroom.id %>">
+                <td><%= link_to chatroom_path(chatroom), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= chatroom.name %></div><% end %></td>
                 <td><%= link_to User.find(chatroom.owner), class: "tab-content-list-option-link" do %><div class="tab-content-list-option"><%= User.find(chatroom.owner).username %></div><% end %></td>
-                <!-- Modal -->
-                <%= render "login", chatroom: chatroom %>
-                <!-- End Modal -->
               </tr>
             <% end %>
           <% end %>

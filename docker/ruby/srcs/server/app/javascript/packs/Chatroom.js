@@ -26,19 +26,19 @@ function setContextMenuPosition(event, contextMenu) {
     mousePosition.x = event.pageX;
     mousePosition.y = event.pageY;
     // if (mousePosition.x + menuDimension.x > $(window).width() + $(window).scrollLeft()) {
-        // menuPosition.x = mousePosition.x - menuDimension.x;
+    // menuPosition.x = mousePosition.x - menuDimension.x;
 
     // } else {
-        // menuPosition.x = mousePosition.x;
+    // menuPosition.x = mousePosition.x;
     // }
 
     // if (mousePosition.y + menuDimension.y > $(window).height() + $(window).scrollTop()) {
-        // menuPosition.y = mousePosition.y - menuDimension.y;
+    // menuPosition.y = mousePosition.y - menuDimension.y;
     // } else {
-        // menuPosition.y = mousePosition.y;
+    // menuPosition.y = mousePosition.y;
     // }
     menuPosition.x = mousePosition.x - ($(window).width() - menuDimension.x) / 2;
-    menuPosition.y = mousePosition.y;
+    menuPosition.y = mousePosition.y - 140;
     return menuPosition;
 }
 
@@ -49,7 +49,7 @@ for (var i = 0; i < menus.length; i++) {
         let pos = setContextMenuPosition(e, this.parentNode.parentNode.nextElementSibling)
         const origin = {
             left: pos.x,
-            top: pos.y - 200
+            top: pos.y
         };
         setPosition(this.parentNode.parentNode.nextElementSibling, origin);
         if (!menuVisible) {
@@ -70,3 +70,27 @@ var closeMenu = function (e) {
     }
 }
 document.addEventListener('click', closeMenu)
+
+/***** new owner menu *****/
+var modals = document.querySelectorAll("#password-modal")
+var links = document.querySelectorAll("#link-to-new-owner")
+var span = document.querySelectorAll(".close")
+
+for (var i = 0; i < links.length; i++) {
+    links[i].modal = modals[i];
+    links[i].addEventListener('click', function (e) {
+        e.currentTarget.modal.style.display = "block";
+    })
+    span[i].modal = modals[i];
+    span[i].addEventListener('click', function (e) {
+        e.currentTarget.modal.style.display = "none";
+    })
+}
+window.addEventListener('click', function (e) {
+    for (var i = 0; i < modals.length; i++) {
+        modal = modals[i]
+        if (e.target == modal)
+            modal.style.display = "none";
+    }
+})
+/**************************/

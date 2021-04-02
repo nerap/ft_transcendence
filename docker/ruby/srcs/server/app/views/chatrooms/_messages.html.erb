@@ -1,33 +1,34 @@
 <% @chats.each do |chat| %>
-    <% if current_user == chat.user %>
-        <p class="sent">
-            <span class="message-header-sent"><%= chat.user.username %> <%= image_tag ("blank-profile-picture.jpg"), class: "user-avatar-sent" %></span><br/>
+        <p class="<%= current_user == chat.user ? "sent" : "received" %>">
+            <span class="message-header">
+            <% if current_user != chat.user %>
+                <img class="user-avatar-<%= current_user == chat.user ? "sent" : "received" %>" src="/assets/blank-profile-picture.jpg" />
+            <% end %>
+            <%= chat.user.username %>
+            <% if current_user == chat.user %>
+                <img class="user-avatar-<%= current_user == chat.user ? "sent" : "received" %>" src="/assets/blank-profile-picture.jpg" />
+            <% end %>
+            </span><br/>
             <span class="message-content"><%= chat.message %></span><br/>
-            <span class="message-footer-sent"><%= chat.created_at.to_s %></span>
+            <span class="message-footer"><%= chat.created_at.to_s %></span>
         </p>
-    <% else %>
-        <p class="received">
-            <span class="message-header-received"><%= image_tag ("blank-profile-picture.jpg"), class: "user-avatar-received" %> <%= chat.user.username %></span><br/>
-            <span class="message-content"><%= chat.message %></span><br/>
-            <span class="message-footer-received"><%= chat.created_at %></span>
-        </p>
-        <div class="user-menu">
+        <div class="user-menu" id="user-menu">
             <ul class="menu-options">
                 <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">See <%= chat.user.username %>'s profile</div><% end %></li>
                 <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">Defy in Pong game</div><% end %></li>
                 <li><%= link_to user_path(chat.user), class: "menu-option-link" do %><div class="menu-option">Block <%= chat.user.username %></div><% end %></li>
                 <div class="admin-panel">
-                    <% if current_user.id == @chatroom.owner && !@chatroom.admin.detect{ |e| e == chat.user.id } %>
+                    <% if current_user.id == @chatroom.owner && !@chatroom.admin.detect{ |e| e == chat.user.id } && !@chatroom.banned.detect{ |e| e == chat.user.id } %>
                         <li class="set-as-admin"><%= link_to set_admin_chatroom_path(@chatroom, userid: chat.user.id, id: @chatroom.id), method: :put, class: "menu-option-link" do %><div class="menu-option">Set <%= chat.user.username %> as admin</div><% end %></li>
-                    <% elsif current_user.id == @chatroom.owner && @chatroom.admin.detect{ |e| e == chat.user.id } %>
+                    <% elsif current_user.id == @chatroom.owner && @chatroom.admin.detect{ |e| e == chat.user.id } && !@chatroom.banned.detect{ |e| e == chat.user.id } %>
                         <li class="unset-as-admin"><%= link_to unset_admin_chatroom_path(@chatroom, userid: chat.user.id, id: @chatroom.id), method: :delete, class: "menu-option-link" do %><div class="menu-option">Unset <%= chat.user.username %> as admin</div><% end %></li>
                     <% end %>
-                    <% if (current_user.id == @chatroom.owner || @chatroom.admin.detect{ |e| e == current_user.id }) && chat.user.id != @chatroom.owner %>
-                        <li><div class="menu-option">Ban <%= chat.user.username %> from <%= @chatroom.name %></div></li>
-                        <li><div class="menu-option">Unban <%= chat.user.username %> from <%= @chatroom.name %></div></li>
+                    <% if (current_user.id == @chatroom.owner || @chatroom.admin.detect{ |e| e == current_user.id }) && !@chatroom.banned.detect{ |e| e == chat.user.id } && chat.user.id != @chatroom.owner %>
+                        <li class="ban-user"><%= link_to ban_user_chatroom_path(@chatroom, userid: chat.user.id, id: @chatroom.id), method: :put, class: "menu-option-link" do %><div class="menu-option">Ban <%= chat.user.username %> from <%= @chatroom.name %></div><% end %></li>
+                    <% elsif (current_user.id == @chatroom.owner || @chatroom.admin.detect{ |e| e == current_user.id }) && @chatroom.banned.detect{ |e| e == chat.user.id } && chat.user.id != @chatroom.owner %>
+                        <li class="unban-user"><%= link_to unban_user_chatroom_path(@chatroom, userid: chat.user.id, id: @chatroom.id), method: :delete, class: "menu-option-link" do %><div class="menu-option">Unban <%= chat.user.username %> from <%= @chatroom.name %></div><% end %></li>
                     <% end %>
                 </div>
             </ul>
         </div>
-    <% end %>
 <% end %>

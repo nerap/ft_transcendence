@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_28_132140) do
+ActiveRecord::Schema.define(version: 2021_04_02_101920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chatroom_bans", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "end_time", null: false
+    t.bigint "user_id", null: false
+    t.bigint "chatroom_id", null: false
+  end
+
+  create_table "chatroom_mutes", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "end_time", null: false
+    t.bigint "user_id", null: false
+    t.bigint "chatroom_id", null: false
+  end
 
   create_table "chatrooms", force: :cascade do |t|
     t.string "name", null: false
@@ -24,6 +40,8 @@ ActiveRecord::Schema.define(version: 2021_02_28_132140) do
     t.bigint "owner", null: false
     t.bigint "admin", default: [], array: true
     t.bigint "banned", default: [], array: true
+    t.bigint "members", default: [], array: true
+    t.bigint "muted", default: [], array: true
     t.index ["name"], name: "index_chatrooms_on_name", unique: true
     t.index ["owner"], name: "index_chatrooms_on_owner"
   end
@@ -38,18 +56,20 @@ ActiveRecord::Schema.define(version: 2021_02_28_132140) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
-  create_table "friends", force: :cascade do |t|
-    t.bigint "user_one_id"
-    t.bigint "user_two_id"
+  create_table "private_messages", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "message"
+    t.bigint "user_id", null: false
+    t.bigint "private_room_id", null: false
+    t.index ["private_room_id"], name: "index_private_messages_on_private_room_id"
+    t.index ["user_id"], name: "index_private_messages_on_user_id"
   end
 
-  create_table "posts", force: :cascade do |t|
-    t.string "title"
-    t.string "content"
+  create_table "private_rooms", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "users", default: [], array: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -70,4 +90,6 @@ ActiveRecord::Schema.define(version: 2021_02_28_132140) do
   add_foreign_key "chatrooms", "users", column: "owner"
   add_foreign_key "chats", "chatrooms"
   add_foreign_key "chats", "users"
+  add_foreign_key "private_messages", "private_rooms"
+  add_foreign_key "private_messages", "users"
 end

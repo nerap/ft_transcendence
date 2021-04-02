@@ -1,0 +1,18 @@
+<div id="edit-panel">
+    <div class="header">
+        <h1>Create a new chatroom</h1>
+        <button onclick="document.location='#chatrooms/public'">Back to index</button>
+    </div>
+    <br/>
+    <form id="create-chatroom" action="/api/chatrooms" accept-charset="UTF-8" method="post" data-remote="true">
+        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chatroom[owner]">
+        Name<br/>
+        <input autocomplete="off" type="text" name="chatroom[name]">
+        <input type="hidden" value="public" name="chatroom[chatroom_type]">
+        <br/><br/>
+        <input type="checkbox" value="private" name="chatroom[chatroom_type]" onclick='$("#edit-password-field").toggle();'> Private chatroom<br/>
+        <input id="edit-password-field" autocomplete="off" type="password" name="chatroom[password]" placeholder="Type password..."><br/><br/>
+        <button type="submit" name="commit" class="edit save" data-disable-with="Save">Save</button>
+        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+</div>

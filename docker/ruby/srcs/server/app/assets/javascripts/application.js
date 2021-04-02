@@ -1,29 +1,24 @@
-console.log("hello from assets")
-var app = (function() {
- 
-    var api = {
-        views: {},
-        models: {},
-        collections: {},
-        content: null,
-        router: null,
-        todos: null,
-        init: function() {
-            this.content = $("#content");
-        },
-        changeContent: function(el) {
-            this.content.empty().append(el);
-            return this;
-        },
-        title: function(str) {
-            $("h1").text(str);
-            return this;
-        }
-    };
-    var ViewsFactory = {};
-    var Router = Backbone.Router.extend({});
-    api.router = new Router();
- 
-    return api;
- 
-})();
+//= require_self
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./routers
+//= require_tree ./views
+//= require_tree .
+
+var Transcendence = {
+  Models: {},
+  Collections: {},
+  Views: {},
+  Routers: {},
+  initialize: function (data) {
+    this.chatrooms = new Transcendence.Collections.Chatrooms(data.chatrooms);
+    this.private_rooms = new Transcendence.Collections.PrivateRooms(data.private_rooms);
+    this.users = new Transcendence.Collections.Users(data.users);
+    this.current_user = new window.Transcendence.UserSession(data.current_user);
+    new Transcendence.Routers.Home();
+    new Transcendence.Routers.Chatrooms();
+    new Transcendence.Routers.PrivateRooms();
+    new Transcendence.Routers.Users();
+    Backbone.history.start();
+  }
+};

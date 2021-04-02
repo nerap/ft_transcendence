@@ -1,0 +1,42 @@
+<div id="main-chats">
+    <table id="chatroom-contents">
+        <tr>
+            <td class="members-title">
+                Members
+            </td>
+            <td class="chatroom-title">
+                <%= chatroom.name %> (<%= chatroom.chatroom_type %>)
+            </td>
+        </tr>
+        <tr>
+            <td id="members-content">
+                <div id="members"></div>
+            </td>
+            <td id="room-content">
+                <div id="messages"></div>
+                <div id="send_message">
+                    <form action="/api/chats" class="send-message-field" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden"
+                            name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        <table>
+                            <tr>
+                                <td class="text"><input placeholder="New message..." autocomplete="off" type="text"
+                                        class="text-field" id="text-field" required="required" name="chat[message]"></td>
+                                <td class="button"><input type="submit" value="Send" class="button-field"
+                                        data-disable-with="Send" name="commit"></td>
+                            </tr>
+                        </table>
+                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chat[user_id]"
+                            id="chat_user_id" />
+                        <input as="hidden" type="hidden" value="<%= chatroom.id %>" name="chat[chatroom_id]"
+                            id="chat_chatroom_id" />
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="current_user_id" data-userid="<%= Transcendence.current_user.id %>"></div>
+<div class="current_chatroom_id" data-roomid="<%= chatroom.id %>"></div>
+
+<div id="flash-messages"></div>

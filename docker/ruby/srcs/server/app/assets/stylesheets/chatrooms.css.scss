@@ -1,0 +1,167 @@
+// Place all the styles related to the Chatrooms controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+#main-chatrooms {
+    background-color: rgb(240, 240, 240);
+    font-family: sans-serif;
+    padding: 40px;
+
+    .create-chatroom {
+        text-align: center;
+        padding: 0;
+        button.create {
+            padding: 10px;
+            white-space: nowrap;
+            height: auto;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 17px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(54, 123, 145, 0.7);
+            &:hover {
+                background: rgb(48, 109, 129);
+            }
+        }
+    }
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ul, li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .tabs li {
+        float: left;
+        display: block;
+    }
+
+    .tabs:after {
+        display: table;
+        content: ' ';
+        clear: both;
+    }
+
+    .tabs a {
+        display: inline-block;
+        background-color: #EEE;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        padding: 10px 15px;
+    }
+
+    .tabs .active a {
+        background-color: #FFF;
+    }
+
+    .tabs-content {
+        width: auto;
+        position: relative;
+        z-index: 3;
+        padding: 20px;
+        background-color: #FFF;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        margin-bottom: 20px;
+
+        .tab-content {
+            display: none;
+            font-size: 20px;
+            text-align: center;
+            background-color: white;
+
+            &.active {
+                display: block;
+            }
+    
+            &-list {
+                margin-left: auto;
+                margin-right: auto;
+                width: 100%;
+                height: auto;
+                border-collapse: collapse;
+                .tab-content-list-options {
+                    background-color: whitesmoke;
+                    border-top: 1px solid rgba(0, 0, 0, 0.12);
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+                    &:hover {
+                        cursor: pointer;
+                        background: rgba(0, 0, 0, 0.2);
+                    }
+                    td {
+                        padding: 0;
+                    }
+                    td.tab-content-list {
+                        padding-left: 15px;
+                        &-main {
+                            padding-top: 15px;
+                            padding-bottom: 15px;
+                            padding-left: 5px;
+                            text-align: left;
+                            .room {
+                                font-size: 17px;
+                                font-weight: bold;
+                                overflow-wrap: break-word;
+                            }
+                            .owner {
+                                font-size: 12px;
+                                font-style: italic;
+                                overflow-wrap: break-word;
+                            }
+                        }
+                        &-image {
+                            padding: 0;
+                            width: 15%;
+                        }
+                        &-join-unjoin {
+                            width: 15%;
+                            padding: 0;
+                            .join {
+                                display: none;
+                                &.active {
+                                    display: block;
+                                }
+                                input[type=submit] {
+                                    font-size: 15px;
+                                    width: 70px;
+                                    height: 40px;
+                                    line-height: 40px;
+                                    background-color: rgba(2, 125, 197, 0.8);
+                                    color: white;
+                                    border-radius: 5px;
+                                    margin: auto;
+                                    text-decoration: none;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+                            }
+                            .unjoin {
+                                display: none;
+                                &.active {
+                                    display: block;
+                                }
+                                input[type=submit] {
+                                    font-size: 15px;
+                                    width: 70px;
+                                    height: 40px;
+                                    line-height: 40px;
+                                    background-color: rgba(2, 125, 197, 0.3);
+                                    color: white;
+                                    border-radius: 5px;
+                                    margin: auto;
+                                    text-decoration: none;
+                                    border: none;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

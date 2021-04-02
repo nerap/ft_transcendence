@@ -67,3 +67,19 @@ environment.plugins.prepend('Provide',
   })
 )
 https://www.botreetechnologies.com/blog/introducing-jquery-in-rails-6-using-webpacker/
+
+Backbone:
+npm install --save backbone
+dans config/webpack/environment.js ajouter la ligne Backbone: "backbone/backbone.js"
+
+si erreur avec javascript_include_tag (asset pipeline):
+dans config/environments/development.rb checker quil y ait bien les lignes
+config.assets.debug = false
+config.assets.check_precompiled_asset = false
+
+si pb bundle:
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+commande pour logout (a voir si laissee comme ca):
+<%= link_to destroy_user_session_path, method: :delete, class: "navbar-option-link" do %>log out<% end %>
