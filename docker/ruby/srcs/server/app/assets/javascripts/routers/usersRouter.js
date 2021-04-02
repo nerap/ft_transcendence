@@ -3,13 +3,22 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         "users": "index",
         "users/:id": "profile",
     },
-
+    initialize: function () {
+        this.view = null;
+    },
+    cleanUp: function () {
+        if (this.view)
+            this.view.remove();
+        this.view = null;
+    },
     index: function() {
-        var viewIndex = new Transcendence.Views.UsersIndex({ collection: Transcendence.users });
-        $('#main-body').html(viewIndex.render().$el);
+        this.cleanUp();
+        this.view = new Transcendence.Views.UsersIndex({ collection: Transcendence.users });
+        $('#main-body').html(this.view.render().$el);
     },
     profile: function (id) {
-        var viewProfile = new Transcendence.Views.UserProfile({ model: Transcendence.users.get(id) });
-        $('#main-body').html(viewProfile.render().$el);
+        this.cleanUp();
+        this.view = new Transcendence.Views.UserProfile({ model: Transcendence.users.get(id) });
+        $('#main-body').html(this.view.render().$el);
     }
 });
