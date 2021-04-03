@@ -28,12 +28,12 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.$('#messages').append(msgs);
         var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model.toJSON() });
         this.$('#flash-messages').append(flashMsg);
-        // setTimeout(function () {
+        setTimeout(function () {
             // let userId = $('.current_user_id').data('userid')
             // sessionStorage.setItem("chat_userid", userId)
-            // let roomId = $('.current_chatroom_id').data('roomid')
-            // sessionStorage.setItem("chat_roomid", roomId)
-        // })
+            let roomId = $('.current_chatroom_id').data('roomid')
+            sessionStorage.setItem("chat_roomid", roomId)
+        })
         return this;
     },
     members: function () {
