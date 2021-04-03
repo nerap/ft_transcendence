@@ -90,7 +90,7 @@ class ChatroomsController < ApplicationController
             chatroom.members.push(current_user.id)
             respond_to do |format|
                 if chatroom.save
-                    flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                    flash[:notice] = "You are now a member of #{chatroom.name} !"
                     ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                     ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: chatroom }, status: :ok }
