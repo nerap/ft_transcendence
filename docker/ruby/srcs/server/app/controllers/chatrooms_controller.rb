@@ -1,7 +1,7 @@
 class ChatroomsController < ApplicationController
     respond_to :html, :json
     before_action :authenticate_user!
-    before_action :load_entities, only: [:index, :show]
+    before_action :load_entities, only: [:index, :show, :join, :unjoin]
     before_action :check_permission, only: [:show]
     before_action { flash.clear }
     before_action :end_of_ban_mute
