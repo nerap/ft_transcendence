@@ -1,7 +1,7 @@
 class ChatroomsController < ApplicationController
     respond_to :html, :json
     before_action :authenticate_user!
-    before_action :load_entities, only: [:index, :show]
+    before_action :load_entities, only: [:index, :show, :join, :unjoin]
     before_action :check_permission, only: [:show]
     before_action { flash.clear }
     before_action :end_of_ban_mute
@@ -18,17 +18,24 @@ class ChatroomsController < ApplicationController
         if @chatroom.chatroom_type == "public"
             @chatroom.password = nil
         elsif @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
-            @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+            if params[:chatroom][:password].length >= 6
+                @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+            else
+                @chatroom.password = "0"
+            end
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
             ActionCable.server.broadcast "chatrooms_channel", content: "create_chatroom", userid: current_user.id
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
         else
+            flash[:error] = ""
+            @chatroom.errors.full_messages.each do |msg|
+              flash[:error] = flash[:error] << msg << "<br/>"
+            end
             respond_to do |format|
-                flash[:error] = "Information is missing"
-                ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+              ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+              format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
             end
         end
     end
@@ -90,7 +97,7 @@ class ChatroomsController < ApplicationController
             chatroom.members.push(current_user.id)
             respond_to do |format|
                 if chatroom.save
-                    flash[:notice] = "You are now a member of #{@chatroom.name} !"
+                    flash[:notice] = "You are now a member of #{chatroom.name} !"
                     ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                     ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: chatroom }, status: :ok }

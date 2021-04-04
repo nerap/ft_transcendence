@@ -1,12 +1,10 @@
 <table>
     <tr>
         <th>Username</th>
-        <th>Email</th>
     </tr>
     <% Transcendence.users.each(function(model) { %>
         <tr>
             <td><a href="/#users/<%= model.escape('id') %>"><%= model.escape('username') %></a></td>
-            <td><%= model.escape('email') %></td>
             <td>
                 <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= model.escape('id') %>">
                     <button type="submit" class="menu-option">send PM</button>

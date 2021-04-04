@@ -19,6 +19,8 @@ Rails.application.routes.draw do
         put 'unjoin'
       end
     end
+
+    put '/users/edit_profile'
     put '/users/block_user'
     put '/users/unblock_user'
 

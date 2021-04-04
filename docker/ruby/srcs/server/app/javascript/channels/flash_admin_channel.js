@@ -12,9 +12,8 @@ consumer.subscriptions.create("FlashAdminChannel", {
   received(data) {
     // Called when there's incoming data on the websocket for this channel
     if (data.type == "admin" || data.type == "ban" || data.type == "owner") {
-      let currentUser = sessionStorage.getItem('chat_userid');
       let currentChatroom = sessionStorage.getItem('chat_roomid')
-      if (data.user == currentUser && data.chatroom.id == currentChatroom) {
+      if (data.chatroom.id == currentChatroom) {
         var elem = `#flash-${data.type}-message`
         $(elem).show();
       }

@@ -3,6 +3,7 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         "chatrooms": "index",
         "chatrooms/public": "index",
         "chatrooms/private": "index",
+        "chatrooms/my_chatrooms": "index",
         "chatrooms/new": "new",
         "chatrooms/:id": "show",
         "chatrooms/:id/edit": "edit",

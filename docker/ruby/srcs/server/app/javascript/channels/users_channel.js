@@ -10,6 +10,10 @@ consumer.subscriptions.create("UsersChannel", {
   },
 
   received(data) {
-    Transcendence.current_user.fetch();
+    if (data.content == "profile") {
+      Transcendence.users.fetch()
+    } else {
+      Transcendence.current_user.fetch();
+    }
   }
 });

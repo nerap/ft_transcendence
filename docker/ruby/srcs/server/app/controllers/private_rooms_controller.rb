@@ -10,7 +10,8 @@ class PrivateRoomsController < ApplicationController
     end
 
     def create
-        if !pr_exists(params[:private_room][:user1], params[:private_room][:user2])
+        if !pr_exists(params[:private_room][:user1], params[:private_room][:user2]) \
+        && params[:private_room][:user1] != params[:private_room][:user2]
             private_room = PrivateRoom.new
             user1 = params[:private_room][:user1]
             user2 = params[:private_room][:user2]

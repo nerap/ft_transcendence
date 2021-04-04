@@ -42,6 +42,10 @@
         display: block;
     }
 
+    li:last-child {
+        float: right;
+    }
+
     .tabs:after {
         display: table;
         content: ' ';
