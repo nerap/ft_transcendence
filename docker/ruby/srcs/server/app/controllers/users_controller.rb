@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     user = User.find(params[:user][:id])
     if current_user == user
       user.username = params[:user][:username]
-      if params[:user][:avatar]
+      if params[:user][:avatar] && !params[:user][:remove]
         uploaded = params[:user][:avatar]
         ext = File.extname(uploaded)
         avatar_path = "avatars/#{user.id}/"
@@ -25,6 +25,9 @@ class UsersController < ApplicationController
           file.write uploaded.read
         end
         user.avatar = "#{avatar_path}#{avatar}"
+      end
+      if params[:user][:remove] == "remove_avatar"
+        user.avatar = "/assets/blank-profile-picture.jpg"
       end
       if user.save
         respond_to do |format|

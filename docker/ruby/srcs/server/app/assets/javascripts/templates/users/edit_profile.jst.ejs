@@ -1,10 +1,24 @@
-<form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data">
-    <input type="hidden" name="_method" value="put">
-    <label for="user_username">Username</label><br/>
-    <input autofocus="autofocus" type="text" value="<%= user.username %>" name="user[username]" id="user_username">
-    <label for="user_avatar">Avatar</label><br/>
-    <input type="file" name="user[avatar]" id="user_avatar"><br/>
-    <button type="submit" class="menu-option">Update</button>
-    <input value="<%= user.id %>" type="hidden" name="user[id]">
-    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-</form>
+<div id="edit-panel">
+    <div class="header">
+        <h1>Edit panel</h1>
+    </div>
+    <br/>
+    <form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="put">
+        Username<br/>
+        <input autofocus="autofocus" type="text" value="<%= user.username %>" name="user[username]" id="user_username">
+        <br/>
+        <br/>
+        <% if (user.avatar == "/assets/blank-profile-picture.jpg") { %>
+            <div>You have no avatar !</div><br/>
+        <% } %>
+        <label class="upload-avatar" for="user_avatar">upload avatar...</label>
+        <input type="file" name="user[avatar]" id="user_avatar">
+        <input type="checkbox" value="remove_avatar" name="user[remove]"> Remove avatar
+        <br/>
+        <br/>
+        <button type="submit" name="commit" class="edit save" data-disable-with="Save">Save</button>
+        <input value="<%= user.id %>" type="hidden" name="user[id]">
+        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+</div>

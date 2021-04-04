@@ -4,6 +4,7 @@
     </tr>
     <% Transcendence.users.each(function(model) { %>
         <tr>
+            <td><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
             <td><a href="/#users/<%= model.escape('id') %>"><%= model.escape('username') %></a></td>
             <td>
                 <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= model.escape('id') %>">

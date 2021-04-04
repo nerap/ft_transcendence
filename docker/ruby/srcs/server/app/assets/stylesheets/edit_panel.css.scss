@@ -43,6 +43,23 @@
         width: 25px;
         height: 25px;
     }
+    label.upload-avatar {
+        margin: auto;
+        height: min-content;
+        width: min-content;
+        padding: 10px;
+        font-variant: small-caps;
+        cursor: pointer;
+        color: white;
+        border-radius: 5px;
+        background-color: rgba(54, 123, 145, 0.7);
+        &:hover {
+            background: rgb(48, 109, 129);
+        }
+    }
+    input[type=file] {
+        display: none;
+    }
     button.edit {
         height: 35px;
         border-radius: 5px;
