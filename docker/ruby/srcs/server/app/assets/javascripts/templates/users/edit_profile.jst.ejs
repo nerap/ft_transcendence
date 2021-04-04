@@ -1,4 +1,4 @@
-<form action="/api/users/edit_profile" method="post" data-remote="true">
+<form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data">
     <input type="hidden" name="_method" value="put">
     <label for="user_username">Username</label><br/>
     <input autofocus="autofocus" type="text" value="<%= user.username %>" name="user[username]" id="user_username">

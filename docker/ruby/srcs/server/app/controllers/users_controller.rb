@@ -1,3 +1,5 @@
+require 'fileutils'
+
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action { flash.clear }
@@ -13,8 +15,16 @@ class UsersController < ApplicationController
     user = User.find(params[:user][:id])
     if current_user == user
       user.username = params[:user][:username]
-      if !params[:user][:avatar].empty?
-        puts "AVATAR"
+      if params[:user][:avatar]
+        uploaded = params[:user][:avatar]
+        ext = File.extname(uploaded)
+        avatar_path = "avatars/#{user.id}/"
+        avatar = "avatar#{ext}"
+        FileUtils.mkdir_p("public/#{avatar_path}")
+        File.open("public/#{avatar_path}#{avatar}", "wb") do |file|
+          file.write uploaded.read
+        end
+        user.avatar = "#{avatar_path}#{avatar}"
       end
       if user.save
         respond_to do |format|
