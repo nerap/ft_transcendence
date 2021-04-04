@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { in: 3..20 }
   has_many :chat, dependent: :destroy
+  has_many :private_message, dependent: :destroy
 end

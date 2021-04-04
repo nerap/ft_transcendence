@@ -1,7 +1,10 @@
 <div id="user-profile">
     <img src="<%= user.avatar %>">
     <h1><%= user.username %>'s profile</h1>
-    <% if (user.id == Transcendence.current_user.id) { %>
-        <a href="/users/edit">Edit profile</a>
-    <% } %>
+    <div class="edit-current-user">
+        <% if (user.id == Transcendence.current_user.id) { %>
+            <a href="/users/edit"><button>Edit account</button></a>
+            <a href="/#users/<%= user.id %>/edit_profile"><button>Edit profile</button></a>
+        <% } %>
+    </div>
 </div>

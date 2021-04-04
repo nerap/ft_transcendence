@@ -1,0 +1,10 @@
+<form action="/api/users/edit_profile" method="post" data-remote="true">
+    <input type="hidden" name="_method" value="put">
+    <label for="user_username">Username</label><br/>
+    <input autofocus="autofocus" type="text" value="<%= user.username %>" name="user[username]" id="user_username">
+    <label for="user_avatar">Avatar</label><br/>
+    <input type="file" name="user[avatar]" id="user_avatar"><br/>
+    <button type="submit" class="menu-option">Update</button>
+    <input value="<%= user.id %>" type="hidden" name="user[id]">
+    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+</form>

@@ -9,6 +9,33 @@ class UsersController < ApplicationController
   def show
   end
 
+  def edit_profile
+    user = User.find(params[:user][:id])
+    if current_user == user
+      user.username = params[:user][:username]
+      if !params[:user][:avatar].empty?
+        puts "AVATAR"
+      end
+      if user.save
+        respond_to do |format|
+          flash[:notice] = "Profile updated successfully !"
+          ActionCable.server.broadcast "users_channel", content: "profile"
+          ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+          format.json { render json: { user: user }, status: :ok }
+        end
+      else
+        flash[:error] = ""
+        user.errors.full_messages.each do |msg|
+          flash[:error] = flash[:error] << msg << "<br/>"
+        end
+        respond_to do |format|
+          ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+          format.json { render json: { user: user }, status: :unprocessable_entity }
+        end
+      end
+    end
+  end
+
   def block_user
     if (user = User.find_by_id(params[:chatroom][:user_id]))
       if !is_blocked(current_user, user.id) \
