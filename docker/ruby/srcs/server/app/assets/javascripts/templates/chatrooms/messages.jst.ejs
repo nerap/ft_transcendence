@@ -10,12 +10,12 @@
         <td class="message-header">
             <% if (Transcendence.current_user.id != this.user_id) { %>
             <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
-                src="/assets/blank-profile-picture.jpg" />
+                src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
             <% } %>
             <%= Transcendence.users.get(this.user_id).toJSON().username %>
             <% if (Transcendence.current_user.id == this.user_id) { %>
             <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
-                src="/assets/blank-profile-picture.jpg" />
+                src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
             <% } %>
         </td>
     </tr>

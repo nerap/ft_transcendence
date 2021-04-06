@@ -6,7 +6,12 @@
         <a href="/#users/<%= chatroom.owner %>" class="menu-option-link">
             <div class="menu-option">see profile</div>
         </a>
-        <div class="menu-option">send private message</div>
+        <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= chatroom.owner %>">
+            <button type="submit" class="menu-option">send PM</button>
+            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
+            <input value="<%= chatroom.owner %>" type="hidden" name="private_room[user2]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
         <div class="menu-option">defy in Pong game</div>
         <% if (Transcendence.current_user.toJSON().block_list.includes(chatroom.owner)) { %>
             <% var action = "unblock" %>
@@ -28,7 +33,12 @@
         <a href="/#users/<%= chatroom.admin[i] %>" class="menu-option-link">
             <div class="menu-option">see profile</div>
         </a>
-        <div class="menu-option">send private message</div>
+        <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= chatroom.admin[i] %>">
+            <button type="submit" class="menu-option">send PM</button>
+            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
+            <input value="<%= chatroom.admin[i] %>" type="hidden" name="private_room[user2]">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
         <div class="menu-option">defy in Pong game</div>
         <% if (Transcendence.current_user.toJSON().block_list.includes(chatroom.admin[i])) { %>
             <% var action = "unblock" %>

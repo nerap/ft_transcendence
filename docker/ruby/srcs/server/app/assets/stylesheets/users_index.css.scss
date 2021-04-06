@@ -1,0 +1,53 @@
+div#users-index {
+    background-color: rgb(240, 240, 240);
+    font-family: sans-serif;
+    padding: 40px;
+    white-space: nowrap;
+    table {
+        margin: auto;
+        width: 500px;
+        border-collapse: collapse;
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+        tr {
+            background-color: rgb(250, 250, 250);
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            &.users-list:hover {
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.12);
+            }
+            th {
+                font-size: 20px;
+                font-variant: small-caps;
+                padding: 10px;
+                background: rgb(54, 54, 54);
+                color: white;
+            }
+            td {
+                height: 45px;
+                padding: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: 17px;
+                vertical-align: middle;
+                &.users-action {
+                    width: 20%;
+                    padding: 0;
+                    button {
+                        background-color: rgba(0, 0, 0, 0);
+                        cursor: pointer;
+                        width: 100%;
+                        height: 45px;
+                        border: none;
+                        font-size: 17px;
+                        font-variant: small-caps;
+                        border-left: solid 1px rgba(0, 0, 0, 0.12);
+                        &:hover {
+                            background: rgba(0, 0, 0, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
