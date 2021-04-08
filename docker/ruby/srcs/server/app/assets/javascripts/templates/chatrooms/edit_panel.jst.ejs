@@ -1,7 +1,7 @@
 <div id="edit-panel">
     <div class="header">
         <h1>Edit panel</h1>
-        <button onclick="document.location='#chatrooms/<%= chatroom.id %>'">Back to <%= chatroom.name %></button>
+        <button class="back" onclick="document.location='#chatrooms/<%= chatroom.id %>'">Back to <%= chatroom.name %></button>
     </div>
     <br/>
     <form id="update-chatroom" action="/api/chatrooms/<%= chatroom.id %>" accept-charset="UTF-8" method="post"

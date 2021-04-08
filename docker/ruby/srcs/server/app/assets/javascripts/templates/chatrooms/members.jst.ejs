@@ -21,7 +21,7 @@
         <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
             <input type="hidden" name="_method" value="put">
             <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-            <input value="<%= chatroom.owner %>" type="hidden" name="chatroom[user_id]">
+            <input value="<%= chatroom.owner %>" type="hidden" name="user[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
     </div>
@@ -48,7 +48,7 @@
         <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
             <input type="hidden" name="_method" value="put">
             <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-            <input value="<%= chatroom.admin[i] %>" type="hidden" name="chatroom[user_id]">
+            <input value="<%= chatroom.admin[i] %>" type="hidden" name="user[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
     </div>
@@ -81,7 +81,7 @@
             <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
                 <input type="hidden" name="_method" value="put">
                 <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-                <input value="<%= chatroom.members[i] %>" type="hidden" name="chatroom[user_id]">
+                <input value="<%= chatroom.members[i] %>" type="hidden" name="user[id]">
                 <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
             </form>
         </div>

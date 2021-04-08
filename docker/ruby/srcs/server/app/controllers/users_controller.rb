@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   end
 
   def block_user
-    if (user = User.find_by_id(params[:chatroom][:user_id]))
+    if (user = User.find_by_id(params[:user][:id]))
       if !is_blocked(current_user, user.id) \
       && current_user != user
         current_user.block_list.push(user.id)
@@ -67,7 +67,7 @@ class UsersController < ApplicationController
   end
 
   def unblock_user
-    if (user = User.find_by_id(params[:chatroom][:user_id]))
+    if (user = User.find_by_id(params[:user][:id]))
       if is_blocked(current_user, user.id)
         current_user.block_list.delete(user.id)
         if current_user.save

@@ -1,6 +1,6 @@
 <div id="edit-panel">
     <div class="header">
-        <h1>Edit panel</h1>
+        <h1>Edit profile</h1>
     </div>
     <br/>
     <form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data">
@@ -21,4 +21,6 @@
         <input value="<%= user.id %>" type="hidden" name="user[id]">
         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
     </form>
+    <br/>
+    <a href="/#users/<%= user.id %>"><button class="back">Back to profile</button></a>
 </div>

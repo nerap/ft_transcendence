@@ -34,6 +34,12 @@
             &:hover {
                 background: rgb(48, 109, 129);
             }
+            &.block {
+                background: rgba(220, 20, 60, 0.7);
+                &:hover {
+                    background: rgb(168, 13, 44);
+                }
+            }
         }
     }
 }

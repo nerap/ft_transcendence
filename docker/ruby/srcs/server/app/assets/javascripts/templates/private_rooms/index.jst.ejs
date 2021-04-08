@@ -10,11 +10,11 @@
         <% } %>
         <% prs.forEach(function(pr) { %>
         <tr class="pr-list">
-            <td onclick='document.location = "/#private_rooms/<%= pr.id %>"'>
+            <td style="text-align:center;" onclick='document.location = "/#private_rooms/<%= pr.id %>"'>
                 <% var to_user = Transcendence.users.get(pr.toJSON().users.filter(function(usr) {
                 return usr != Transcendence.current_user.id;
                 })).toJSON()  %>
-                Discussion with <span style="font-weight:bold;"><%= to_user.username %></span>
+                Discussion with <span style="font-weight:bold;"><%= to_user.username %></span> <img style="vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>">
             </td>
         </tr>
         <% }) %>

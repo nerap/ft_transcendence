@@ -92,3 +92,9 @@ config.assets.check_precompiled_asset = false
 si pb bundle:
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
 sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+
+
+Dans POSTGRESQL terminal:
+SELECT * FROM nomtable;  ==> montrer tous les elements d'une table
+SELECT * FROM nomtable WHERE id=10 ==> selectionner table id 10
+UPDATE chatrooms SET members = array_remove(members, CAST ('10' AS BIGINT)); ==> supprimer user 10 des members des chatrooms
