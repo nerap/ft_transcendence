@@ -10,9 +10,13 @@ consumer.subscriptions.create("PrivateRoomChannel", {
   },
 
   received(data) {
-    Transcendence.private_rooms.fetch().done(function () {
-      if (Transcendence.current_user.id == data.userid)
-        location.hash = "#private_rooms/" + data.roomid;
-    });
+    if (data.content == "destroy") {
+      Transcendence.private_rooms.fetch()
+    } else {
+      Transcendence.private_rooms.fetch().done(function () {
+        if (Transcendence.current_user.id == data.userid)
+          location.hash = "#private_rooms/" + data.roomid;
+      });
+    }
   }
 });

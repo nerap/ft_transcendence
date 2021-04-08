@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     post '/private_messages', to: "private_messages#create"
   end
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations/registrations' }
 
   get 'users', to: "users#index"
   get 'users/:id', to: "users#show", as: 'user'

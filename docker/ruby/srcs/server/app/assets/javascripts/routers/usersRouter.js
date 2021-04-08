@@ -19,7 +19,10 @@ Transcendence.Routers.Users = Backbone.Router.extend({
     },
     profile: function (id) {
         this.cleanUp();
-        this.view = new Transcendence.Views.UserProfile({ model: Transcendence.users.get(id) });
+        this.view = new Transcendence.Views.UserProfile({
+            model: Transcendence.users.get(id),
+            id: id
+        });
         $('#main-body').html(this.view.render().$el);
     },
     edit: function (id) {
