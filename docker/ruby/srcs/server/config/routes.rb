@@ -33,5 +33,6 @@ Rails.application.routes.draw do
   get 'users', to: "users#index"
   get 'users/:id', to: "users#show", as: 'user'
 
+  match "*path", to: "application#error_404", :via => [:get, :post, :delete, :put, :patch]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
