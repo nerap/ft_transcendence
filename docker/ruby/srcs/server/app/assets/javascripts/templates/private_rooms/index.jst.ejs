@@ -1,3 +1,22 @@
-<% prs.forEach(function(pr) { %>
-    <a href="/#private_rooms/<%= pr.id %>"><%= pr.id %></a>
-<% }) %>
+<div id="pr-index">
+    <table>
+        <tr>
+            <th>Private messages</th>
+        </tr>
+        <% if (prs.length == 0) { %>
+            <tr class="pr-list">
+                <td style="font-style:italic;text-align:center;">You have no private conversation !</td>
+            </tr>
+        <% } %>
+        <% prs.forEach(function(pr) { %>
+        <tr class="pr-list">
+            <td onclick='document.location = "/#private_rooms/<%= pr.id %>"'>
+                <% var to_user = Transcendence.users.get(pr.toJSON().users.filter(function(usr) {
+                return usr != Transcendence.current_user.id;
+                })).toJSON()  %>
+                Discussion with <span style="font-weight:bold;"><%= to_user.username %></span>
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+</div>
