@@ -23,6 +23,18 @@
                         </form>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
+                            class="<%= user.id %>">
+                            <button type="submit" class="menu-option">send PM</button>
+                            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
+                            <input value="<%= user.id %>" type="hidden" name="private_room[user2]">
+                            <input type="hidden" name="authenticity_token"
+                                value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+                </tr>
             </table>
         <% } %>
     </div>
