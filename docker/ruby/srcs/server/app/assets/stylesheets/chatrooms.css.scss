@@ -6,6 +6,7 @@
     background-color: rgb(240, 240, 240);
     font-family: sans-serif;
     padding: 40px;
+    min-width: 700px;
 
     .create-chatroom {
         text-align: center;
@@ -32,9 +33,10 @@
     }
 
     ul, li {
-        margin: 0;
+        margin: auto;
         padding: 0;
         list-style: none;
+        max-width: 740px;
     }
 
     .tabs li {
@@ -64,7 +66,10 @@
     }
 
     .tabs-content {
+        margin: auto;
+        min-width: 500px;
         width: auto;
+        max-width: 700px;
         position: relative;
         z-index: 3;
         padding: 20px;
@@ -123,7 +128,7 @@
                         }
                         &-join-unjoin {
                             width: 15%;
-                            padding: 0;
+                            padding: 10px;
                             .join {
                                 display: none;
                                 &.active {
