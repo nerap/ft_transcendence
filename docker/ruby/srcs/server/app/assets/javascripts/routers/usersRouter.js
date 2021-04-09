@@ -18,9 +18,24 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         $('#main-body').html(this.view.render().$el);
     },
     profile: function (id) {
-        this.cleanUp();
-        this.view = new Transcendence.Views.UserProfile({ model: Transcendence.users.get(id) });
-        $('#main-body').html(this.view.render().$el);
+        if (!Transcendence.users.get(id)) {
+            location.hash = "#users";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This user doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        } else {
+            this.cleanUp();
+            this.view = new Transcendence.Views.UserProfile({
+                model: Transcendence.users.get(id),
+                id: id
+            });
+            $('#main-body').html(this.view.render().$el);
+        }
     },
     edit: function (id) {
         if (!Transcendence.users.get(id)) {

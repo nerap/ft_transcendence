@@ -12,8 +12,7 @@ consumer.subscriptions.create("UsersChannel", {
   received(data) {
     if (data.content == "profile") {
       Transcendence.users.fetch()
-    } else {
-      Transcendence.current_user.fetch();
     }
+    Transcendence.current_user.fetch();
   }
 });

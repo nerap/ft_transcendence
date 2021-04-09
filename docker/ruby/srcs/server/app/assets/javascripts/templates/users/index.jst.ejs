@@ -8,6 +8,7 @@
             <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
             <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
             <td class="users-action">
+                <% if (model.escape('id') != Transcendence.current_user.id) { %>
                 <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
                     class="<%= model.escape('id') %>">
                     <button type="submit" class="menu-option">send PM</button>
@@ -16,6 +17,7 @@
                     <input type="hidden" name="authenticity_token"
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
+                <% } %>
             </td>
         </tr>
         <% }) %>

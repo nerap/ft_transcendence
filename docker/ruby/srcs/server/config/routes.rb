@@ -30,10 +30,11 @@ Rails.application.routes.draw do
     post '/private_messages', to: "private_messages#create"
   end
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'registrations/registrations' }
 
   get 'users', to: "users#index"
   get 'users/:id', to: "users#show", as: 'user'
 
+  match "*path", to: "application#error_404", :via => [:get, :post, :delete, :put, :patch]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

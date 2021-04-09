@@ -19,7 +19,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
                 this.members();
             }
         });
-        this.listenTo(Transcendence.current_user, 'sync', this.render);
+        this.listenTo(Transcendence.current_user, 'change', this.render);
     },
     render: function () {
         this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model.toJSON() }));
