@@ -1,4 +1,5 @@
 class FriendsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_friend, only: %i[ show edit update destroy ]
 
   # GET /friends or /friends.json
@@ -25,10 +26,9 @@ class FriendsController < ApplicationController
 
     respond_to do |format|
       if @friend.save
-        format.html { redirect_to @friend, notice: "Friend was successfully created." }
+        ActionCable.server.broadcast "friend_channel", content: "ok"
         format.json { render :show, status: :created, location: @friend }
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @friend.errors, status: :unprocessable_entity }
       end
     end
@@ -38,10 +38,9 @@ class FriendsController < ApplicationController
   def update
     respond_to do |format|
       if @friend.update(friend_params)
-        format.html { redirect_to @friend, notice: "Friend was successfully updated." }
+        ActionCable.server.broadcast "friend_channel", content: "ok"
         format.json { render :show, status: :ok, location: @friend }
       else
-        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @friend.errors, status: :unprocessable_entity }
       end
     end
@@ -51,7 +50,7 @@ class FriendsController < ApplicationController
   def destroy
     @friend.destroy
     respond_to do |format|
-      format.html { redirect_to friends_url, notice: "Friend was successfully destroyed." }
+      ActionCable.server.broadcast "friend_channel", content: "ok"
       format.json { head :no_content }
     end
   end
@@ -64,6 +63,6 @@ class FriendsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def friend_params
-      params.require(:friend).permit(:user_one_id, :user_two_id)
+      params.permit(:user_one_id, :user_two_id, :pending)
     end
 end

@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  resources :friends
   resources :chatrooms
   root "home#index"
   get "home", to: "home#index"
 
   scope "api" do
+    resources :friends
     resources :chatrooms do
       member do
         post 'login'

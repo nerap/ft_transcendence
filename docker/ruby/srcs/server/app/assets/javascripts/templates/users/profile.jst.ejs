@@ -7,9 +7,48 @@
             <a href="/#users/<%= user.id %>/edit_profile"><button>Edit profile</button></a>
         <% } else { %>
             <table style="margin:auto;">
-                <tr>
-                    <td><button>Add friend</button></td>
+                <tr>	
                     <td>
+                       	<% var action = "Add Friend" %>
+                       	<% var method = "post" %>
+                       	<% var url = "friends" %>
+                       	<% var pending = "true" %>
+			
+        		<% Transcendence.friends.each(function(model) { %>	
+                	<% if ((model.escape('user_one_id') == Transcendence.current_user.id)) { %>
+			<% if  (model.escape('user_two_id') == user.id) { %>
+			<% if  (model.escape('pending') == 'true') { %>
+			<% action = "Accept Request" %>	
+                       	<% method = "put" %>
+                       	<% pending = "false" %>
+                       	<% url = "friends/" + model.escape('id') %>
+			<% } else { %>
+			<% action = "Remove" %>	
+                       	<% method = "delete" %>
+                       	<% pending = "false" %>
+                       	<% url = "friends/" + model.escape('id') %>
+			<% }}} else if ((model.escape('user_two_id') == Transcendence.current_user.id)) { %>
+			<% if (model.escape('user_one_id') == user.id) { %>
+			<% if  (model.escape('pending') == 'true') { %>
+			<% action = "Pending" %>	
+                       	<% method = "get" %>
+                       	<% pending = "false" %>
+                       	<% url = "friends" %>
+			<% } else { %>
+			<% action = "Remove" %>	
+                       	<% method = "delete" %>
+                       	<% pending = "false" %>
+                       	<% url = "friends/" + model.escape('id') %>
+			<% }}}}) %>
+                        <form action="/api/<%= url %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="<%= method %>">
+                            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+                            <input value="<%= user.id %>" type="hidden" name="user_one_id">
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
+                            <input value="<%= pending %>" type="hidden" name="pending">
+                        </form>
+                    </td>
+		    <td>
                         <% if (Transcendence.current_user.toJSON().block_list.includes(user.id)) { %>
                             <% var action = "unblock" %>
                         <% } else { %>
