@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   scope "api" do
     resources :friends
+    resources :guilds
     resources :chatrooms do
       member do
         post 'login'
