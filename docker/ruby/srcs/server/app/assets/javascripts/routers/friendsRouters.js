@@ -3,7 +3,7 @@ Transcendence.Routers.Friends = Backbone.Router.extend({
         "friends": "index",
     },
     initialize: function () {
-        this.view = null;
+        this.listenTo(Transcendence.friends, 'change add remove', this.render);
     },
     cleanUp: function () {
         if (this.view)
@@ -12,5 +12,7 @@ Transcendence.Routers.Friends = Backbone.Router.extend({
     },
     index: function () {
         this.cleanUp();
+        this.view = new Transcendence.Views.FriendsIndex({ collection: Transcendence.friends });
+        $('#main-body').html(this.view.render().$el);
     },
 });
