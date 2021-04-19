@@ -10,6 +10,6 @@ consumer.subscriptions.create("FriendChannel", {
   },
 
   received(data) {
-    // Called when there's incoming data on the websocket for this channel
+    Transcendence.friends.fetch()
   }
 });
