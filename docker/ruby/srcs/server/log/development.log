@@ -16593,3 +16593,4 @@ Successfully upgraded to WebSocket (REQUEST_METHOD: GET, HTTP_CONNECTION: keep-a
 [ActionCable] [harry] FriendChannel is streaming from friend_channel
 [ActionCable] [harry] RoomChannel is transmitting the subscription confirmation
 [ActionCable] [harry] RoomChannel is streaming from room_channel
+DEPRECATION WARNING: The config.web_console.whitelisted_ips is deprecated and will be ignored in future release of web_console. Please use config.web_console.allowed_ips instead. (called from <top (required)> at /home/user42/Documents/ft_transcendence/docker/ruby/srcs/server/config/environment.rb:5)
