@@ -10,6 +10,13 @@ consumer.subscriptions.create("GuildChannel", {
   },
 
   received(data) {
-    // Called when there's incoming data on the websocket for this channel
+    if (data.content == "create_guild") {
+      Transcendence.guilds.fetch().done(function () {
+        if (Transcendence.current_user.id == data.userid)
+          location.hash = "#guilds"
+      });
+    } else {
+      Transcendence.guilds.fetch()
+    }
   }
 });

@@ -1,2 +1,0 @@
-class GuildController < ApplicationController
-end

@@ -1,0 +1,57 @@
+<div id="current-guild">
+    <table>
+        <% Transcendence.guilds.each(function(temp) { %>
+        <% if (temp.escape('id') == Transcendence.current_user.toJSON().guild) { %>
+
+        <%= temp.escape('name') %>
+        <%= temp.escape('anagram') %>
+        <%= temp.escape('points') %>
+        <% if (Transcendence.current_user.toJSON().id == temp.escape('owner')) { %>
+            <td class="users-action">
+            <form action="/api/guilds/<%= temp.escape('id') %>" method="post" data-remote="true" id="join_guild" class="delete-guild">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="menu-option">Delete</button>
+            </form>
+            </td>
+        <% } %>
+        <tr>
+            <th colspan="5">Guilds</th>
+        </tr>
+        <% Transcendence.users.each(function(model) { %>
+        <% if (model.escape('guild') == Transcendence.current_user.toJSON().guild) { %>
+        <tr class="users-list">
+            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
+            <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
+            <td class="kicks-action">
+                <% if ((temp.escape('owner') == Transcendence.current_user.toJSON().id) || (model.escape('officer') == "true")) { %>
+                <% if ((model.escape('id') != temp.escape('owner')) && (model.escape('id') != Transcendence.current_user.toJSON().id)) { %>
+                <form action="/api/guilds/kick" method="post" data-remote="true" id="kick_id"
+                    class="kick_form">
+                    <button type="submit" class="menu-option">Kick</button>
+                    <input type="hidden" name="current_id" value="<%= model.escape('id') %>">
+                    <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+                <% }} %>
+            </td>
+            <td class="promote-action">
+                <% if (temp.escape('owner') == Transcendence.current_user.toJSON().id) { %>
+                <% if (model.escape('id') != temp.escape('owner')) { %>
+                <% if (model.escape('officer') == "false") { %>
+                    <% var action = "promote" %>
+                <% } else { %>
+                    <% var action = "demote" %>
+                <% } %>
+                <form action="/api/guilds/<%= action %>" method="post" data-remote="true" id="<%= action %>_id"
+                    class="<%= action %>_form">
+                    <button type="submit" class="menu-option"><%= action %></button>
+                    <input type="hidden" name="current_id" value="<%= model.escape('id') %>">
+                    <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+                <% }} %>
+            </td>
+        </tr>
+        <% }})}}) %>
+    </table>
+</div>

@@ -1,0 +1,22 @@
+<div id="guilds-list">
+    <table>
+        <tr>
+            <th colspan="4">Guilds</th>
+        </tr>
+        <% Transcendence.guilds.each(function(model) { %>
+        <tr class="guilds-list">
+            <td style="width:15%;"><%= model.escape('name') %></td>
+            <td style="width:15%;"><%= model.escape('anagram') %></td>
+            <td class="users-action">
+                <form action="/api/guilds/join_guild" method="post" data-remote="true" id="join_guild" class="<%= model.escape('id') %>">
+                    <button type="submit" class="menu-option">Join</button>
+                    <input value="<%= model.escape('id') %>" type="hidden" name="guild_id">
+                    <input value="<%= Transcendence.current_user.id %>" type="hidden" name="user_id">
+                    <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+</div>
