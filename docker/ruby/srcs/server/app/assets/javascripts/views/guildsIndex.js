@@ -6,11 +6,7 @@ Transcendence.Views.GuildsIndex = Backbone.View.extend ({
     },
     render: function () {
         this.$el.html(JST['templates/guilds/index']());
-        if (!Transcendence.current_user.toJSON().guild) {
-            var guildsView = JST['templates/guilds/list_guilds']();
-        } else {
-            var guildsView = JST['templates/guilds/current_guilds']();
-        }
+        var guildsView = JST['templates/guilds/list_guilds']();
         this.$('.guilds-list').append(guildsView);
         return this
     },

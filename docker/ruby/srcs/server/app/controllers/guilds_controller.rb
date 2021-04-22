@@ -23,8 +23,6 @@ class GuildsController < ApplicationController
   
     # POST /guilds or /guilds.json
     def create
-      puts "salut"
-      puts User.find_by_id(current_user.id).guild
       if (User.find_by_id(guild_params[:owner]).guild != nil)
         redirect_to "/#guilds"
         flash[:error] = "You are already in a guild sneaky :) "
@@ -69,7 +67,7 @@ class GuildsController < ApplicationController
       user_params.officer = false
       if user_params.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: current_user.id
       end
     end
 
@@ -84,7 +82,7 @@ class GuildsController < ApplicationController
         user_params.officer = false
         if guild_temp.save && user_params.save && guild_temp.save
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "ok"
+          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
         end
       elsif User.where(guild: guild_temp.id).length <= 1
         user_params.guild = nil
@@ -92,7 +90,7 @@ class GuildsController < ApplicationController
         if user_params.save
           guild_temp.destroy
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "ok"
+          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
         end
       elsif user_params.id == guild_temp.owner
         flash[:error] = "User not viable !"
@@ -102,7 +100,7 @@ class GuildsController < ApplicationController
         user_params.officer = false
         if user_params.save
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "ok"
+          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
         end
       end
     end
