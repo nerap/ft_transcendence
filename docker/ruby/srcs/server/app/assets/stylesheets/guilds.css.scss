@@ -1,0 +1,156 @@
+// Place all the styles related to the Chatrooms controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+div#main-guilds {
+    background-color: rgb(240, 240, 240);
+    font-family: sans-serif;
+    min-width: 700px;
+
+    .create-chatroom {
+        text-align: center;
+        padding: 0;
+        button.create {
+            
+            padding: 10px;
+            white-space: nowrap;
+            height: auto;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 17px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(54, 123, 145, 0.7);
+            &:hover {
+                background: rgb(48, 109, 129);
+            }
+        }
+
+        button.delete {
+            padding: 10px;
+            white-space: nowrap;
+            height: auto;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 17px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(201, 63, 81, 0.7);
+            &:hover {
+                background: rgba(201, 63, 81, 0.7);
+            }
+        }
+
+        button.promote {
+            text-transform: capitalize;
+            padding: 10px;
+            white-space: nowrap;
+            height: auto;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 17px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(132, 141, 0, 0.7);
+            &:hover {
+                background:rgba(132, 141, 0, 0.7);
+            }
+        }
+    }
+
+
+    .name-guild {
+        text-align:center;
+        height: 40px;
+        border:4px black solid;
+        font-size:42px;
+        padding-top: 20px;
+        margin: auto;
+        width: 30%;
+    }
+
+    .anagram-guild {
+        text-align:center;
+        margin: auto;
+        font-size: 30px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        padding-top: 20px;
+    }
+
+    .points-guild {
+        text-align:center;
+        margin: auto;
+        padding-bottom: 20px;
+        font-size: 19px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        padding-top: 20px;
+    }
+
+    .win-guild {
+        color: rgb(0, 138, 0);
+        margin-left: 47%;
+        width: auto;
+        float: left;
+    }
+
+    .loose-guild {
+        color: rgb(143, 1, 1);
+        margin-right: 44%;
+        padding-left: 10px;
+        width: auto;
+        overflow: hidden;
+    }
+
+
+    table {
+        margin: auto;
+        width: 500px;
+        border-collapse: collapse;
+        box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+        tr {
+            background-color: rgb(250, 250, 250);
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+            &.users-list:hover, &.pr-list:hover {
+                cursor: pointer;
+                background: rgba(0, 0, 0, 0.12);
+            }
+            th {
+                font-size: 20px;
+                font-variant: small-caps;
+                padding: 10px;
+                background: rgb(54, 54, 54);
+                color: white;
+            }
+            td {
+                text-align: center;
+                height: 45px;
+                padding: 0;
+                padding-left: 10px;
+                padding-right: 10px;
+                font-size: 17px;
+                vertical-align: middle;
+                &.users-action {
+                    width: 20%;
+                    padding: 0;
+                    button {
+                        background-color: rgba(0, 0, 0, 0);
+                        cursor: pointer;
+                        width: 100%;
+                        height: 45px;
+                        border: none;
+                        font-size: 17px;
+                        font-variant: small-caps;
+                        border-left: solid 1px rgba(0, 0, 0, 0.12);
+                        &:hover {
+                            background: rgba(0, 0, 0, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

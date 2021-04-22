@@ -1,0 +1,44 @@
+<div id="main-guilds">
+    <% if (Transcendence.current_user.toJSON().guild == null) { %>
+    <div class="create-chatroom">
+        <a href="#guilds/new"><button class="create">Create a guild</button></a>
+    </div>
+    <% } else { %>
+    <% Transcendence.guilds.each(function(model) { %>
+    <% if (Transcendence.current_user.toJSON().guild == model.escape('id')) { %>
+    <% if (Transcendence.current_user.toJSON().id == model.escape('owner')) { %>
+    <div class="create-chatroom">
+        <button class="delete" onclick='$("#leave-modal").show()'>Leave</button>
+        <div id="leave-modal" class="modal">
+            <div class="modal-content">
+                <span id="close" onclick='$("#leave-modal").hide()'>&times;</span><br />
+                <div class="modal-header">
+                    Select a new owner for this guild
+                </div>
+                <form action="/api/guilds/leave_guild" accept-charset="UTF-8" method="post"
+                    data-remote="true">
+                    <div class="modal-body">
+                        <input type="hidden" name="current_id" value="<%= Transcendence.current_user.toJSON().id %>">
+                        <input autocomplete="off" placeholder="Enter user name..." type="text"
+                            name="new_owner"><button name="button" type="submit"
+                            class="button-password" onclick='$("#leave-modal").hide()'>Submit</button>
+                        <input type="hidden" name="authenticity_token"
+                            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+        <div class="create-chatroom">
+            <form action="/api/guilds/leave_guild" accept-charset="UTF-8" method="post" data-remote="true">
+                <input type="hidden" name="current_id" value="<%= Transcendence.current_user.toJSON().id %>">
+                <button type="submit" class="delete">Leave</button>
+                <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        </div>
+    <% }}})} %>
+    <br></br>
+    <div class="guilds-list"></div>
+</div>

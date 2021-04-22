@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_02_101920) do
+ActiveRecord::Schema.define(version: 2021_04_21_112601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,25 @@ ActiveRecord::Schema.define(version: 2021_04_02_101920) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
+  create_table "friends", force: :cascade do |t|
+    t.bigint "user_one_id"
+    t.bigint "user_two_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "pending"
+  end
+
+  create_table "guilds", force: :cascade do |t|
+    t.string "name"
+    t.string "anagram"
+    t.integer "points"
+    t.bigint "owner"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "win"
+    t.bigint "loose"
+  end
+
   create_table "private_messages", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -83,6 +102,8 @@ ActiveRecord::Schema.define(version: 2021_04_02_101920) do
     t.string "username"
     t.string "avatar"
     t.bigint "block_list", default: [], array: true
+    t.bigint "guild"
+    t.boolean "officer"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -1,0 +1,20 @@
+<div id="edit-panel">
+    <div class="header">
+        <h1>Create a guilds</h1>
+        <button class="back" onclick="document.location='#guilds'">Back to list of guilds</button>
+    </div>
+    <br/>
+    <form id="create-chatroom" action="/api/guilds" accept-charset="UTF-8" method="post" data-remote="true">
+        Name<br/>
+        <input autocomplete="off" type="text" name="name" minlength="3" maxlength="12" id="name_id">
+        <br>Anagram 5 letters<br/>
+        <input autocomplete="off" type="text" name="anagram" minlength="5" maxlength="5">
+        <br/><br/>
+        <input type="hidden" name="points" value="0">
+        <input type="hidden" name="win" value="0">
+        <input type="hidden" name="loose" value="0">
+        <input type="hidden" name="owner" value="<%= Transcendence.current_user.id %>">
+        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        <button type="submit" name="commit" class="edit save" data-disable-with="Save">Create</button>
+    </form>
+</div>
