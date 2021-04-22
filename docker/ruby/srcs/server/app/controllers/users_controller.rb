@@ -82,9 +82,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def last_seen
-  end
-
   protected
   # utils
   def is_blocked(user, targetuserid)
