@@ -39,7 +39,11 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 $(`.error`).slideUp(500);
             }, 3000);
         } else {
-            if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().members.includes(Transcendence.current_user.id)) {
+            if (
+                Transcendence.current_user.toJSON().admin == true
+                || Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner
+                || Transcendence.chatrooms.get(id).toJSON().members.includes(Transcendence.current_user.id)
+            ) {
                 this.cleanUp();
                 this.view = new Transcendence.Views.ChatroomShow({
                     id: id,
@@ -78,7 +82,10 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 $(`.error`).slideUp(500);
             }, 3000);
         } else {
-            if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner) {
+            if (
+                Transcendence.current_user.toJSON().admin == true
+                || Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner
+            ) {
                 this.cleanUp();
                 this.view = new Transcendence.Views.ChatroomEdit({
                     model: Transcendence.chatrooms.get(id).toJSON(),
@@ -111,7 +118,11 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 $(`.error`).slideUp(500);
             }, 3000);
         } else {
-            if (Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)) {
+            if (
+                Transcendence.current_user.toJSON().admin == true
+                || Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner
+                || Transcendence.chatrooms.get(id).toJSON().admin.includes(Transcendence.current_user.id)
+            ) {
                 this.cleanUp();
                 this.view = new Transcendence.Views.ChatroomAdmin({
                     model: Transcendence.chatrooms.get(id).toJSON(),

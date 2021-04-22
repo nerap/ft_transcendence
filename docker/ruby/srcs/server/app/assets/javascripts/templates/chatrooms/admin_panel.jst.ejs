@@ -4,7 +4,7 @@
         <button onclick="document.location='#chatrooms/<%= chatroom.id %>'">Back to <%= chatroom.name %></button>
     </div>
     <br/>
-    <% if (chatroom.owner == Transcendence.current_user.id) { %>
+    <% if (Transcendence.current_user.toJSON().admin == true || chatroom.owner == Transcendence.current_user.id) { %>
     <table class="action-type">
         <tr>
             <td class="inputs">

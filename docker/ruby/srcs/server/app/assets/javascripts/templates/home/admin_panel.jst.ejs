@@ -1,0 +1,103 @@
+<div id="admin-panel">
+    <div class="header">
+        <h1>General Admin panel</h1>
+        <button onclick="document.location='/#'">Back to Home</button>
+    </div>
+    <br/>
+    <% if (Transcendence.current_user.toJSON().superuser == true) { %>
+    <table class="action-type">
+        <tr>
+            <td class="inputs">
+                <form action="/api/admin/set_admin" type="submit" method="post" data-remote="true">
+                    <input type="hidden" name="_method" value="put">
+                    <input id="input-setadmin" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
+                    <input type="submit" value="Set as admin">
+                    <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="members-list">
+                <div class="header">Members list</div>
+                <div class="content">
+                    <% $.each(members, function(i) { %>
+                    <div class="option" onclick="$('#input-setadmin').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
+            </td>
+        </tr>
+    </table>
+    &emsp;&emsp;
+    <table class="action-type">
+        <tr>
+            <td class="inputs">
+                <form action="/api/admin/unset_admin" type="submit" method="post" data-remote="true">
+                    <input type="hidden" name="_method" value="put">
+                    <input id="input-unsetadmin" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
+                    <input type="submit" value="Demote">
+                    <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="members-list">
+                <div class="header">Admins list</div>
+                <div class="content">
+                    <% $.each(admins, function(i) { %>
+                    <div class="option" onclick="$('#input-unsetadmin').val($(this).text());"><%= Transcendence.users.get(admins[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br/>
+    <br/>
+    <% } %>
+    <table class="action-type">
+        <tr>
+            <td class="inputs">
+                <form action="/api/admin/ban_user" type="submit" method="post" data-remote="true">
+                    <input type="hidden" name="_method" value="put">
+                    <input id="input-ban" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
+                    <input type="submit" value="Ban user">
+                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="members-list">
+                <div class="header">Members list</div>
+                <div class="content">
+                    <% $.each(members, function(i) { %>
+                    <div class="option" onclick="$('#input-ban').val($(this).text());"><%= Transcendence.users.get(members[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
+            </td>
+        </tr>
+    </table>
+    &emsp;&emsp;
+    <table class="action-type">
+        <tr>
+            <td class="inputs">
+                <form action="/api/admin/unban_user" type="submit" method="post" data-remote="true">
+                    <input type="hidden" name="_method" value="put">
+                    <input id="input-unban" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
+                    <input type="submit" value="Unban user">
+                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td class="members-list">
+                <div class="header">Banned users list</div>
+                <div class="content">
+                    <% $.each(banned, function(i) { %>
+                    <div class="option" onclick="$('#input-unban').val($(this).text());"><%= Transcendence.users.get(banned[i]).toJSON().username %></div>
+                    <% }); %>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
