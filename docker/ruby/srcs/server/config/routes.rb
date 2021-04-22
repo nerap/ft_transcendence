@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   scope "api" do
     resources :friends
+    resources :guilds
     resources :chatrooms do
       member do
         post 'login'
@@ -28,6 +29,11 @@ Rails.application.routes.draw do
   
     resources :private_rooms
     post '/private_messages', to: "private_messages#create"
+    post '/guilds/leave_guild', to: "guilds#leave_guild"
+    post '/guilds/join_guild', to: "guilds#join_guild"
+    post '/guilds/promote', to: "guilds#promote"
+    post '/guilds/demote', to: "guilds#demote"
+    post '/guilds/kick', to: "guilds#kick"
   end
 
   get 'my_friends', to: "friends#index"
