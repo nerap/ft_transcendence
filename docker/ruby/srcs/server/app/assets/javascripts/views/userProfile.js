@@ -3,7 +3,7 @@ Transcendence.Views.UserProfile = Backbone.View.extend ({
         "click #send-pm": "sendPM"
     },
     initialize: function () {
-        this.listenTo(Transcendence.current_user, 'change', this.render);
+        this.listenTo(Transcendence.users, 'change', this.render);
         this.listenTo(Transcendence.friends, 'change add remove', this.render);
     },
     render: function () {

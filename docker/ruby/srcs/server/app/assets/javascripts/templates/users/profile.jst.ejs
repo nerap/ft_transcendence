@@ -1,6 +1,12 @@
 <div id="user-profile">
     <img src="<%= user.avatar %>">
-    <h1><%= user.username %>'s profile</h1>
+    <h1><%= user.username %>'s profile
+        <% if (user.online == true) { %>
+            <span class="status online"></span>
+        <% } else { %>
+            <span class="status offline"></span>
+        <% } %>
+    </h1>
     <div class="edit-current-user">
         <% if (user.id == Transcendence.current_user.id) { %>
             <a href="/users/edit"><button>Edit account</button></a>
