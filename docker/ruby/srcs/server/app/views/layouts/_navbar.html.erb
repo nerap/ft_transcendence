@@ -15,11 +15,6 @@
                 <a href="/#users/<%= current_user.id %>">see profile</a>
                 <a href="/#private_rooms">private messages</a>
                 <a href="/#friends">Friends</a>
-                <% if current_user.guild == nil %>
-                <a href="/#guilds">My guild</a>
-                <% else  %>
-                <a href="/#guilds/<%= current_user.guild %>">My guild</a>
-                <% end %>
                 <a href="/users/sign_out" data-method="delete" rel="nofollow" style="border-top:solid 2px rgb(54, 54, 54);">log out</a>
             </div></li>
         <% else %>
