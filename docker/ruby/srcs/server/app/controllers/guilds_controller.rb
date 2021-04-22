@@ -76,7 +76,7 @@ class GuildsController < ApplicationController
     def leave_guild
       user_params = User.find_by_id(params[:current_id])
       guild_temp = Guild.find_by_id(user_params.guild)
-      if ((user_params.id == guild_temp.owner) && (check_owner(params[:new_owner], guild_temp.id)))
+      if ((user_params.id == guild_temp.owner) && (check_owner(params[:new_owner], guild_temp.id)) && (params[:new_owner] != current_user.username))
         newowner = User.find_by_username(params[:new_owner])
         newowner.officer = false
         guild_temp.owner = newowner.id
@@ -95,7 +95,7 @@ class GuildsController < ApplicationController
           ActionCable.server.broadcast "guild_channel", content: "ok"
         end
       elsif user_params.id == guild_temp.owner
-        flash[:error] = "User not found or not part of the guild !"
+        flash[:error] = "User not viable !"
         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
       else
         user_params.guild = nil
@@ -159,7 +159,7 @@ class GuildsController < ApplicationController
   
       # Only allow a list of trusted parameters through.
       def guild_params
-        params.permit(:name, :anagram, :points, :owner)
+        params.permit(:name, :anagram, :points, :owner, :win, :loose)
       end
 
       def check_owner(username_value, guild_id)

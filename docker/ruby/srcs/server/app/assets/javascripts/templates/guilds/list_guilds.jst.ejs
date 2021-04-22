@@ -6,7 +6,7 @@
         <% Transcendence.guilds.each(function(model) { %>
         <tr class="guilds-list">
             <td style="width:15%;"><%= model.escape('name') %></td>
-            <td style="width:15%;"><%= model.escape('anagram') %></td>
+            <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.escape('anagram') %></b></td>
             <td class="users-action">
                 <form action="/api/guilds/join_guild" method="post" data-remote="true" id="join_guild" class="<%= model.escape('id') %>">
                     <button type="submit" class="menu-option">Join</button>
