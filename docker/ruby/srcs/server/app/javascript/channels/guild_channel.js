@@ -11,6 +11,13 @@ consumer.subscriptions.create("GuildChannel", {
 
   received(data) {
     if (data.content == "create_guild") {
+      Transcendence.users.fetch();
+      Transcendence.guilds.fetch().done(function () {
+        if (Transcendence.current_user.id == data.userid)
+          location.hash = "#guilds/" + Transcendence.current_user.toJSON().guild;
+      });
+    } else if (data.content == "leave") {
+      Transcendence.users.fetch();
       Transcendence.guilds.fetch().done(function () {
         if (Transcendence.current_user.id == data.userid)
           location.hash = "#guilds"

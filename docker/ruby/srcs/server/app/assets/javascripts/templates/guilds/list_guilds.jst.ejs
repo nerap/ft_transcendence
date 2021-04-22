@@ -1,12 +1,14 @@
 <div id="guilds-list">
     <table>
         <tr>
-            <th colspan="4">Guilds</th>
+            <th colspan="5">Guilds</th>
         </tr>
         <% Transcendence.guilds.each(function(model) { %>
         <tr class="guilds-list">
-            <td style="width:15%;"><%= model.escape('name') %></td>
+            <td style="width:15%;" onclick='document.location = "/#guilds/<%= model.escape(`id`) %>"'><%= model.escape('name') %></a></td>
             <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.escape('anagram') %></b></td>
+            <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.escape('points') %></b></td> 
+            <% if (Transcendence.current_user.toJSON().guild == null) { %>
             <td class="users-action">
                 <form action="/api/guilds/join_guild" method="post" data-remote="true" id="join_guild" class="<%= model.escape('id') %>">
                     <button type="submit" class="menu-option">Join</button>
@@ -16,6 +18,7 @@
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
             </td>
+            <% } %>
         </tr>
         <% }) %>
     </table>

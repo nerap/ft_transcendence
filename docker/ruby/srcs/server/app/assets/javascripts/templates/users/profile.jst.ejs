@@ -5,6 +5,11 @@
         <% if (user.id == Transcendence.current_user.id) { %>
             <a href="/users/edit"><button>Edit account</button></a>
             <a href="/#users/<%= user.id %>/edit_profile"><button>Edit profile</button></a>
+            <% if (user.guild != null) { %>
+            <tr>
+                <td class="onclick"><button onclick='document.location = "/#guilds/<%= user.guild %>"'>Guild</button></td>
+            </tr>
+            <% } %>
         <% } else { %>
             <table style="margin:auto;">
                 <tr>	
@@ -63,7 +68,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
                         <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
                             class="<%= user.id %>">
                             <button type="submit" class="menu-option">send PM</button>
@@ -72,8 +76,12 @@
                             <input type="hidden" name="authenticity_token"
                                 value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </form>
-                    </td>
                 </tr>
+                <% if (user.guild != null) { %>
+                <tr>
+                    <td class="onclick" onclick='document.location = "/#guilds/<%= user.guild %>"'>Guilds</a></td>
+                </tr>
+                <% } %>
             </table>
         <% } %>
     </div>

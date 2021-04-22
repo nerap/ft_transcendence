@@ -23,26 +23,15 @@ class FriendsController < ApplicationController
   # POST /friends or /friends.json
   def create
     @friend = Friend.new(friend_params)
-
-    respond_to do |format|
-      if @friend.save
-        ActionCable.server.broadcast "friend_channel", content: "ok"
-        format.json { render :show, status: :created, location: @friend }
-      else
-        format.json { render json: @friend.errors, status: :unprocessable_entity }
-      end
+    if @friend.save
+      ActionCable.server.broadcast "friend_channel", content: "ok"
     end
   end
 
   # PATCH/PUT /friends/1 or /friends/1.json
   def update
-    respond_to do |format|
-      if @friend.update(friend_params)
-        ActionCable.server.broadcast "friend_channel", content: "ok"
-        format.json { render :show, status: :ok, location: @friend }
-      else
-        format.json { render json: @friend.errors, status: :unprocessable_entity }
-      end
+    if @friend.update(friend_params)
+      ActionCable.server.broadcast "friend_channel", content: "ok"
     end
   end
 

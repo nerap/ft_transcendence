@@ -2,6 +2,7 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
     routes: {
         "guilds": "index",
         "guilds/new": "new",
+        "guilds/:id": "guild",
     },
     initialize: function () {
         this.view = null;
@@ -20,5 +21,25 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
         this.cleanUp();
         this.view = new Transcendence.Views.GuildsNew();
         $('#main-body').html(this.view.render().$el);
+    },
+    guild: function (id) {
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This guild doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        } else {
+            this.cleanUp();
+            this.view = new Transcendence.Views.GuildsPanel({
+                model: Transcendence.guilds.get(id),
+                id: id
+            });
+            $('#main-body').html(this.view.render().$el);
+        }
     },
 });
