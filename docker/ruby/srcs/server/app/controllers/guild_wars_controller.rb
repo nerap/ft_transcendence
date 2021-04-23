@@ -1,0 +1,2 @@
+class GuildWarController < ApplicationController
+end
