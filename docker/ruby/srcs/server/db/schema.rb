@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_112601) do
+ActiveRecord::Schema.define(version: 2021_04_23_102220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,22 @@ ActiveRecord::Schema.define(version: 2021_04_21_112601) do
     t.boolean "pending"
   end
 
+  create_table "guild_wars", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.bigint "prize"
+    t.bigint "guild_one_id"
+    t.bigint "guild_two_id"
+    t.bigint "guild_one_points"
+    t.bigint "guild_two_points"
+    t.bigint "unanswered_match"
+    t.boolean "duels"
+    t.boolean "ladder"
+    t.boolean "addons"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "guilds", force: :cascade do |t|
     t.string "name"
     t.string "anagram"
@@ -73,6 +89,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_112601) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "win"
     t.bigint "loose"
+    t.boolean "war"
   end
 
   create_table "private_messages", force: :cascade do |t|
@@ -104,6 +121,9 @@ ActiveRecord::Schema.define(version: 2021_04_21_112601) do
     t.bigint "block_list", default: [], array: true
     t.bigint "guild"
     t.boolean "officer"
+    t.boolean "admin", default: false
+    t.boolean "superuser", default: false
+    t.boolean "banned", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
