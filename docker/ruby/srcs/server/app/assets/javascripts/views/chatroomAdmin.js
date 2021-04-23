@@ -11,7 +11,11 @@ Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
         });
     },
     render: function () {
-        if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner && !Transcendence.chatrooms.get(this.id).toJSON().admin.includes(Transcendence.current_user.id)) {
+        if (
+            Transcendence.current_user.toJSON().admin == false
+            && Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner
+            && !Transcendence.chatrooms.get(this.id).toJSON().admin.includes(Transcendence.current_user.id)
+        ) {
             this.remove();
             var loc = "#chatrooms/" + this.id;
             location.hash = loc;

@@ -14,4 +14,18 @@ class ApplicationController < ActionController::Base
     def configure_permitted_parameters
         devise_parameter_sanitizer.permit(:sign_up, keys: [:username, :avatar])
     end
+
+    def is_superuser(user)
+        if user.superuser == true
+            return true
+        end
+        return false
+    end
+
+    def is_sadmin(user)
+        if user.admin == true
+            return true
+        end
+        return false
+    end
 end

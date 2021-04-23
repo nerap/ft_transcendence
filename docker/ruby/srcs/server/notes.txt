@@ -98,3 +98,9 @@ Dans POSTGRESQL terminal:
 SELECT * FROM nomtable;  ==> montrer tous les elements d'une table
 SELECT * FROM nomtable WHERE id=10 ==> selectionner table id 10
 UPDATE chatrooms SET members = array_remove(members, CAST ('10' AS BIGINT)); ==> supprimer user 10 des members des chatrooms
+
+Automatically populate database:
+in db/seeds.rb
+User.create(...parameters...)
+puis run rail db:seed
+ou rails db:setup (= supprime db puis fait seed)

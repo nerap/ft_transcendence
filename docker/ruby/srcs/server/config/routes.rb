@@ -26,6 +26,11 @@ Rails.application.routes.draw do
     put '/users/block_user'
     put '/users/unblock_user'
 
+    put 'admin/set_admin'
+    put 'admin/unset_admin'
+    put 'admin/ban_user'
+    put 'admin/unban_user'
+
     post '/chats', to: "chats#create"
   
     resources :private_rooms

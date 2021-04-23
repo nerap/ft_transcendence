@@ -17,7 +17,10 @@ Transcendence.Views.ChatroomEdit = Backbone.View.extend({
         location.hash = "#chatrooms/public"
     },
     render: function () {
-        if (Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner) {
+        if (
+            Transcendence.current_user.toJSON().admin == false
+            && Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner
+        ) {
             this.remove();
             location.hash = "#chatrooms/public";
         } else {

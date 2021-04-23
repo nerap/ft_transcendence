@@ -2,7 +2,6 @@ class ChatroomsController < ApplicationController
     respond_to :html, :json
     before_action :authenticate_user!
     before_action :load_entities, only: [:index, :show, :join, :unjoin]
-    before_action :check_permission, only: [:show]
     before_action { flash.clear }
     before_action :end_of_ban_mute
 
@@ -70,7 +69,7 @@ class ChatroomsController < ApplicationController
 
     def destroy
         chatroom = Chatroom.find(params[:id])
-        if is_owner(current_user.id, chatroom)
+        if (is_sadmin(current_user) || is_owner(current_user.id, chatroom))
             name = chatroom.name
             chatroom.destroy
             respond_to do |format|
@@ -109,7 +108,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if is_owner(current_user.id, chatroom) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom)) \
             && is_member(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
             && !is_owner(user.id, chatroom)
@@ -137,7 +136,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if is_owner(current_user.id, chatroom) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom)) \
             && is_admin(user.id, chatroom)
                 chatroom.admin.delete(user.id)
                 respond_to do |format|
@@ -162,10 +161,11 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && !is_owner(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
-            && !is_banned(user.id, chatroom)
+            && !is_banned(user.id, chatroom) \
+            && !is_sadmin(user)
                 chatroom.banned.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
@@ -204,7 +204,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && is_banned(user.id, chatroom)
                 chatroom.banned.delete(user.id)
                 ChatroomBan.where(user_id: user.id, chatroom_id: chatroom.id).destroy_all
@@ -230,10 +230,11 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && !is_owner(user.id, chatroom) \
             && !is_admin(user.id, chatroom) \
-            && !is_muted(user.id, chatroom)
+            && !is_muted(user.id, chatroom) \
+            && !is_sadmin(user)
                 chatroom.muted.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
@@ -265,7 +266,7 @@ class ChatroomsController < ApplicationController
         chatroom = Chatroom.find(params[:id])
         if User.find_by_username(params[:chatroom][:user])
             user = User.find_by_username(params[:chatroom][:user])
-            if (is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
+            if (is_sadmin(current_user) || is_owner(current_user.id, chatroom) || is_admin(current_user.id, chatroom)) \
             && is_muted(user.id, chatroom)
                 chatroom.muted.delete(user.id)
                 ChatroomMute.where(user_id: user.id, chatroom_id: chatroom.id).destroy_all
@@ -378,15 +379,6 @@ class ChatroomsController < ApplicationController
 
     def permitted_parameters
         params.require(:chatroom).permit(:name, :chatroom_type, :password, :owner)
-    end
-
-    def check_permission
-        @chatroom = Chatroom.find(params[:id]) if params[:id]
-        if @chatroom.banned.detect{ |e| e == current_user.id } || (!@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner)
-            flash[:error] = "You are not a member of this chatroom!" if (!@chatroom.members.detect{ |e| e == current_user.id } && current_user.id != @chatroom.owner)
-            flash[:error] = "You have been banned of this chatroom!" if @chatroom.banned.detect{ |e| e == current_user.id }
-            redirect_to chatrooms_path(anchor: @chatroom.chatroom_type)
-        end
     end
 
     def end_of_ban_mute
