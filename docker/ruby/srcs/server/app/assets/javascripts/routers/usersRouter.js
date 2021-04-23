@@ -20,14 +20,7 @@ Transcendence.Routers.Users = Backbone.Router.extend({
     profile: function (id) {
         if (!Transcendence.users.get(id)) {
             location.hash = "#users";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This user doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This user doesn't exist !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.UserProfile({
@@ -40,14 +33,7 @@ Transcendence.Routers.Users = Backbone.Router.extend({
     edit: function (id) {
         if (!Transcendence.users.get(id)) {
             location.hash = "#users";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This user doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This user doesn't exist !");
         } else {
             if (Transcendence.current_user.id == Transcendence.users.get(id).toJSON().id) {
                 this.cleanUp();
@@ -55,14 +41,7 @@ Transcendence.Routers.Users = Backbone.Router.extend({
                 $('#main-body').html(this.view.render().$el);
             } else {
                 location.hash = "#users";
-                var flash = `<div class="error">` +
-                    `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                    `You are not authorized to access this page !` +
-                    `</div>`
-                $("#flash-message").append(flash);
-                setTimeout(function () {
-                    $(`.error`).slideUp(500);
-                }, 3000);
+                flashMessage("error", "You are not authorized to access this page !");
             }
         }
     }
