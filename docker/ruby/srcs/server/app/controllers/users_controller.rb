@@ -82,6 +82,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def enable_2fa
+    current_user.otp_required_for_login = true
+    current_user.otp_secret = User.generate_otp_secret
+    current_user.save!
+    current_user.otp_provisioning_uri(current_user.email, issuer: 'ft_transcendence')
+  end
+
+  def disable_2fa
+    current_user.otp_required_for_login = flash_admin_channel
+    current_user.save
+  end
+
   protected
   # utils
   def is_blocked(user, targetuserid)

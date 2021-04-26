@@ -10,7 +10,5 @@ import $ from 'jquery'
 import Backbone from 'backbone'
 import _ from 'underscore'
 
-window.Routes = require('routes');
-
 Rails.start()
 ActiveStorage.start()
