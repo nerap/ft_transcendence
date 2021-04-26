@@ -1,8 +1,8 @@
 Transcendence.Routers.Users = Backbone.Router.extend({
     routes: {
         "users": "index",
+        "users/edit_profile": "edit",
         "users/:id": "profile",
-        "users/:id/edit_profile": "edit"
     },
     initialize: function () {
         this.view = null;
@@ -17,17 +17,15 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         this.view = new Transcendence.Views.UsersIndex({ collection: Transcendence.users });
         $('#main-body').html(this.view.render().$el);
     },
+    edit: function () {
+        this.cleanUp();
+        this.view = new Transcendence.Views.UserEdit({ model: Transcendence.current_user });
+        $('#main-body').html(this.view.render().$el);
+    },
     profile: function (id) {
         if (!Transcendence.users.get(id)) {
             location.hash = "#users";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This user doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This user doesn't exist !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.UserProfile({
@@ -35,35 +33,6 @@ Transcendence.Routers.Users = Backbone.Router.extend({
                 id: id
             });
             $('#main-body').html(this.view.render().$el);
-        }
-    },
-    edit: function (id) {
-        if (!Transcendence.users.get(id)) {
-            location.hash = "#users";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This user doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
-        } else {
-            if (Transcendence.current_user.id == Transcendence.users.get(id).toJSON().id) {
-                this.cleanUp();
-                this.view = new Transcendence.Views.UserEdit({ model: Transcendence.users.get(id) });
-                $('#main-body').html(this.view.render().$el);
-            } else {
-                location.hash = "#users";
-                var flash = `<div class="error">` +
-                    `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                    `You are not authorized to access this page !` +
-                    `</div>`
-                $("#flash-message").append(flash);
-                setTimeout(function () {
-                    $(`.error`).slideUp(500);
-                }, 3000);
-            }
         }
     }
 });

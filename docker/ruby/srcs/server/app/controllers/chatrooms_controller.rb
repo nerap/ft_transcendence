@@ -57,10 +57,19 @@ class ChatroomsController < ApplicationController
                 ActionCable.server.broadcast "chatrooms_channel", content: "ok"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
             else
-                render :edit, status: :unprocessable_entity
+                flash[:error] = ""
+                @chatroom.errors.full_messages.each do |msg|
+                  flash[:error] = flash[:error] << msg << "<br/>"
+                end
+                respond_to do |format|
+                  ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                  format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+                end
             end
         else
-            render :index, status: :forbidden
+            respond_to do |format|
+                format.json { head :no_content }
+            end
         end
     end
 

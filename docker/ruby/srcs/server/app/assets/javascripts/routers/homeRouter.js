@@ -20,14 +20,7 @@ Transcendence.Routers.Home = Backbone.Router.extend({
     admin: function () {
         if (Transcendence.current_user.toJSON().superuser == false && Transcendence.current_user.toJSON().admin == false) {
             location.hash = "#";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `You are not an administrator` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "You are not an administrator !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.HomeAdmin();

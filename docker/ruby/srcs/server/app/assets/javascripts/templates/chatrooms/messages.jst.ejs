@@ -2,7 +2,6 @@
     var element = document.getElementById('messages');
     element.scrollTop = element.scrollHeight - element.clientHeight;
 </script>
-
 <% $.each(chat, function() { %>
 <% if (!Transcendence.current_user.toJSON().block_list.includes(this.user_id)) { %>
 <table class="<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>">
@@ -11,6 +10,9 @@
             <% if (Transcendence.current_user.id != this.user_id) { %>
             <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
                 src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
+            <% } %>
+            <% if (anagram = getAnagram(this.user_id)) { %>
+                [<%= anagram %>]
             <% } %>
             <%= Transcendence.users.get(this.user_id).toJSON().username %>
             <% if (Transcendence.current_user.id == this.user_id) { %>

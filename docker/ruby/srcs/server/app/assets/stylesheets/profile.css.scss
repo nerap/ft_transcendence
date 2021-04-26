@@ -17,6 +17,19 @@
         text-align: center;
         margin-top: 20px;
         margin-bottom: 20px;
+        .status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+            &.online {
+                background: green;
+            }
+            &.offline {
+                background:  rgb(161, 161, 161);
+            }
+        }
     }
     div.edit-current-user {
         text-align: center;
