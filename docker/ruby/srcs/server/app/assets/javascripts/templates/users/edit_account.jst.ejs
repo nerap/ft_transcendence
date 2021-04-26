@@ -1,0 +1,47 @@
+<div id="edit-panel">
+    <div class="header">
+        <h1>Edit profile</h1>
+    </div>
+    <br/>
+    <form class="edit_user" id="edit_user" action="/users" accept-charset="UTF-8" method="post">
+        <input type="hidden" name="_method" value="put">
+        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+
+        <div class="field">
+            <label for="user_email">Email</label><br/>
+            <input autocomplete="email" type="email" value="<%= user.email %>" name="user[email]" id="user_email">
+        </div>
+
+        <div class="field">
+            <label for="user_password">Password</label> <i>(leave blank if you don't want to change it)</i><br/>
+            <input autocomplete="new-password" type="password" name="user[password]" id="user_password">
+            <br/>
+            <em>6 characters minimum</em>
+        </div>
+
+        <div class="field">
+            <label for="user_password_confirmation">Password confirmation</label><br/>
+            <input autocomplete="new-password" type="password" name="user[password_confirmation]"
+                id="user_password_confirmation">
+        </div>
+
+        <div class="field">
+            <label for="user_current_password">Current password</label> <i>(we need your current password to confirm
+                your changes)</i><br/>
+            <input autocomplete="current-password" type="password" name="user[current_password]"
+                id="user_current_password">
+        </div>
+
+        <div class="actions">
+            <input type="submit" name="commit" value="Update" class="edit save" data-disable-with="Update">
+        </div>
+    </form>
+    <h3>Cancel my account</h3>
+    <form class="button_to" method="post" action="/users" data-remote="true">
+        <input type="hidden" name="_method" value="delete">
+        <input data-confirm="Are you sure?" class="edit destroy" type="submit" value="Cancel my account">
+        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+    <br/>
+    <a href="/#users/<%= user.id %>"><button class="back">Back to profile</button></a>
+</div>
