@@ -11,7 +11,6 @@ class CreateGuildWars < ActiveRecord::Migration[6.1]
       t.bigint :unanswered_match
       t.boolean :duels
       t.boolean :ladder
-      t.boolean :addons
 
       t.timestamps
     end

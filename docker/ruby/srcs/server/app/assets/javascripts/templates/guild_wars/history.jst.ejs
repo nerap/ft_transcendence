@@ -1,0 +1,11 @@
+<div id="users-index">
+    <table>
+        <tr>
+            <th colspan="4">Current Guild war History</th>
+        </tr>
+        <% Transcendence.guild_wars.each(function(bob) { %>
+        <% if (bob.escape('done') == "true") { %>
+        <% if ((bob.escape('guild_one_id') == guild.id) || (bob.escape('guild_two_id') == guild.id)) { %>
+        <% }}}) %>
+    </table>
+</div>

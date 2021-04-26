@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :friends
     resources :guilds
     resources :guild_wars
+    put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
     resources :chatrooms do
       member do
         post 'login'
@@ -40,6 +41,7 @@ Rails.application.routes.draw do
     post '/guilds/promote', to: "guilds#promote"
     post '/guilds/demote', to: "guilds#demote"
     post '/guilds/kick', to: "guilds#kick"
+ 
   end
 
   get 'my_friends', to: "friends#index"

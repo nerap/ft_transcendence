@@ -13,7 +13,7 @@
         <input type="hidden" name="points" value="0">
         <input type="hidden" name="win" value="0">
         <input type="hidden" name="loose" value="0">
-        <input type="hidden" name="war" value="false">
+        <input type="hidden" name="war" value="null">
         <input type="hidden" name="owner" value="<%= Transcendence.current_user.id %>">
         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         <button type="submit" name="commit" class="edit save" data-disable-with="Save">Create</button>

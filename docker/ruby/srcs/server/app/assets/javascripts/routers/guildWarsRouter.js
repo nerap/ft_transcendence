@@ -1,18 +1,88 @@
 Transcendence.Routers.GuildWars = Backbone.Router.extend({
     routes: {
-        "guild_wars": "index",
+        "guild_wars/new": "new",
+        "guild_wars/new/:id": "new_war",
+        "guild_wars/:id": "wars",
+        "guild_wars/history/:id": "history",
     },
     initialize: function () {
         this.view = null;
     },
     cleanUp: function () {
+        setInterval(() => {$.ajax({
+            url: '/api/guild_wars/',
+            type: 'get',
+            success: function(response)
+            {
+            }
+        });}, 20000);
         if (this.view)
             this.view.remove();
         this.view = null;
     },
-    index: function () {
+    history: function (id) {
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This guild doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        } else {
+            this.cleanUp();
+            this.view = new Transcendence.Views.GuildWarsHistory({
+                model: Transcendence.guilds.get(id),
+                id: id
+            });
+            $('#main-body').html(this.view.render().$el);
+        }
+    },
+    new: function () {
         this.cleanUp();
-        this.view = new Transcendence.Views.GuildWarsIndex({ collection: Transcendence.guildwars });
+        this.view = new Transcendence.Views.GuildWarsNew();
         $('#main-body').html(this.view.render().$el);
+    },
+    new_war: function (id) {
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This guild doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        } else {
+            this.cleanUp();
+            this.view = new Transcendence.Views.GuildWarsNewWar({
+                model: Transcendence.guilds.get(id),
+                id: id
+            });
+            $('#main-body').html(this.view.render().$el);
+        }
+    },
+    wars: function (id) {
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            var flash = `<div class="error">` +
+                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
+                `This guild doesn't exist !` +
+                `</div>`
+            $("#flash-message").append(flash);
+            setTimeout(function () {
+                $(`.error`).slideUp(500);
+            }, 3000);
+        } else {
+            this.cleanUp();
+            this.view = new Transcendence.Views.GuildWarsIndex({
+                model: Transcendence.guilds.get(id),
+                id: id
+            });
+            $('#main-body').html(this.view.render().$el);
+        }
     },
 });

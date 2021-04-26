@@ -17,7 +17,7 @@ var Transcendence = {
     this.users = new Transcendence.Collections.Users(data.users);
     this.friends = new Transcendence.Collections.Friends(data.friends);
     this.guilds = new Transcendence.Collections.Guilds(data.guilds);
-    this.guild_wars = new Transcendence.Collections.Guilds(data.guild_wars);
+    this.guild_wars = new Transcendence.Collections.GuildWars(data.guild_wars);
     this.current_user = new window.Transcendence.UserSession(data.current_user);
     new Transcendence.Routers.Home();
     new Transcendence.Routers.Chatrooms();
