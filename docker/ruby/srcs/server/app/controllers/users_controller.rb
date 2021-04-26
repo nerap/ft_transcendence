@@ -59,7 +59,7 @@ class UsersController < ApplicationController
             flash[:deleted] = "You have blocked #{user.username} !"
             ActionCable.server.broadcast "users_channel:#{current_user.id}", content: "ok"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-            format.json { render json: { chatroom: @chatroom }, status: :ok }
+            format.json { render json: { user: user }, status: :ok }
           end
         end
       end
@@ -75,7 +75,7 @@ class UsersController < ApplicationController
             flash[:notice] = "You have unblocked #{user.username} !"
             ActionCable.server.broadcast "users_channel:#{current_user.id}", content: "ok"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-            format.json { render json: { chatroom: @chatroom }, status: :ok }
+            format.json { render json: { user: user }, status: :ok }
           end
         end
       end
@@ -86,11 +86,14 @@ class UsersController < ApplicationController
     current_user.otp_required_for_login = true
     current_user.otp_secret = User.generate_otp_secret
     current_user.save!
-    current_user.otp_provisioning_uri(current_user.email, issuer: 'ft_transcendence')
+    otp_uri = current_user.otp_provisioning_uri(current_user.email, issuer: 'ft_transcendence')
+    respond_to do |format|
+      format.json { render json: { otp_uri: otp_uri }, status: :ok }
+    end
   end
 
   def disable_2fa
-    current_user.otp_required_for_login = flash_admin_channel
+    current_user.otp_required_for_login = false
     current_user.save
   end
 
