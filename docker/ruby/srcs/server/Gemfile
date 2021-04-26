@@ -22,16 +22,17 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-gem 'rails-backbone'
-gem 'jquery-rails'
+# gem 'rails-backbone'
+# gem 'jquery-rails'
 
 # For users management
 gem 'devise'
+gem 'devise-two-factor'
 
-gem 'js-routes'
+# gem 'js-routes'
 
-gem 'redis'
-gem 'redis-rails'
+# gem 'redis'
+# gem 'redis-rails'
 
 # for encrypting passwords
 gem 'bcrypt'
