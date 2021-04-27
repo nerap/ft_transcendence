@@ -5,8 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:marvin]
   devise :two_factor_authenticatable,
-         :otp_secret_encryption_key => "00805870a2147e34eda3777504a715580c60c5d88323c477118ecedcfc582216"
-       #   :otp_secret_encryption_key => ENV['ENCRYPTION_KEY']
+         :otp_secret_encryption_key => ENV['ENCRYPTION_KEY']
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { in: 3..20 }
   has_many :chatroom, dependent: :destroy, :foreign_key => "owner"
