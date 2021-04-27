@@ -30,6 +30,7 @@ class GuildsController < ApplicationController
         ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: current_user.id
       else
         @guild = Guild.new(guild_params)
+        @guild.war = nil;
         if @guild.save
           user_params = User.find_by_id(guild_params[:owner])
           user_params.guild = Guild.find_by(name: guild_params[:name]).id
@@ -140,11 +141,12 @@ class GuildsController < ApplicationController
         temp.officer = false
         temp.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: temp.id        
+        ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id       
       end
       @guild.destroy
       respond_to do |format|
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "users_channel", content: "profile"
+        ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
         format.json { head :no_content }
       end
     end
@@ -157,7 +159,7 @@ class GuildsController < ApplicationController
   
       # Only allow a list of trusted parameters through.
       def guild_params
-        params.permit(:name, :anagram, :points, :owner, :win, :loose)
+        params.permit(:name, :anagram, :points, :owner, :win, :loose, :war)
       end
 
       def check_owner(username_value, guild_id)

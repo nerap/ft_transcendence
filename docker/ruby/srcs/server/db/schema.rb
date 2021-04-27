@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_26_103349) do
+ActiveRecord::Schema.define(version: 2021_04_26_132354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,27 @@ ActiveRecord::Schema.define(version: 2021_04_26_103349) do
     t.boolean "pending"
   end
 
+  create_table "guild_wars", force: :cascade do |t|
+    t.datetime "start"
+    t.datetime "end"
+    t.bigint "prize"
+    t.bigint "guild_one_id"
+    t.bigint "guild_two_id"
+    t.bigint "guild_one_points"
+    t.bigint "guild_two_points"
+    t.bigint "unanswered_match"
+    t.boolean "duels"
+    t.boolean "ladder"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "pending"
+    t.boolean "done"
+    t.boolean "started"
+    t.boolean "faster"
+    t.boolean "giant"
+    t.boolean "reverse"
+  end
+
   create_table "guilds", force: :cascade do |t|
     t.string "name"
     t.string "anagram"
@@ -73,6 +94,7 @@ ActiveRecord::Schema.define(version: 2021_04_26_103349) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "win"
     t.bigint "loose"
+    t.bigint "war"
   end
 
   create_table "private_messages", force: :cascade do |t|

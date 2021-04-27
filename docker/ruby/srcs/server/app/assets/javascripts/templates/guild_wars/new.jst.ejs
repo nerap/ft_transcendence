@@ -1,0 +1,18 @@
+<div id="edit-panel">
+    <div class="header">
+        <h1>Create a wars</h1>
+        <button class="back" onclick="document.location='/#guilds'">Back to guilds</button>
+    </div>
+    <br/>
+    <% Transcendence.guilds.each(function(model) { %>
+    <% if (Transcendence.current_user.toJSON().guild != model.escape('id')) { %>
+        <tr class="guilds-list">
+            <td style="width:15%;" onclick='document.location = "/#guilds/<%= model.escape(`id`) %>"'><%= model.escape('name') %></a></td>
+            <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.escape('anagram') %></b></td>
+            <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.escape('points') %></b></td> 
+            <td class="users-action">
+                <button class="choose" onclick='document.location = "/#guild_wars/new/<%= model.escape(`id`) %>"'>Choose</button>
+            </td>
+        </tr>
+    <% }}) %>
+</div>

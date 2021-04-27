@@ -32,9 +32,16 @@
                     value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
     </div>
-    <% }} %>
+    <% } %>
     <br></br>
-        <table>
+    <div class="create-chatroom">
+        <a href="#guild_wars/<%= guild.id %>"><button class="create">Guild wars</button></a>
+    </div>
+    <div class="create-chatroom">
+        <a href="#guild_wars/history/<%= guild.id %>"><button class="create">Guild wars history</button></a>
+    </div>
+    <% } %>
+    <br></br>
         <% if (Transcendence.current_user.toJSON().id == guild.owner) { %>
         <div class="create-chatroom">
             <form action="/api/guilds/<%= guild.id %>" method="post" data-remote="true" id="join_guild" class="delete-guild">
@@ -44,8 +51,9 @@
                     value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
             </form>
         </div>
-        <br></br>
         <% } %>
+        <br></br>
+        <table>
         <h1 class="name-guild"><%= guild.name %></h1>
         <h1 class="anagram-guild"><b style="margin: auto;"><%= guild.anagram %></b></p>
         <p class="points-guild"><b style="margin: auto;"><%= guild.points %> Points</b></p>

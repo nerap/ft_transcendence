@@ -18,6 +18,7 @@ var Transcendence = {
     this.users = new Transcendence.Collections.Users(data.users);
     this.friends = new Transcendence.Collections.Friends(data.friends);
     this.guilds = new Transcendence.Collections.Guilds(data.guilds);
+    this.guild_wars = new Transcendence.Collections.GuildWars(data.guild_wars);
     this.current_user = new window.Transcendence.UserSession(data.current_user);
     this.otp_uri = data.otp_uri;
     new Transcendence.Routers.Home();
@@ -26,6 +27,7 @@ var Transcendence = {
     new Transcendence.Routers.Users();
     new Transcendence.Routers.Friends();
     new Transcendence.Routers.Guilds();
+    new Transcendence.Routers.GuildWars();
     Backbone.history.start();
   }
 };
