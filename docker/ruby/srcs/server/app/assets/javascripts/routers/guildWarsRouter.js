@@ -23,14 +23,7 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
     history: function (id) {
         if (!Transcendence.guilds.get(id)) {
             location.hash = "#guilds";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This guild doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This guild doesn't exist !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.GuildWarsHistory({
@@ -48,14 +41,7 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
     new_war: function (id) {
         if (!Transcendence.guilds.get(id)) {
             location.hash = "#guilds";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This guild doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This guild doesn't exist !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.GuildWarsNewWar({
@@ -68,14 +54,7 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
     wars: function (id) {
         if (!Transcendence.guilds.get(id)) {
             location.hash = "#guilds";
-            var flash = `<div class="error">` +
-                `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-                `This guild doesn't exist !` +
-                `</div>`
-            $("#flash-message").append(flash);
-            setTimeout(function () {
-                $(`.error`).slideUp(500);
-            }, 3000);
+            flashMessage("error", "This guild doesn't exist !");
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.GuildWarsIndex({
