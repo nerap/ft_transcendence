@@ -82,5 +82,18 @@
                 background: rgb(48, 109, 129);
             }
         }
+        &.select {
+            background: rgb(218, 218, 218);
+            color: rgb(109, 109, 109);
+            &:hover {
+                background: rgb(179, 206, 156);
+            }
+        }
+        &.selected {
+            background: rgb(66, 150, 66);
+            &:hover {
+                background: green;
+            }
+        }
     }
 }

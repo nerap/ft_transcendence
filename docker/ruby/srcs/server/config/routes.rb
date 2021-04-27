@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     put '/users/block_user'
     put '/users/unblock_user'
     put '/users/enable_2fa'
+    put '/users/disable_2fa'
 
     put 'admin/set_admin'
     put 'admin/unset_admin'

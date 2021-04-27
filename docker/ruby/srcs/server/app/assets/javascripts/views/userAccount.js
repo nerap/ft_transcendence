@@ -1,12 +1,18 @@
 Transcendence.Views.UserAccount = Backbone.View.extend({
     events: {
-        "submit #enable-2fa": "enable2fa"
+        "submit #enable-2fa": "enable2fa",
+        "submit #disable-2fa": "disable2fa"
     },
+    // initialize: function () {
+    //     this.listenTo(Transcendence.current_user, "change", this.render);
+    // },
     render: function () {
         this.$el.html(JST['templates/users/edit_account']({ user: this.model.toJSON() }));
         return this;
     },
-    enable2fa: function () {
+    enable2fa: function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
         $.ajax({
             type: "PUT",
             url: "/api/users/enable_2fa",
@@ -16,8 +22,23 @@ Transcendence.Views.UserAccount = Backbone.View.extend({
             processData: false,
             contentType: false,
         }).done(data => {
-            this.model.set({ otp_required_for_login: true });
+            Transcendence.current_user.set({ otp_required_for_login: true });
             Transcendence.otp_uri = data.otp_uri;
+            this.render();
+        });
+    },
+    disable2fa: function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        $.ajax({
+            type: "PUT",
+            url: "/api/users/disable_2fa",
+            encode: true,
+            processData: false,
+            contentType: false,
+        }).done(data => {
+            Transcendence.current_user.set({ otp_required_for_login: false });
+            this.render();
         });
     }
 });

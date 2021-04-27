@@ -94,6 +94,9 @@ class UsersController < ApplicationController
 
   def disable_2fa
     current_user.otp_required_for_login = false
+    current_user.encrypted_otp_secret = nil
+    current_user.encrypted_otp_secret_iv = nil
+    current_user.encrypted_otp_secret_salt = nil
     current_user.save
   end
 

@@ -5,12 +5,12 @@
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="field">
-      <%= f.label :email %><br />
+      Email<br/>
       <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     </div>
 
     <div class="field">
-      <%= f.label :password %><br />
+      Password<br/>
       <%= f.password_field :password, autocomplete: "current-password" %>
     </div>
 
@@ -19,6 +19,11 @@
         <%= f.check_box :remember_me %> Remember me
       </div>
     <% end %>
+
+    <div class="field">
+      OTP<br/>
+      <%= f.text_field :otp_attempt, autocomplete: nil, placeholder: "Ignore if not enabled..." %>
+    </div>
 
     <div class="actions">
       <%= f.submit "Log in", class: "edit save" %>

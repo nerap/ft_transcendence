@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :registerable,
          :recoverable, :rememberable, :validatable
   devise :two_factor_authenticatable,
-         :otp_secret_encryption_key => "703273357538782F413F4428472B4B62"
+         :otp_secret_encryption_key => "00805870a2147e34eda3777504a715580c60c5d88323c477118ecedcfc582216"
        #   :otp_secret_encryption_key => ENV['ENCRYPTION_KEY']
 
   validates :username, presence: true, uniqueness: { case_sensitive: false }, length: { in: 3..20 }
