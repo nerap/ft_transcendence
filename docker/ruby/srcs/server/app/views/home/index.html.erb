@@ -1,4 +1,5 @@
 <script type="text/javascript">
+<% if (current_user) %>
     Transcendence.initialize({
       chatrooms: <%== Chatroom.all.order(:name).to_json(:include => :chat) %>,
       private_rooms: <%== PrivateRoom.all.to_json(:include => :private_message) %>,
@@ -9,4 +10,5 @@
       current_user: <%== current_user.to_json %>,
       otp_uri: <%== current_user.otp_provisioning_uri(current_user.email, issuer: 'ft_transcendence').to_json %>
     });
+<% end %>
 </script>

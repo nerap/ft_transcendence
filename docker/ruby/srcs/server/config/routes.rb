@@ -47,7 +47,7 @@ Rails.application.routes.draw do
   end
 
   get 'my_friends', to: "friends#index"
-  devise_for :users, controllers: { registrations: 'registrations/registrations' }
+  devise_for :users, controllers: { registrations: 'registrations/registrations', omniauth_callbacks: "registrations/omniauth_callbacks" }
   get 'users', to: "users#index"
   get 'users/:id', to: "users#show", as: 'user'
 

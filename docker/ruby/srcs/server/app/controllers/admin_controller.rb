@@ -1,4 +1,6 @@
 class AdminController < ApplicationController
+    before_action :authenticate_user!
+
     def set_admin
         user = User.find_by_username(params[:username])
         if user

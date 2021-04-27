@@ -129,3 +129,15 @@ cancel account (pour plus tard):
     <input data-confirm="Are you sure?" class="edit destroy" type="submit" value="Cancel my account">
     <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
 </form>
+
+Connect avec 42:
+https://github.com/fakenine/omniauth-marvin
+dans config/devise.rb (ligne 278):
+config.omniauth :marvin, ENV["FT_ID"], ENV["FT_SECRET"]
+FT_ID et FT_SECRET s'obtiennent en creant une application dans intra42 settings/API
+parametrer le REDIRECT URI a:
+http://192.168.1.12:3000/users/auth/marvin/callback
+ou
+http://localhost:3000/users/auth/marvin/callback
+ou
+http://nom.domaine/users/auth/marvin/callback
