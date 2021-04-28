@@ -141,3 +141,5 @@ ou
 http://localhost:3000/users/auth/marvin/callback
 ou
 http://nom.domaine/users/auth/marvin/callback
+
+/config/environment.rb contient les variables d'environnement pour les cles

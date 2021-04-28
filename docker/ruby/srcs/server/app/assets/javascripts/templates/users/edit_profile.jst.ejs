@@ -12,6 +12,8 @@
         <% if (user.avatar == "/assets/blank-profile-picture.jpg") { %>
             <div style="font-style:italic;">You have no avatar !</div><br/>
         <% } %>
+        Avatar<br/>
+        <input type="text" name="user[linked_avatar]" placeholder="Link avatar..."><br/><br/>
         <label class="upload-avatar" for="user_avatar">upload avatar...</label>
         <input type="file" name="user[avatar]" id="user_avatar">
         <input type="checkbox" value="remove_avatar" name="user[remove]"> Remove avatar
