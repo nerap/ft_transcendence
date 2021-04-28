@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   
     resources :private_rooms
     post '/private_messages', to: "private_messages#create"
+
     post '/guilds/leave_guild', to: "guilds#leave_guild"
     post '/guilds/join_guild', to: "guilds#join_guild"
     post '/guilds/promote', to: "guilds#promote"
