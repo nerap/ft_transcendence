@@ -13,32 +13,32 @@
                     </tr>
                 <% } %>
                 <% chatrooms.forEach(function(model) { %>
-                <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>">
+                <tr class="tab-content-list-options" id="chatroom_<%= model.toJSON().id %>">
                     <td class="tab-content-list-image">
-                        <% if (model.escape('banned').includes(Transcendence.current_user.id)) { %>
+                        <% if (model.toJSON().banned.includes(Transcendence.current_user.id)) { %>
                         <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/block.png">
                         <% } else { %>
                         <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
                         <% } %>
                     </td>
-                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
-                        <div class="room"><%= model.escape('name') %></div>
-                        <div class="owner">Owner: <%= Transcendence.users.get(model.escape('owner')).toJSON().username %>
+                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.toJSON().id %>";'>
+                        <div class="room"><%= model.toJSON().name %></div>
+                        <div class="owner">Owner: <%= Transcendence.users.get(model.toJSON().owner).toJSON().username %>
                         </div>
                     </td>
                     <td class="tab-content-list-join-unjoin">
-                        <% if (!model.escape('members').includes(Transcendence.current_user.id) && Transcendence.current_user.id != model.escape('owner')) { %>
+                        <% if (!model.toJSON().members.includes(Transcendence.current_user.id) && Transcendence.current_user.id != model.toJSON().owner) { %>
                         <% join = "active"; unjoin = "" %>
                         <% } else { %>
                         <% join = ""; unjoin = "active" %>
                         <% } %>
-                        <form action="/api/chatrooms/<%= model.escape('id') %>/join" type="submit" method="post"
+                        <form action="/api/chatrooms/<%= model.toJSON().id %>/join" type="submit" method="post"
                             class="join <%= join %>" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="join" class="tab-content-list-join-link">
                             <input type="hidden" name="authenticity_token"
                                 value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </form>
-                        <form action="/api/chatrooms/<%= model.escape('id') %>/unjoin" type="submit" method="post"
+                        <form action="/api/chatrooms/<%= model.toJSON().id %>/unjoin" type="submit" method="post"
                             class="unjoin <%= unjoin %>" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="unjoin" class="tab-content-list-unjoin-link">
                             <input type="hidden" name="authenticity_token"

@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+    before_action :banned?
     before_action :configure_permitted_parameters, if: :devise_controller?
     rescue_from ActionController::UnknownFormat, :with => :template_not_found
 
@@ -28,5 +29,14 @@ class ApplicationController < ActionController::Base
             return true
         end
         return false
+    end
+
+    def banned?
+        if current_user.present? && current_user.banned?
+            flash[:error] = "You have been ban from this website !"
+            ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+            sign_out current_user
+            root_path
+        end
     end
 end

@@ -13,13 +13,13 @@
                     </tr>
                 <% } %>
                 <% owned.forEach(function(model) { %>
-                <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>">
+                <tr class="tab-content-list-options" id="chatroom_<%= model.toJSON().id %>">
                     <td class="tab-content-list-image">
                         <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
                     </td>
-                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
-                        <div class="room"><%= model.escape('name') %> (owned)</div>
-                        <div class="owner">Type: <%= model.escape('chatroom_type') %>
+                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.toJSON().id %>";'>
+                        <div class="room"><%= model.toJSON().name %> (owned)</div>
+                        <div class="owner">Type: <%= model.toJSON().chatroom_type %>
                         </div>
                     </td>
                     <td class="tab-content-list-join-unjoin">
@@ -27,17 +27,17 @@
                 </tr>
                 <% }) %>
                 <% joined.forEach(function(model) { %>
-                <tr class="tab-content-list-options" id="chatroom_<%= model.escape('id') %>">
+                <tr class="tab-content-list-options" id="chatroom_<%= model.toJSON().id %>">
                     <td class="tab-content-list-image">
                         <img style="width: 20px; height: 20px; vertical-align: middle" src="/assets/check.png">
                     </td>
-                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.escape(`id`) %>";'>
-                        <div class="room"><%= model.escape('name') %></div>
-                        <div class="owner">Owner: <%= Transcendence.users.get(model.escape('owner')).toJSON().username %>,  Type: <%= model.escape('chatroom_type') %>
+                    <td class="tab-content-list-main" onclick='document.location = "#chatrooms/<%= model.toJSON().id %>";'>
+                        <div class="room"><%= model.toJSON().name %></div>
+                        <div class="owner">Owner: <%= Transcendence.users.get(model.toJSON().owner).toJSON().username %>,  Type: <%= model.toJSON().chatroom_type %>
                         </div>
                     </td>
                     <td class="tab-content-list-join-unjoin">
-                        <form action="/api/chatrooms/<%= model.escape('id') %>/unjoin" type="submit" method="post"
+                        <form action="/api/chatrooms/<%= model.toJSON().id %>/unjoin" type="submit" method="post"
                             class="unjoin active" data-remote="true"><input type="hidden" name="_method" value="put">
                             <input type="submit" value="unjoin" class="tab-content-list-unjoin-link">
                             <input type="hidden" name="authenticity_token"

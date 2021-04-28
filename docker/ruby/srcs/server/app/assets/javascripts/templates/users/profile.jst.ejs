@@ -26,21 +26,21 @@
                     <% var pending = "true" %>
 
                     <% Transcendence.friends.each(function(model) { %>
-                    <% if ((model.escape('user_one_id') == Transcendence.current_user.id)) { %>
-                    <% if  (model.escape('user_two_id') == user.id) { %>
-                    <% if  (model.escape('pending') == 'true') { %>
+                    <% if ((model.toJSON().user_one_id == Transcendence.current_user.id)) { %>
+                    <% if  (model.toJSON().user_two_id == user.id) { %>
+                    <% if  (model.toJSON().pending == 'true') { %>
                     <% action = "Accept Request" %>
                     <% method = "put" %>
                     <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
+                    <% url = "friends/" + model.toJSON().id %>
                     <% } else { %>
                     <% action = "Remove" %>
                     <% method = "delete" %>
                     <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
-                    <% }}} else if ((model.escape('user_two_id') == Transcendence.current_user.id)) { %>
-                    <% if (model.escape('user_one_id') == user.id) { %>
-                    <% if  (model.escape('pending') == 'true') { %>
+                    <% url = "friends/" + model.toJSON().id %>
+                    <% }}} else if ((model.toJSON().user_two_id == Transcendence.current_user.id)) { %>
+                    <% if (model.toJSON().user_one_id == user.id) { %>
+                    <% if  (model.toJSON().pending == 'true') { %>
                     <% action = "Pending" %>
                     <% method = "get" %>
                     <% pending = "false" %>
@@ -49,7 +49,7 @@
                     <% action = "Remove" %>
                     <% method = "delete" %>
                     <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
+                    <% url = "friends/" + model.toJSON().id %>
                     <% }}}}) %>
                     <form action="/api/<%= url %>" method="post" data-remote="true">
                         <input type="hidden" name="_method" value="<%= method %>">
