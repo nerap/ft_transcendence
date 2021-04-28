@@ -63,25 +63,5 @@
                 }
             }
         }
-        .onclick {
-            height: auto;
-            border-radius: 5px;
-            border: 0;
-            color: white;
-            font-size: 18px;
-            width: auto;
-            padding: 7px;
-            cursor: pointer;
-            background: rgba(54, 123, 145, 0.7);
-            &:hover {
-                background: rgb(48, 109, 129);
-            }
-            &.block {
-                background: rgba(220, 20, 60, 0.7);
-                &:hover {
-                    background: rgb(168, 13, 44);
-                }
-            }
-        }
     }
 }
