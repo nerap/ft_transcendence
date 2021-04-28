@@ -70,12 +70,10 @@
                         </form>
                     </td>
                 </tr>
-                <% if (user.guild != null) { %>
-                <tr>
-                    <td class="onclick" onclick='document.location = "/#guilds/<%= user.guild %>"'>Guild</a></td>
-                </tr>
-                <% } %>
             </table>
+        <% } %>
+        <% if (user.guild != null) { %>
+            <a href="/#guilds/<%= user.guild %>"><button>Guild</button></a>
         <% } %>
     </div>
 </div>
