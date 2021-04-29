@@ -33,10 +33,8 @@ class ApplicationController < ActionController::Base
 
     def banned?
         if current_user.present? && current_user.banned?
-            flash[:error] = "You have been ban from this website !"
-            ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
             sign_out current_user
-            root_path
+            redirect_to root_path
         end
     end
 end

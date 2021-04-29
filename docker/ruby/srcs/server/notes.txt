@@ -143,3 +143,11 @@ ou
 http://nom.domaine/users/auth/marvin/callback
 
 /config/environment.rb contient les variables d'environnement pour les cles
+
+
+    modifié :         app/assets/javascripts/templates/guild_wars/history.jst.ejs
+    modifié :         app/assets/javascripts/templates/guild_wars/index.jst.ejs
+    modifié :         app/assets/javascripts/templates/guild_wars/new.jst.ejs
+    modifié :         app/assets/javascripts/templates/guilds/current_guilds.jst.ejs
+    modifié :         app/assets/javascripts/templates/guilds/list_guilds.jst.ejs
+    modifié :         app/assets/javascripts/templates/guilds/panel.jst.ejs

@@ -12,8 +12,7 @@
                     <input type="hidden" name="_method" value="put">
                     <input id="input-setadmin" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
                     <input type="submit" value="Set as admin">
-                    <input type="hidden" name="authenticity_token"
-                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
             </td>
         </tr>
@@ -36,8 +35,7 @@
                     <input type="hidden" name="_method" value="put">
                     <input id="input-unsetadmin" type="text" name="username" placeholder="Type or select user..." autocomplete="off">
                     <input type="submit" value="Demote">
-                    <input type="hidden" name="authenticity_token"
-                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
             </td>
         </tr>
