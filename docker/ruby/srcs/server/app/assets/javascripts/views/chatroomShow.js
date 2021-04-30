@@ -1,16 +1,22 @@
 Transcendence.Views.ChatroomShow = Backbone.View.extend({
     events: {
         "click .member-name, .member-owner, .member-admin": "menu",
-        "click #send-pm": "sendPM"
+        "click .send-pm": "sendPM"
     },
     initialize: function () {
+        this.listenTo(this.model, "change:name change:chatroom_type", this.render);
         this.listenTo(this.model, "change:chat add:chat", function () {
             this.$('#messages').empty();
             var msgs = JST['templates/chatrooms/messages']({ chat: this.model.toJSON().chat });
             this.$('#messages').append(msgs);
         });
-        this.listenTo(Transcendence.chatrooms.get(this.id), 'change:members change:admin change:muted remove', function () {
-            if (!Transcendence.chatrooms.get(this.id)) {
+        this.listenTo(Transcendence.chatrooms.get(this.id), 'change:owner change:members change:admin change:muted remove', function () {
+            if (!Transcendence.chatrooms.get(this.id)
+                || (!Transcendence.chatrooms.get(this.id).toJSON().members.includes(Transcendence.current_user.id)
+                    && !Transcendence.chatrooms.get(this.id).toJSON().banned.includes(Transcendence.current_user.id)
+                    && Transcendence.current_user.toJSON().admin == false
+                    && Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner)
+            ) {
                 this.remove();
                 location.hash = "#chatrooms/public";
             } else {
@@ -28,9 +34,11 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.$('#messages').append(msgs);
         var flashMsg = JST['templates/chatrooms/flash_messages']({ chatroom: this.model.toJSON() });
         this.$('#flash-messages').append(flashMsg);
+        if (Transcendence.current_user.toJSON().admin == true || this.model.toJSON().owner == Transcendence.current_user.id) {
+            var editPanel = JST['templates/chatrooms/edit_panel']({ chatroom: this.model.toJSON() });
+            this.$('#chatroom-edit-panel').append(editPanel);
+        }
         setTimeout(function () {
-            // let userId = $('.current_user_id').data('userid')
-            // sessionStorage.setItem("chat_userid", userId)
             let roomId = $('.current_chatroom_id').data('roomid')
             sessionStorage.setItem("chat_roomid", roomId)
         })
@@ -47,7 +55,7 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
     sendPM: function (e) {
         pr = Transcendence.private_rooms.find(function (pr) {
             return (pr.toJSON().users.includes(Transcendence.current_user.id)
-            && pr.toJSON().users.includes(parseInt($(e.currentTarget).attr('class'))));
+                && pr.toJSON().users.includes(parseInt($(e.currentTarget).attr('id'))));
         });
         if (pr) {
             location.hash = "#private_rooms/" + pr.id;

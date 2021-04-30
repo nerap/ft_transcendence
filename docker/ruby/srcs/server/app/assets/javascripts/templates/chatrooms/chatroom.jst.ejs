@@ -21,7 +21,7 @@
                             <tr>
                                 <td class="text"><input placeholder="New message..." autocomplete="off" type="text"
                                         class="text-field" id="text-field" required="required" name="chat[message]"></td>
-                                <td class="button"><input type="submit" value="Send" class="button-field"
+                                <td class="button"><input type="image" src="/assets/send.png" class="button-field"
                                         data-disable-with="Send" name="commit"></td>
                             </tr>
                         </table>
@@ -36,7 +36,7 @@
     </table>
 </div>
 
-<div class="current_user_id" data-userid="<%= Transcendence.current_user.id %>"></div>
 <div class="current_chatroom_id" data-roomid="<%= chatroom.id %>"></div>
 
 <div id="flash-messages"></div>
+<div id="chatroom-edit-panel"></div>

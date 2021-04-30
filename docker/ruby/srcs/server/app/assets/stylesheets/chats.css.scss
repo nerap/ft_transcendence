@@ -274,20 +274,16 @@
                 height: 40px;
                 padding: 0;
                 border: none;
+                &:hover {
+                  background: rgba(0, 0, 0, 0.2);
+                  cursor: pointer;
+                }
                 .button-field {
-                  border-bottom-right-radius: 10px;
+                  display: block;
+                  margin: auto;
                   border: none;
-                  border-left: 1px solid;
-                  height: 100%;
-                  width: 100%;
-                  color: black;
-                  font-size: 20px;
-                  background-color: white;
-                  font-variant: small-caps;
-                  &:hover {
-                    background: rgba(0, 0, 0, 0.2);
-                    cursor: pointer;
-                  }
+                  height: 35px;
+                  width: 30px;
                 }
               }
             }

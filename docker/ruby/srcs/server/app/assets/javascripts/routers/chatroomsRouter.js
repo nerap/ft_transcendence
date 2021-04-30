@@ -4,7 +4,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         "chatrooms/public": "index",
         "chatrooms/private": "index",
         "chatrooms/my_chatrooms": "index",
-        "chatrooms/new": "new",
         "chatrooms/:id": "show",
         "chatrooms/:id/edit": "edit",
         "chatrooms/:id/admin": "admin",
@@ -20,11 +19,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
     index: function () {
         this.cleanUp();
         this.view = new Transcendence.Views.ChatroomsIndex({ collection: Transcendence.chatrooms });
-        $('#main-body').html(this.view.render().$el);
-    },
-    new: function () {
-        this.cleanUp();
-        this.view = new Transcendence.Views.ChatroomNew();
         $('#main-body').html(this.view.render().$el);
     },
     show: function (id) {

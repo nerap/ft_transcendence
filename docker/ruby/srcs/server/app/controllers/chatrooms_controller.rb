@@ -24,7 +24,7 @@ class ChatroomsController < ApplicationController
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
-            ActionCable.server.broadcast "chatrooms_channel", content: "create_chatroom", userid: current_user.id
+            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
         else
             flash[:error] = ""
@@ -50,7 +50,11 @@ class ChatroomsController < ApplicationController
                 @chatroom.password = nil
             end
             if @chatroom.chatroom_type == "private" && !params[:chatroom][:password].empty?
-                @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+                if params[:chatroom][:password].length >= 6
+                    @chatroom.password = BCrypt::Password.create(params[:chatroom][:password])
+                else
+                    @chatroom.password = "0"
+                end
             end
             if @chatroom.save
                 flash[:notice] = "#{@chatroom.name} was updated successfully"

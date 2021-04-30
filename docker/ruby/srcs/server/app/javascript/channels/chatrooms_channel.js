@@ -10,14 +10,7 @@ const chatroomsChannel = consumer.subscriptions.create("ChatroomsChannel", {
   },
 
   received(data) {
-    if (data.content == "create_chatroom") {
-      Transcendence.chatrooms.fetch().done(function () {
-        if (Transcendence.current_user.id == data.userid)
-          location.hash = "#chatrooms/public"
-      });
-    } else {
-      Transcendence.chatrooms.fetch();
-    }
+    Transcendence.chatrooms.fetch();
   }
 });
 
