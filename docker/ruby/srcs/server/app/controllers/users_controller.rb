@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     user = User.find(params[:user][:id])
     if current_user == user
       user.username = params[:user][:username]
-      if params[:user][:linked_avatar] && !params[:user][:remove]
+      if !params[:user][:linked_avatar].empty? && !params[:user][:remove]
         user.avatar = params[:user][:linked_avatar]
       end
       if params[:user][:avatar] && !params[:user][:remove]
