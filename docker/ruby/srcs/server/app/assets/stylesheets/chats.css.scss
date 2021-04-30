@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 #main-chats {
+  margin-left: 200px;
   height: auto;
   width: auto;
   background-color: rgb(240, 240, 240);
@@ -13,7 +14,7 @@
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 0;
-    width: 800px;
+    width: 700px;
     margin: auto;
     overflow: hidden;
     border-collapse: collapse;
