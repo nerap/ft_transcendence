@@ -21,6 +21,11 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
                 location.hash = "#chatrooms/public";
             } else {
                 this.model = Transcendence.chatrooms.get(this.id);
+                if (Transcendence.current_user.toJSON().admin == true || this.model.toJSON().owner == Transcendence.current_user.id) {
+                    this.$('#chatroom-edit-panel').empty();
+                    var editPanel = JST['templates/chatrooms/edit_panel']({ chatroom: this.model.toJSON() });
+                    this.$('#chatroom-edit-panel').append(editPanel);
+                }
                 this.$('#members').empty();
                 this.members();
             }
