@@ -38,17 +38,16 @@
             </form>
             <div id="password-modal-<%= model.toJSON().id %>" class="modal">
                 <div class="modal-content">
-                    <span id="close" class="close-<%= model.toJSON().id %>"
-                        onclick='$("#password-modal-<%= model.toJSON().id %>").hide()'>&times;</span><br/>
+                    <span id="close" class="close-<%= model.toJSON().id %>" onclick='$("#password-modal-<%= model.toJSON().id %>").hide()'>&times;</span><br/>
                     <div class="modal-header">
                         <img class="padlock-image" src="/assets/padlock.png"><br/>
                         <%= model.toJSON().name %> is locked by a password
                     </div>
-                    <form action="/api/chatrooms/<%= model.toJSON().id %>/login" type="submit"
-                        method="post" data-remote="true">
+                    <br/>
+                    <form action="/api/chatrooms/<%= model.toJSON().id %>/login" type="submit" method="post" data-remote="true">
                         <div class="modal-body">
-                            <input type="password" placeholder="Enter password..."
-                                name="chatroom[chatroom_password]"><button type="submit" class="button-password"><img style="padding:0;width:25px;height:25px;vertical-align:middle;" src="/assets/send.png"></button>
+                            <input type="password" placeholder="Enter password..." name="chatroom[chatroom_password]">
+                            <button type="submit" class="button-password"><img style="padding:0;width:25px;height:25px;vertical-align:middle;" src="/assets/send.png"></button>
                             <input value="<%= model.toJSON().id %>" type="hidden" name="chatroom[chatroom_id]">
                             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </div>

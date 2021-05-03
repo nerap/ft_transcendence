@@ -13,24 +13,24 @@
                 Email<br/>
                 <input autocomplete="email" type="email" value="<%= user.email %>" name="user[email]" id="user_email">
             </div>
-        
+
             <div class="field">
                 Password<br/><i style="font-size:12px">(leave blank if you don't want to change it)</i><br/>
                 <input autocomplete="new-password" type="password" name="user[password]" id="user_password" placeholder="6 characters minimum...">
             </div>
-        
+
             <div class="field">
                 Password confirmation<br/>
                 <input autocomplete="new-password" type="password" name="user[password_confirmation]"
                     id="user_password_confirmation">
             </div>
-        
+
             <div class="field">
                 Current password<br/><i style="font-size:12px">(we need your current password to confirm your changes)</i><br/>
                 <input autocomplete="current-password" type="password" name="user[current_password]"
                     id="user_current_password">
             </div>
-        
+
             <div class="actions">
                 <input type="submit" name="commit" value="Update" class="edit save" data-disable-with="Update">
             </div>

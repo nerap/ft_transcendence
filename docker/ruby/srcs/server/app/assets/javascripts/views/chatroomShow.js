@@ -43,6 +43,11 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
             var editPanel = JST['templates/chatrooms/edit_panel']({ chatroom: this.model.toJSON() });
             this.$('#chatroom-edit-panel').append(editPanel);
         }
+        if (this.model.toJSON().chatroom_type == "public") {
+            this.$('#optpublic').addClass('active');
+        } else if (this.model.toJSON().chatroom_type == "private") {
+            this.$('#optpriv').addClass('active');
+        }
         setTimeout(function () {
             let roomId = $('.current_chatroom_id').data('roomid')
             sessionStorage.setItem("chat_roomid", roomId)

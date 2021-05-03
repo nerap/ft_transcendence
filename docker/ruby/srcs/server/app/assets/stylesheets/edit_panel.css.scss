@@ -67,8 +67,9 @@
             display: none;
         }
         input[type=text], input[type=password], input[type=email] {
+            filter: none;
             width: 250px;
-            height:30px;
+            height: 30px;
             color: black;
             outline: none;
             padding: 5px;

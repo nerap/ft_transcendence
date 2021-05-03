@@ -19,8 +19,11 @@
                 background-color: rgba(0, 0, 0, 0.12);
                 cursor: pointer;
             }
-            &.selected {
+            &.active {
                 background-color: rgba(0, 0, 0, 0.12);
+                &:hover {
+                    background-color: rgba(0, 0, 0, 0.281);
+                }
             }
         }
     }

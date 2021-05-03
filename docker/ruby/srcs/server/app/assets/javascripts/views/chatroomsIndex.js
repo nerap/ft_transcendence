@@ -15,10 +15,13 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
     },
     chatroomType: function () {
         if (window.location.hash == "#chatrooms/public" || window.location.hash == "#chatrooms") {
+            this.$('#optpublic').addClass('active');
             var chatroomView = JST['templates/chatrooms/public']({ chatrooms: this.collection.where({chatroom_type: "public"}) });
         } else if (window.location.hash == "#chatrooms/private") {
+            this.$('#optpriv').addClass('active');
             var chatroomView = JST['templates/chatrooms/private']({ chatrooms: this.collection.where({chatroom_type: "private"}) });
         } else if (window.location.hash == "#chatrooms/my_chatrooms") {
+            this.$('#optmych').addClass('active');
             var joined = this.collection.filter(function(chatroom){
                 return chatroom.toJSON().members.includes(Transcendence.current_user.id);
             });

@@ -50,28 +50,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
             }
         }
     },
-    edit: function (id) {
-        if (!Transcendence.chatrooms.get(id)) {
-            location.hash = "#chatrooms/public";
-            flashMessage("error", "This chatroom doesn't exist !");
-        } else {
-            if (
-                Transcendence.current_user.toJSON().admin == true
-                || Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner
-            ) {
-                this.cleanUp();
-                this.view = new Transcendence.Views.ChatroomEdit({
-                    model: Transcendence.chatrooms.get(id).toJSON(),
-                    id: id,
-                });
-                $('#main-body').html(this.view.render().$el);
-            } else {
-                var loc = "#chatrooms/" + id;
-                location.hash = loc;
-                flashMessage("error", "You are not the owner of this chatroom !");
-            }
-        }
-    },
     admin: function (id) {
         if (!Transcendence.chatrooms.get(id)) {
             location.hash = "#chatrooms/public";
