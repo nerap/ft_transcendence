@@ -112,7 +112,7 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 flash[:error] = "Wrong password !"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                format.json { render json: { chatroom: chatroom }, status: :unprocessable_entity }
+                format.json { render json: { chatroom: chatroom }, status: :bad_request }
             end
         end
     end
@@ -379,7 +379,7 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 flash[:error] = "You are the owner of #{@chatroom.name} !"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                format.json { render json: { chatroom: @chatroom }, status: :unprocessable_entity }
+                format.json { render json: { chatroom: @chatroom }, status: :bad_request }
             end
         end
     end

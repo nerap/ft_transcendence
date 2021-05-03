@@ -8,7 +8,7 @@
         <form class="edit_user" id="edit_user" action="/users" accept-charset="UTF-8" method="post">
             <input type="hidden" name="_method" value="put">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-        
+
             <div class="field">
                 Email<br/>
                 <input autocomplete="email" type="email" value="<%= user.email %>" name="user[email]" id="user_email">

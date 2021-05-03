@@ -22,7 +22,7 @@
     .members-title {
       height: 20px;
       border-top-left-radius: 10px;
-      background: rgb(54, 54, 54);
+      background-color: rgb(34, 86, 99);
       color: white;
       font-size: 25px;
       padding: 10px;
@@ -32,14 +32,14 @@
     .chatroom-title {
       height: 20px;
       border-top-right-radius: 10px;
-      background: rgb(54, 54, 54);
+      background-color: rgb(34, 86, 99);
       color: white;
       font-size: 25px;
       padding: 10px;
       text-align: center;
       font-variant: small-caps;
     }
-  
+
     #members-content {
       vertical-align: top;
       padding: 0;
