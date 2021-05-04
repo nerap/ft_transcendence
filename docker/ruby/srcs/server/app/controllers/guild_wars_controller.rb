@@ -94,16 +94,16 @@ class GuildWarsController < ApplicationController
         @guild_wars = GuildWar.where(done: false, pending: false, started: true)
         @guild_wars.each do |war|
            if (DateTime.now.change(:offset => "+0000").to_time > war.end.to_time)
-               if (war.done == false && war.pending == false)
+                if (war.done == false && war.pending == false)
                     war.done = true
                     guild_one_id = Guild.find_by_id(war.guild_one_id)
                     guild_two_id = Guild.find_by_id(war.guild_two_id)
                     if (war.guild_one_points < war.guild_two_points)
                         guild_one_id.points -= war.prize
-                        guild_two_id.points = war.prize * 2
+                        guild_two_id.points += (war.prize * 2)
                     elsif (war.guild_one_points > war.guild_two_points)
                         guild_two_id.points -= war.prize
-                        guild_one_id.points = war.prize * 2
+                        guild_one_id.points += (war.prize * 2)
                     end
                     guild_one_id.war = false;
                     guild_two_id.war = false;
@@ -149,6 +149,28 @@ class GuildWarsController < ApplicationController
         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
     end
   
+    def forfeit
+        @guild_war = GuildWar.find(params[:id])
+        @guild_war.done = true
+        @guild_war.started = true 
+        @guild_war.pending = false
+        guild_one_id = Guild.find_by_id(@guild_war.guild_one_id)
+        guild_two_id = Guild.find_by_id(@guild_war.guild_two_id)
+        if (params[:guild_forfeit] == guild_two_id.id)
+            guild_one_id.points -= @guild_war.prize
+            guild_two_id.points += (@guild_war.prize * 2)
+        else
+            guild_two_id.points -= @guild_war.prize
+            guild_one_id.points += (@guild_war.prize * 2)
+        end
+        guild_one_id.war = false;
+        guild_two_id.war = false;
+        if @guild_war.save && guild_one_id.save && guild_two_id.save
+            ActionCable.server.broadcast "guild_channel", content: "ok"
+            ActionCable.server.broadcast "guild_war_channel", content: "ok"
+        end
+    end
+
     # PATCH/PUT /guilds/1 or /guilds/1.json
     def update
       respond_to do |format|
@@ -193,7 +215,7 @@ class GuildWarsController < ApplicationController
   
       # Only allow a list of trusted parameters through.
       def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :faster, :giant, :reverse, :pending, :done, :started)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :faster, :giant, :reverse, :pending, :done, :started, :guild_forfeit)
       end
 
 end

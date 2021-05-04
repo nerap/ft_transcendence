@@ -14,7 +14,7 @@
     </tr>
     <% Transcendence.guilds.each(function(model) { %>
         <% Transcendence.guild_wars.each(function(bob) { %>
-        <% if ((bob.toJSON().guild_one_id == model.toJSON().id) && (bob.toJSON().guild_two_id == guild.id) && (bob.toJSON().pending == 'true')) { %>
+        <% if ((bob.toJSON().guild_one_id == model.toJSON().id) && (bob.toJSON().guild_two_id == guild.id) && (bob.toJSON().pending == true)) { %>
             <tr class="users-list">
                 <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().name %></b></td>
                 <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().anagram %></b></td>  
@@ -58,7 +58,7 @@
             </tr>
         <% }})}) %>
     </table>
-    <% } else { %>
+    <% }} else { %>
         <% Transcendence.guild_wars.each(function(model) { %>
             <% if (guild.war == model.toJSON().id) { %>
                 Current War !
@@ -70,6 +70,15 @@
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Faster : <%= model.toJSON().faster %></b></p>
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Giant : <%= model.toJSON().giant %></b></p>
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Reverse : <%= model.toJSON().reverse %></b></p>
-        <% }}) %>
-    <% }} %>
+                <% if (Transcendence.current_user.toJSON().id == guild.owner) { %>
+                    <td class="users-action"> 
+                        <form action="/api/guild_wars/forfeit/<%= model.toJSON().id %>" method="post" data-remote="true" id="forfeit"
+                            class="<%= model.toJSON().id %>">
+                            <button type="submit" class="menu-option">Forfeit</button>
+                            <input type="hidden" name="_method" value="put">
+                            <input value="<%= guild.id %>" type="hidden" name="guild_forfeit>
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+            <% }}})} %>
 </div>

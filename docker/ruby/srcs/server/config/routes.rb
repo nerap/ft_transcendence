@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :guilds
     resources :guild_wars
     put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
+    put '/guild_wars/forfeit/:id', to: "guild_wars#forfeit"
     resources :chatrooms do
       member do
         post 'login'
