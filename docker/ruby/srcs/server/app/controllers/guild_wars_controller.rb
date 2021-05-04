@@ -2,7 +2,7 @@ class GuildWarsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_guild_war, only: %i[ show edit update destroy ]
     before_action { flash.clear }
-    before_action :check_war, :check_start_war, :check_has_start_war, :check_has_end_war
+    before_action :check_war, :check_start_war,
 
     # GET /guilds or /guilds.json
     def index
@@ -33,7 +33,6 @@ class GuildWarsController < ApplicationController
                 end
                 war.destroy
                 if guild_two_id.save
-                    ActionCable.server.broadcast "guild_channel", content: "ok"
                     ActionCable.server.broadcast "guild_war_channel", content: "ok"
                 end
             elsif (guild_two_id == nil)
@@ -42,7 +41,6 @@ class GuildWarsController < ApplicationController
                 end
                 war.destroy
                 if guild_one_id.save
-                    ActionCable.server.broadcast "guild_channel", content: "ok"
                     ActionCable.server.broadcast "guild_war_channel", content: "ok"
                 end
             end
@@ -52,7 +50,6 @@ class GuildWarsController < ApplicationController
             if (guild.war != nil && GuildWar.find_by_id(guild.war) == nil)
                 guild.war = nil
                 if guild.save
-                    ActionCable.server.broadcast "guild_channel", content: "ok"
                     ActionCable.server.broadcast "guild_war_channel", content: "ok"
                 end
             end
@@ -60,38 +57,20 @@ class GuildWarsController < ApplicationController
     end
 
     def check_start_war
-        @guild_wars = GuildWar.where(pending: true)
+        @guild_wars = GuildWar.all
         @guild_wars.each do |war|
             if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time)
                 if (war.pending == true)
                     war.destroy
-                    ActionCable.server.broadcast "guild_channel", content: "ok"
                     ActionCable.server.broadcast "guild_war_channel", content: "ok"
-                end
-            end
-        end
-    end
-
-    def check_has_start_war
-        @guild_wars = GuildWar.where(started: false)
-        @guild_wars.each do |war|
-            if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time)
-                if (war.started == false && war.pending == false)
+                elsif (war.started == false && war.pending == false)
                     war.started = true
                     if war.save
-                        ActionCable.server.broadcast "guild_channel", content: "ok"
                         ActionCable.server.broadcast "guild_war_channel", content: "ok"
                     end
                 end
-            end
-        end
-    end
-
-    def check_has_end_war
-        @guild_wars = GuildWar.where(done: false, pending: false, started: true)
-        @guild_wars.each do |war|
-           if (DateTime.now.change(:offset => "+0000").to_time > war.end.to_time)
-                if (war.done == false && war.pending == false)
+            elsif (DateTime.now.change(:offset => "+0000").to_time > war.end.to_time)
+                if (war.done == false && war.pending == false && war.started == true)
                     war.done = true
                     guild_one_id = Guild.find_by_id(war.guild_one_id)
                     guild_two_id = Guild.find_by_id(war.guild_two_id)
@@ -105,8 +84,7 @@ class GuildWarsController < ApplicationController
                     guild_one_id.war = false;
                     guild_two_id.war = false;
                     if war.save && guild_one_id.save && guild_two_id.save
-                       ActionCable.server.broadcast "guild_channel", content: "ok"
-                       ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                        ActionCable.server.broadcast "guild_war_channel", content: "ok"
                     end
                 end
             end
@@ -124,7 +102,6 @@ class GuildWarsController < ApplicationController
                                     if (guild_war_params[:pending] == "true")
                                         guild_one = Guild.find_by_id(params[:guild_one_id])
                                         guild_two = Guild.find_by_id(params[:guild_two_id])
-                                        @guild_war = GuildWar.new(guild_war_params)
                                         if (guild_one.points < params[:prize].to_i)
                                             flash[:error] = ""
                                             flash[:error] = flash[:error] << "Your guild has not enough points" << "<br/>"
@@ -132,6 +109,7 @@ class GuildWarsController < ApplicationController
                                               ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                                               format.json { render json: { guild: @guild }, status: :unprocessable_entity }
                                             end
+                                            return
                                         elsif (guild_two.points < params[:prize].to_i)
                                             flash[:error] = ""
                                             flash[:error] = flash[:error] << "Their guild has not enough points" << "<br/>"
@@ -139,7 +117,9 @@ class GuildWarsController < ApplicationController
                                               ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                                               format.json { render json: { guild: @guild }, status: :unprocessable_entity }
                                             end
+                                            return
                                         end
+                                        @guild_war = GuildWar.new(guild_war_params)
                                         guild_one.war = @guild_war.id
                                         guild_two.war = @guild_war.id
                                         @guild_war.done = false;
@@ -171,9 +151,13 @@ class GuildWarsController < ApplicationController
         if (params[:guild_forfeit].to_i == @guild_war.guild_one_id)
             guild_one_id.points -= @guild_war.prize
             guild_two_id.points += @guild_war.prize
+            @guild_war.guild_one_points = 0
+            @guild_war.guild_two_points = 100
         else
             guild_two_id.points -= @guild_war.prize
             guild_one_id.points += @guild_war.prize
+            @guild_war.guild_one_points = 100
+            @guild_war.guild_two_points = 0
         end
         guild_one_id.war = false;
         guild_two_id.war = false;
