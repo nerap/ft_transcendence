@@ -1,81 +1,88 @@
 <div id="users-index">
     <table>
         <tr>
-            <th colspan="4">Friends</th>
+            <th colspan="3">Friends</th>
         </tr>
-        <% Transcendence.friends.each(function(bob) { %>
-        <% Transcendence.users.each(function(model) { %>
-        <% if ((bob.escape('user_one_id') == Transcendence.current_user.id)) { %>
-        <% if  (bob.escape('user_two_id') == model.escape('id')) { %>
-        <% if  (bob.escape('pending') == 'false') { %>
-        <tr class="users-list">
-            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
-            <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
-            <td></td>
-            <td class="users-action">
-                
-                <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
-                    class="<%= model.escape('id') %>">
-                    <button type="submit" class="menu-option">send PM</button>
-                    <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
-                    <input value="<%= model.escape('id') %>" type="hidden" name="private_room[user2]">
-                    <input type="hidden" name="authenticity_token"
-                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                </form>
-            </td>
-        </tr>
-        <% }}} else if ((bob.escape('user_two_id') == Transcendence.current_user.id)) { %>
-        <% if (bob.escape('user_one_id') == model.escape('id')) { %>
-        <% if  (bob.escape('pending') == 'false') { %>
+        <% if (friends1.length == 0 && friends2.length == 0) { %>
+            <tr><td style="text-align:center;">You don't have any friends !</td></tr>
+        <% } %>
+        <% friends1.forEach(function(friend) { %>
+            <% user2 = Transcendence.users.get(friend.toJSON().user_two_id).toJSON() %>
             <tr class="users-list">
-                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
-                <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
-                <td></td>
+                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
+                <td onclick='document.location = "/#users/<%= user2.id %>"'><%= user2.username %></a></td>
                 <td class="users-action">
-                    
-                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
-                        class="<%= model.escape('id') %>">
+                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
                         <button type="submit" class="menu-option">send PM</button>
                         <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
-                        <input value="<%= model.escape('id') %>" type="hidden" name="private_room[user2]">
-                        <input type="hidden" name="authenticity_token"
-                            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        <input value="<%= user2.id %>" type="hidden" name="private_room[user2]">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                     </form>
                 </td>
             </tr>
-        <% }}}})}) %>
-        <tr>
-            <th colspan="4">Current Friends Request</th>
-        </tr>
-        <% Transcendence.friends.each(function(bob) { %>
-        <% Transcendence.users.each(function(model) { %>
-        <% if ((bob.escape('user_one_id') == Transcendence.current_user.id)) { %>
-        <% if (bob.escape('user_two_id') == model.escape('id')) { %>
-        <% if  (bob.escape('pending') == 'true') { %>
+        <% }) %>
+        <% friends2.forEach(function(friend) { %>
+            <% user2 = Transcendence.users.get(friend.toJSON().user_one_id).toJSON() %>
             <tr class="users-list">
-                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
-                <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
+                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
+                <td onclick='document.location = "/#users/<%= user2.id %>"'><%= user2.username %></a></td>
                 <td class="users-action">
-                    <form action="/api/friends/<%= bob.escape('id') %>" method="post" data-remote="true">
+                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
+                        <button type="submit" class="menu-option">send PM</button>
+                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
+                        <input value="<%= user2.id %>" type="hidden" name="private_room[user2]">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    </table>
+    <br/>
+    <% if (pending1.length > 0) { %>
+    <table>
+        <tr>
+            <th colspan="4">Friendship Requests</th>
+        </tr>
+        <% pending1.forEach(function(pending) { %>
+            <% user2 = Transcendence.users.get(pending.toJSON().user_two_id).toJSON() %>
+            <tr class="users-list">
+                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
+                <td onclick='document.location = "/#users/<%= user2.id %>"'><%= user2.username %></a></td>
+                <td class="users-action"  style="background:rgb(181, 224, 181);">
+                    <form action="/api/friends/<%= pending.toJSON().id %>" method="post" data-remote="true">
                         <input type="hidden" name="_method" value="put">
-                        <button type="submit" class="menu-option accept request">Accept Request</button>
-                        <input value="<%= model.escape('id') %>" type="hidden" name="user_one_id">
+                        <button type="submit" class="menu-option accept request">Accept</button>
+                        <input value="<%= user2.id %>" type="hidden" name="user_one_id">
                         <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
                         <input value="false" type="hidden" name="pending">
                     </form>
                 </td>
-                <td class="users-action">
-                    
-                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
-                        class="<%= model.escape('id') %>">
-                        <button type="submit" class="menu-option">send PM</button>
-                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
-                        <input value="<%= model.escape('id') %>" type="hidden" name="private_room[user2]">
-                        <input type="hidden" name="authenticity_token"
-                            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                <td class="users-action" style="background:rgb(221, 178, 178);">
+                    <form action="/api/friends/<%= pending.toJSON().id %>" method="post" data-remote="true">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="menu-option accept request">Decline</button>
+                        <input value="<%= user2.id %>" type="hidden" name="user_one_id">
+                        <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
+                        <input value="false" type="hidden" name="pending">
                     </form>
                 </td>
             </tr>
-        <% }}}})}) %>
+        <% }) %>
     </table>
+    <% } %>
+    <br/>
+    <% if (pending2.length > 0) { %>
+    <table>
+        <tr>
+            <th colspan="4">Requests waiting</th>
+        </tr>
+        <% pending2.forEach(function(pending) { %>
+            <% user2 = Transcendence.users.get(pending.toJSON().user_one_id).toJSON() %>
+            <tr class="users-list">
+                <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
+                <td onclick='document.location = "/#users/<%= user2.id %>"'><%= user2.username %></a></td>
+            </tr>
+        <% }) %>
+    </table>
+    <% } %>
 </div>

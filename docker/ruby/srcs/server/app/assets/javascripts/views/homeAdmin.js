@@ -3,7 +3,7 @@ Transcendence.Views.HomeAdmin = Backbone.View.extend({
         this.listenTo(Transcendence.users, 'change:admin change:banned', this.render);
     },
     render: function () {
-        if (Transcendence.current_user.superuser == false && Transcendence.current_user.admin == false) {
+        if (Transcendence.current_user.toJSON().superuser == false && Transcendence.current_user.toJSON().admin == false) {
             this.remove();
             location.hash = "#";
         } else {

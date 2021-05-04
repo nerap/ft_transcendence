@@ -14,5 +14,8 @@ consumer.subscriptions.create("UsersChannel", {
       Transcendence.users.fetch()
     }
     Transcendence.current_user.fetch();
+    if (data.content == "banned") {
+      window.location.href = "/"
+    }
   }
 });

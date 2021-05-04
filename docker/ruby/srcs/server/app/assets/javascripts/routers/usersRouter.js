@@ -1,7 +1,8 @@
 Transcendence.Routers.Users = Backbone.Router.extend({
     routes: {
         "users": "index",
-        "users/edit_profile": "edit",
+        "users/edit_account": "editAccount",
+        "users/edit_profile": "editProfile",
         "users/:id": "profile",
     },
     initialize: function () {
@@ -17,7 +18,12 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         this.view = new Transcendence.Views.UsersIndex({ collection: Transcendence.users });
         $('#main-body').html(this.view.render().$el);
     },
-    edit: function () {
+    editAccount: function () {
+        this.cleanUp();
+        this.view = new Transcendence.Views.UserAccount({ model: Transcendence.current_user });
+        $('#main-body').html(this.view.render().$el);
+    },
+    editProfile: function () {
         this.cleanUp();
         this.view = new Transcendence.Views.UserEdit({ model: Transcendence.current_user });
         $('#main-body').html(this.view.render().$el);

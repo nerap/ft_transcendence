@@ -6,7 +6,9 @@ class ChatsController < ApplicationController
   def create
     chatroomid = params[:chat][:chatroom_id].to_i
     chatroom = Chatroom.find_by_id(chatroomid)
-    if (chatroom.members.detect{ |e| e == current_user.id } && !chatroom.muted.detect{ |e| e == current_user.id }) || chatroom.owner == current_user.id
+    if ((chatroom.members.detect{ |e| e == current_user.id } && !chatroom.muted.detect{ |e| e == current_user.id }) \
+    || chatroom.owner == current_user.id \
+    || is_sadmin(current_user))
       @chat = Chat.create(chat_params)
       respond_to do |format|
         if @chat.save

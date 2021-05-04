@@ -2,9 +2,6 @@ Transcendence.Routers.Friends = Backbone.Router.extend({
     routes: {
         "friends": "index",
     },
-    initialize: function () {
-        this.listenTo(Transcendence.friends, 'change add remove', this.render);
-    },
     cleanUp: function () {
         if (this.view)
             this.view.remove();

@@ -15,6 +15,9 @@ class UsersController < ApplicationController
     user = User.find(params[:user][:id])
     if current_user == user
       user.username = params[:user][:username]
+      if !params[:user][:linked_avatar].empty? && !params[:user][:remove]
+        user.avatar = params[:user][:linked_avatar]
+      end
       if params[:user][:avatar] && !params[:user][:remove]
         uploaded = params[:user][:avatar]
         ext = File.extname(uploaded)
@@ -59,7 +62,7 @@ class UsersController < ApplicationController
             flash[:deleted] = "You have blocked #{user.username} !"
             ActionCable.server.broadcast "users_channel:#{current_user.id}", content: "ok"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-            format.json { render json: { chatroom: @chatroom }, status: :ok }
+            format.json { render json: { user: user }, status: :ok }
           end
         end
       end
@@ -75,11 +78,29 @@ class UsersController < ApplicationController
             flash[:notice] = "You have unblocked #{user.username} !"
             ActionCable.server.broadcast "users_channel:#{current_user.id}", content: "ok"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-            format.json { render json: { chatroom: @chatroom }, status: :ok }
+            format.json { render json: { user: user }, status: :ok }
           end
         end
       end
     end
+  end
+
+  def enable_2fa
+    current_user.otp_required_for_login = true
+    current_user.otp_secret = User.generate_otp_secret
+    current_user.save!
+    otp_uri = current_user.otp_provisioning_uri(current_user.email, issuer: 'ft_transcendence')
+    respond_to do |format|
+      format.json { render json: { otp_uri: otp_uri }, status: :ok }
+    end
+  end
+
+  def disable_2fa
+    current_user.otp_required_for_login = false
+    current_user.encrypted_otp_secret = nil
+    current_user.encrypted_otp_secret_iv = nil
+    current_user.encrypted_otp_secret_salt = nil
+    current_user.save
   end
 
   protected

@@ -30,6 +30,19 @@ div#users-index, div#pr-index {
                 padding-right: 10px;
                 font-size: 17px;
                 vertical-align: middle;
+                .status {
+                    float: right;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    vertical-align: middle;
+                    &.online {
+                        background: green;
+                    }
+                    &.offline {
+                        background:  rgb(161, 161, 161);
+                    }
+                }
                 &.users-action {
                     width: 20%;
                     padding: 0;

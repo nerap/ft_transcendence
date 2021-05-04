@@ -4,7 +4,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
         "chatrooms/public": "index",
         "chatrooms/private": "index",
         "chatrooms/my_chatrooms": "index",
-        "chatrooms/new": "new",
         "chatrooms/:id": "show",
         "chatrooms/:id/edit": "edit",
         "chatrooms/:id/admin": "admin",
@@ -20,11 +19,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
     index: function () {
         this.cleanUp();
         this.view = new Transcendence.Views.ChatroomsIndex({ collection: Transcendence.chatrooms });
-        $('#main-body').html(this.view.render().$el);
-    },
-    new: function () {
-        this.cleanUp();
-        this.view = new Transcendence.Views.ChatroomNew();
         $('#main-body').html(this.view.render().$el);
     },
     show: function (id) {
@@ -53,28 +47,6 @@ Transcendence.Routers.Chatrooms = Backbone.Router.extend({
                 var hash = Transcendence.chatrooms.get(id).toJSON().chatroom_type
                 location.hash = "#chatrooms/" + hash;
                 flashMessage("error", msg);
-            }
-        }
-    },
-    edit: function (id) {
-        if (!Transcendence.chatrooms.get(id)) {
-            location.hash = "#chatrooms/public";
-            flashMessage("error", "This chatroom doesn't exist !");
-        } else {
-            if (
-                Transcendence.current_user.toJSON().admin == true
-                || Transcendence.current_user.id == Transcendence.chatrooms.get(id).toJSON().owner
-            ) {
-                this.cleanUp();
-                this.view = new Transcendence.Views.ChatroomEdit({
-                    model: Transcendence.chatrooms.get(id).toJSON(),
-                    id: id,
-                });
-                $('#main-body').html(this.view.render().$el);
-            } else {
-                var loc = "#chatrooms/" + id;
-                location.hash = loc;
-                flashMessage("error", "You are not the owner of this chatroom !");
             }
         }
     },

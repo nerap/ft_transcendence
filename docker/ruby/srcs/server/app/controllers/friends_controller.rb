@@ -22,9 +22,12 @@ class FriendsController < ApplicationController
 
   # POST /friends or /friends.json
   def create
-    @friend = Friend.new(friend_params)
-    if @friend.save
-      ActionCable.server.broadcast "friend_channel", content: "ok"
+    if !friendship_exists(params[:user_one_id], params[:user_two_id]) \
+    && params[:user_one_id] != params[:user_two_id]
+      @friend = Friend.new(friend_params)
+      if @friend.save
+        ActionCable.server.broadcast "friend_channel", content: "ok"
+      end
     end
   end
 
@@ -54,4 +57,12 @@ class FriendsController < ApplicationController
     def friend_params
       params.permit(:user_one_id, :user_two_id, :pending)
     end
+
+    def friendship_exists(user_1, user_2)
+      if (!Friend.where(user_one_id: user_1, user_two_id: user_2).empty? \
+      || !Friend.where(user_one_id: user_2, user_two_id: user_1).empty?)
+          return 1
+      end
+      return nil
+  end
 end

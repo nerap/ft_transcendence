@@ -2,6 +2,9 @@ Transcendence.Views.UsersIndex = Backbone.View.extend ({
     events: {
         "click #send-pm": "sendPM"
     },
+    initialize: function () {
+        this.listenTo(Transcendence.users, "change:online", this.render)
+    },
     render: function () {
         this.$el.html(JST['templates/users/index']());
         return this

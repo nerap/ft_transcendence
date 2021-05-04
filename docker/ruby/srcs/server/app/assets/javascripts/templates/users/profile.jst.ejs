@@ -9,88 +9,71 @@
     </h1>
     <div class="edit-current-user">
         <% if (user.id == Transcendence.current_user.id) { %>
-        <a href="/users/edit"><button>Edit account</button></a>
-        <a href="/#users/edit_profile"><button>Edit profile</button></a>
-        <% if (user.guild != null) { %>
-        <tr>
-            <td class="onclick"><button onclick='document.location = "/#guilds/<%= user.guild %>"'>Guild</button></td>
-        </tr>
-        <% } %>
+            <a href="/#users/edit_account"><button>Edit account</button></a>
+            <a href="/#users/edit_profile"><button>Edit profile</button></a>
         <% } else { %>
-        <table style="margin:auto;">
-            <tr>
-                <td>
-                    <% var action = "Add Friend" %>
+            <table style="margin:auto;">
+                <tr>
+                    <td>
+                        <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user.id %>">
+                            <button type="submit" class="menu-option">send PM</button>
+                            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
+                            <input value="<%= user.id %>" type="hidden" name="private_room[user2]">
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+                    <td>
+                        <% if (Transcendence.current_user.toJSON().block_list.includes(user.id)) { %>
+                            <% var action = "unblock" %>
+                            <% } else { %>
+                            <% var action = "block" %>
+                        <% } %>
+                        <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="put">
+                            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+                            <input value="<%= user.id %>" type="hidden" name="user[id]">
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <table style="margin:auto;">
+                <% if (!friend) { %>
+                    <% var action = "add friend" %>
                     <% var method = "post" %>
                     <% var url = "friends" %>
                     <% var pending = "true" %>
-
-                    <% Transcendence.friends.each(function(model) { %>
-                    <% if ((model.escape('user_one_id') == Transcendence.current_user.id)) { %>
-                    <% if  (model.escape('user_two_id') == user.id) { %>
-                    <% if  (model.escape('pending') == 'true') { %>
-                    <% action = "Accept Request" %>
+                <% } else if (friend.toJSON().pending == false) { %>
+                    <% action = "remove friendship" %>
+                    <% method = "delete" %>
+                    <% pending = "false" %>
+                    <% url = "friends/" + friend.toJSON().id %>
+                <% } else if (friend.toJSON().user_one_id == Transcendence.current_user.id && friend.toJSON().user_two_id == user.id) { %>
+                    <% action = "accept request" %>
                     <% method = "put" %>
                     <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
-                    <% } else { %>
-                    <% action = "Remove" %>
+                    <% url = "friends/" + friend.toJSON().id %>
+                <% } else if (friend.toJSON().user_two_id == Transcendence.current_user.id && friend.toJSON().user_one_id == user.id) { %>
+                    <% action = "pending" %>
                     <% method = "delete" %>
                     <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
-                    <% }}} else if ((model.escape('user_two_id') == Transcendence.current_user.id)) { %>
-                    <% if (model.escape('user_one_id') == user.id) { %>
-                    <% if  (model.escape('pending') == 'true') { %>
-                    <% action = "Pending" %>
-                    <% method = "get" %>
-                    <% pending = "false" %>
-                    <% url = "friends" %>
-                    <% } else { %>
-                    <% action = "Remove" %>
-                    <% method = "delete" %>
-                    <% pending = "false" %>
-                    <% url = "friends/" + model.escape('id') %>
-                    <% }}}}) %>
-                    <form action="/api/<%= url %>" method="post" data-remote="true">
-                        <input type="hidden" name="_method" value="<%= method %>">
-                        <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-                        <input value="<%= user.id %>" type="hidden" name="user_one_id">
-                        <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
-                        <input value="<%= pending %>" type="hidden" name="pending">
-                    </form>
-                </td>
-                <td>
-                    <% if (Transcendence.current_user.toJSON().block_list.includes(user.id)) { %>
-                    <% var action = "unblock" %>
-                    <% } else { %>
-                    <% var action = "block" %>
-                    <% } %>
-                    <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
-                        <input type="hidden" name="_method" value="put">
-                        <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-                        <input value="<%= user.id %>" type="hidden" name="user[id]">
-                        <input type="hidden" name="authenticity_token"
-                            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user.id %>">
-                        <button type="submit" class="menu-option">send PM</button>
-                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
-                        <input value="<%= user.id %>" type="hidden" name="private_room[user2]">
-                        <input type="hidden" name="authenticity_token"
-                            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                    </form>
-                </td>
-            </tr>
-            <% if (user.guild != null) { %>
-            <tr>
-                <td class="onclick" onclick='document.location = "/#guilds/<%= user.guild %>"'>Guilds</a></td>
-            </tr>
-            <% } %>
-        </table>
+                    <% url = "friends/" + friend.toJSON().id %>
+                <% } %>
+                <tr>
+                    <td>
+                        <form action="/api/<%= url %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="<%= method %>">
+                            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+                            <input value="<%= user.id %>" type="hidden" name="user_one_id">
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
+                            <input value="<%= pending %>" type="hidden" name="pending">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        <% } %>
+        <% if (user.guild != null) { %>
+            <a href="/#guilds/<%= user.guild %>"><button>Guild</button></a>
         <% } %>
     </div>
 </div>

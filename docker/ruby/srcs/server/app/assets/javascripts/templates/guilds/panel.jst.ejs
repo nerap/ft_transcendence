@@ -64,17 +64,17 @@
             <th colspan="5">Guilds</th>
         </tr>
         <% Transcendence.users.each(function(model) { %>
-        <% if (model.escape('guild') == guild.id) { %>
+        <% if (model.toJSON().guild == guild.id) { %>
         <tr class="create-chatroom">
-            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
-            <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
+            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
+            <td onclick='document.location = "/#users/<%= model.toJSON().id %>"'><%= model.toJSON().username %></a></td>
             <td class="kicks-action">
-                <% if ((guild.owner == Transcendence.current_user.toJSON().id) || (model.escape('officer') == "true")) { %>
-                <% if ((model.escape('id') != guild.owner) && (model.escape('id') != Transcendence.current_user.toJSON().id)) { %>
+                <% if ((guild.owner == Transcendence.current_user.toJSON().id) || (model.toJSON().officer == "true")) { %>
+                <% if ((model.toJSON().id != guild.owner) && (model.toJSON().id != Transcendence.current_user.toJSON().id)) { %>
                 <form action="/api/guilds/kick" method="post" data-remote="true" id="kick_id"
                     class="kick_form">
                     <button type="submit" class="delete">Kick</button>
-                    <input type="hidden" name="current_id" value="<%= model.escape('id') %>">
+                    <input type="hidden" name="current_id" value="<%= model.toJSON().id %>">
                     <input type="hidden" name="authenticity_token"
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
@@ -82,8 +82,8 @@
             </td>
             <td class="create-chatroom">
                 <% if (guild.owner == Transcendence.current_user.toJSON().id) { %>
-                <% if (model.escape('id') != guild.owner) { %>
-                <% if (model.escape('officer') == "false") { %>
+                <% if (model.toJSON().id != guild.owner) { %>
+                <% if (model.toJSON().officer == "false") { %>
                     <% var action = "promote" %>
                 <% } else { %>
                     <% var action = "demote" %>
@@ -91,7 +91,7 @@
                 <form action="/api/guilds/<%= action %>" method="post" data-remote="true" id="<%= action %>_id"
                     class="<%= action %>_form">
                     <button type="submit" class="promote"><%= action %></button>
-                    <input type="hidden" name="current_id" value="<%= model.escape('id') %>">
+                    <input type="hidden" name="current_id" value="<%= model.toJSON().id %>">
                     <input type="hidden" name="authenticity_token"
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>

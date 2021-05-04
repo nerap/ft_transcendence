@@ -15,4 +15,4 @@ function flashMessage(type, str) {
     setTimeout(function () {
         $(`.${type}`).slideUp(500);
     }, 3000);
-}
+} // type: notice, error or deleted; str: message to print

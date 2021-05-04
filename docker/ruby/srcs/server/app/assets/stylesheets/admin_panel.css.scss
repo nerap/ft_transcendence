@@ -23,6 +23,7 @@
         }
     }
     .members-list {
+        background-color: white;
         vertical-align: top;
         border: solid 1px rgb(54, 54, 54);
         height: 100px;
@@ -58,9 +59,11 @@
         position: relative;
         border-collapse: collapse;
         .inputs {
+            background-color: white;
             border: solid 1px rgb(54, 54, 54);
             padding: 0;
             input[type=text] {
+                background-color: white;
                 position: relative;
                 width: auto;
                 height:100%;
@@ -85,6 +88,7 @@
                 }
             }
             input[type=date], input[type=time] {
+                background-color: white;
                 vertical-align: middle;
                 border: none;
                 outline: none;

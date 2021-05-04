@@ -5,15 +5,22 @@
         </tr>
         <% Transcendence.users.each(function(model) { %>
         <tr class="users-list">
-            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.escape('avatar') %>"></td>
-            <td onclick='document.location = "/#users/<%= model.escape(`id`) %>"'><%= model.escape('username') %></a></td>
+            <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
+            <td onclick='document.location = "/#users/<%= model.toJSON().id %>"'>
+                <%= model.toJSON().username %></a>
+                <% if (model.toJSON().online == true) { %>
+                    <span class="status online"></span>
+                <% } else { %>
+                    <span class="status offline"></span>
+                <% } %>
+            </td>
             <td class="users-action">
-                <% if (model.escape('id') != Transcendence.current_user.id) { %>
+                <% if (model.toJSON().id != Transcendence.current_user.id) { %>
                 <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm"
-                    class="<%= model.escape('id') %>">
+                    class="<%= model.toJSON().id %>">
                     <button type="submit" class="menu-option">send PM</button>
                     <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
-                    <input value="<%= model.escape('id') %>" type="hidden" name="private_room[user2]">
+                    <input value="<%= model.toJSON().id %>" type="hidden" name="private_room[user2]">
                     <input type="hidden" name="authenticity_token"
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>

@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 #main-chats {
+  margin-left: 200px;
   height: auto;
   width: auto;
   background-color: rgb(240, 240, 240);
@@ -13,7 +14,7 @@
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 0;
-    width: 800px;
+    width: 700px;
     margin: auto;
     overflow: hidden;
     border-collapse: collapse;
@@ -21,7 +22,7 @@
     .members-title {
       height: 20px;
       border-top-left-radius: 10px;
-      background: rgb(54, 54, 54);
+      background-color: rgb(34, 86, 99);
       color: white;
       font-size: 25px;
       padding: 10px;
@@ -31,14 +32,14 @@
     .chatroom-title {
       height: 20px;
       border-top-right-radius: 10px;
-      background: rgb(54, 54, 54);
+      background-color: rgb(34, 86, 99);
       color: white;
       font-size: 25px;
       padding: 10px;
       text-align: center;
       font-variant: small-caps;
     }
-  
+
     #members-content {
       vertical-align: top;
       padding: 0;
@@ -274,20 +275,16 @@
                 height: 40px;
                 padding: 0;
                 border: none;
+                &:hover {
+                  background: rgba(0, 0, 0, 0.2);
+                  cursor: pointer;
+                }
                 .button-field {
-                  border-bottom-right-radius: 10px;
+                  display: block;
+                  margin: auto;
                   border: none;
-                  border-left: 1px solid;
-                  height: 100%;
-                  width: 100%;
-                  color: black;
-                  font-size: 20px;
-                  background-color: white;
-                  font-variant: small-caps;
-                  &:hover {
-                    background: rgba(0, 0, 0, 0.2);
-                    cursor: pointer;
-                  }
+                  height: 35px;
+                  width: 30px;
                 }
               }
             }
