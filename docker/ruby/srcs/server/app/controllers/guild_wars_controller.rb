@@ -2,11 +2,8 @@ class GuildWarsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_guild_war, only: %i[ show edit update destroy ]
     before_action { flash.clear }
-    before_action :check_war
-    before_action :check_start_war
-    before_action :check_has_start_war
-    before_action :check_has_end_war
-  
+    before_action :check_war, :check_start_war, :check_has_start_war, :check_has_end_war
+
     # GET /guilds or /guilds.json
     def index
       @guild_wars = GuildWar.all
@@ -26,7 +23,7 @@ class GuildWarsController < ApplicationController
     end
   
     def check_war
-        @guild_wars = GuildWar.all
+        @guild_wars = GuildWar.where(done: false, started: true)
         @guild_wars.each do |war|
             guild_one_id = Guild.find_by_id(war.guild_one_id)
             guild_two_id = Guild.find_by_id(war.guild_two_id)
@@ -100,10 +97,10 @@ class GuildWarsController < ApplicationController
                     guild_two_id = Guild.find_by_id(war.guild_two_id)
                     if (war.guild_one_points < war.guild_two_points)
                         guild_one_id.points -= war.prize
-                        guild_two_id.points += (war.prize * 2)
+                        guild_two_id.points += war.prize
                     elsif (war.guild_one_points > war.guild_two_points)
                         guild_two_id.points -= war.prize
-                        guild_one_id.points += (war.prize * 2)
+                        guild_one_id.points += war.prize
                     end
                     guild_one_id.war = false;
                     guild_two_id.war = false;
@@ -125,9 +122,24 @@ class GuildWarsController < ApplicationController
                         if (guild_war_params[:duels] == "false" || guild_war_params[:duels] == "true")
                             if (guild_war_params[:ladder] == "false" || guild_war_params[:ladder] == "true")
                                     if (guild_war_params[:pending] == "true")
+                                        guild_one = Guild.find_by_id(params[:guild_one_id])
+                                        guild_two = Guild.find_by_id(params[:guild_two_id])
                                         @guild_war = GuildWar.new(guild_war_params)
-                                        guild_one = Guild.find_by_id(@guild_war.guild_one_id)
-                                        guild_two = Guild.find_by_id(@guild_war.guild_two_id)
+                                        if (guild_one.points < params[:prize].to_i)
+                                            flash[:error] = ""
+                                            flash[:error] = flash[:error] << "Your guild has not enough points" << "<br/>"
+                                            respond_to do |format|
+                                              ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                              format.json { render json: { guild: @guild }, status: :unprocessable_entity }
+                                            end
+                                        elsif (guild_two.points < params[:prize].to_i)
+                                            flash[:error] = ""
+                                            flash[:error] = flash[:error] << "Their guild has not enough points" << "<br/>"
+                                            respond_to do |format|
+                                              ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                              format.json { render json: { guild: @guild }, status: :unprocessable_entity }
+                                            end
+                                        end
                                         guild_one.war = @guild_war.id
                                         guild_two.war = @guild_war.id
                                         @guild_war.done = false;
@@ -156,12 +168,12 @@ class GuildWarsController < ApplicationController
         @guild_war.pending = false
         guild_one_id = Guild.find_by_id(@guild_war.guild_one_id)
         guild_two_id = Guild.find_by_id(@guild_war.guild_two_id)
-        if (params[:guild_forfeit] == guild_two_id.id)
+        if (params[:guild_forfeit].to_i == @guild_war.guild_one_id)
             guild_one_id.points -= @guild_war.prize
-            guild_two_id.points += (@guild_war.prize * 2)
+            guild_two_id.points += @guild_war.prize
         else
             guild_two_id.points -= @guild_war.prize
-            guild_one_id.points += (@guild_war.prize * 2)
+            guild_one_id.points += @guild_war.prize
         end
         guild_one_id.war = false;
         guild_two_id.war = false;

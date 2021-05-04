@@ -76,7 +76,7 @@
                             class="<%= model.toJSON().id %>">
                             <button type="submit" class="menu-option">Forfeit</button>
                             <input type="hidden" name="_method" value="put">
-                            <input value="<%= guild.id %>" type="hidden" name="guild_forfeit>
+                            <input value="<%= guild.id %>" type="hidden" name="guild_forfeit">
                             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </form>
                     </td>
