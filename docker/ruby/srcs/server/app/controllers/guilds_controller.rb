@@ -66,6 +66,7 @@ class GuildsController < ApplicationController
       user_params = User.find_by_id(params[:user_id])
       user_params.guild = params[:guild_id]
       user_params.officer = false
+      user_params.member = false
       if user_params.save
         ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: current_user.id
@@ -78,9 +79,12 @@ class GuildsController < ApplicationController
       if ((user_params.id == guild_temp.owner) && (check_owner(params[:new_owner], guild_temp.id)) && (params[:new_owner] != current_user.username))
         newowner = User.find_by_username(params[:new_owner])
         newowner.officer = false
+        newowner.member = false
         guild_temp.owner = newowner.id
         user_params.guild = nil
         user_params.officer = false
+        user_params.member = false
+
         if guild_temp.save && user_params.save && guild_temp.save
           ActionCable.server.broadcast "users_channel", content: "profile"
           ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
@@ -88,6 +92,7 @@ class GuildsController < ApplicationController
       elsif User.where(guild: guild_temp.id).length <= 1
         user_params.guild = nil
         user_params.officer = false
+        user_params.member = false
         if user_params.save
           guild_temp.destroy
           ActionCable.server.broadcast "users_channel", content: "profile"
@@ -99,6 +104,7 @@ class GuildsController < ApplicationController
       else
         user_params.guild = nil
         user_params.officer = false
+        user_params.member = false
         if user_params.save
           ActionCable.server.broadcast "users_channel", content: "profile"
           ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
@@ -108,7 +114,12 @@ class GuildsController < ApplicationController
 
     def promote
       user_params = User.find_by_id(params[:current_id])
-      user_params.officer = true
+      if user_params.member == true
+        user_params.member = false
+        user_params.officer = true
+      elsif user_params.officer == false && user_params.member == false
+        user_params.member = true
+      end
       if user_params.save
         ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_channel", content: "ok"
@@ -117,7 +128,12 @@ class GuildsController < ApplicationController
 
     def demote
       user_params = User.find_by_id(params[:current_id])
-      user_params.officer = false
+      if user_params.member == true
+        user_params.member = false
+      elsif user_params.officer == true
+        user_params.officer = false
+        user_params.member = true
+      end
       if user_params.save
         ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_channel", content: "ok"
