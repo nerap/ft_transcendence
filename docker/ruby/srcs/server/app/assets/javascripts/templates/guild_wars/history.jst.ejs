@@ -3,9 +3,23 @@
         <tr>
             <th colspan="4">Current Guild war History</th>
         </tr>
+        <% Transcendence.guilds.each(function(model) { %>
         <% Transcendence.guild_wars.each(function(bob) { %>
-        <% if (bob.toJSON().done == "true") { %>
-        <% if ((bob.toJSON().guild_one_id == guild.id) || (bob.toJSON().guild_two_id == guild.id)) { %>
-        <% }}}) %>
+        <% if (bob.toJSON().done == true) { %>
+        <% if ((bob.toJSON().guild_one_id == guild.id) && (bob.toJSON().guild_two_id == model.toJSON().id)) { %>
+            <% if (bob.toJSON().guild_one_points > bob.toJSON().guild_two_points) { %>
+                <% var action = "Victory" %>
+            <% } if (bob.toJSON().guild_one_points < bob.toJSON().guild_two_points) { %>
+                <% var action = "Defeat" %>
+            <% } else { %>
+                <% var action = "Tie" %>
+            <% } %>
+            <tr class="users-list">
+                <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().name %></b></td>
+                <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().anagram %></b></td>
+                <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().points %></b></td>    
+                <td><%= action %></td>
+            </tr>
+        <% }}})}) %>
     </table>
 </div>
