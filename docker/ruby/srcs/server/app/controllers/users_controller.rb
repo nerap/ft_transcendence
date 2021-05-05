@@ -11,6 +11,11 @@ class UsersController < ApplicationController
   def show
   end
 
+  def unset_ft
+    current_user.first_time = false
+    current_user.save
+  end
+
   def edit_profile
     user = User.find(params[:user][:id])
     if current_user == user

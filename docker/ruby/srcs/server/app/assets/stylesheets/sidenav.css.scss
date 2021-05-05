@@ -9,6 +9,16 @@
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
+    img {
+        cursor:pointer;
+        width:20px;
+        height:20px;
+        vertical-align: middle;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.12);
+            border-radius: 50%;
+        }
+    }
     table {
         width: 100%;
         border-collapse: collapse;

@@ -9,6 +9,7 @@
     overflow: auto;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
+    text-align: center;
     .modal-content {
         box-sizing: border-box;
         width: auto;
@@ -46,6 +47,20 @@
             .padlock-image {
                 width: 40px;
                 height: 40px;
+            }
+        }
+        button.unset-firsttime {
+            height: 35px;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-size: 15px;
+            min-width: 100px;
+            width: auto;
+            cursor: pointer;
+            background: rgba(54, 123, 145, 0.7);
+            &:hover {
+                background: rgb(48, 109, 129);
             }
         }
         .modal-body {

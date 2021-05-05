@@ -9,7 +9,7 @@ class Chatroom < ApplicationRecord
         chatroom_type == "private"
     end
 
-    # def as_json(options = {})
-        # super(options.merge(:only => [ :id, :name, :chatroom_type, :password, :owner, :admin, :banned, :members, :muted, :include => :chat ]))
-    # end
+    def as_json(options = {})
+        super(options.merge(except: [ :password ]))
+    end
 end

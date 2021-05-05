@@ -2,3 +2,17 @@
     FT_TRANSCENDENCE
 </h1>
 <a href="#admin_panel">admin panel</a>
+
+<% if (Transcendence.current_user.toJSON().first_time == true) { %>
+<div id="firsttime-modal" class="modal" style="display:block;z-index:150;">
+    <div class="modal-content">
+        <div class="modal-header">
+            First time ?<br/>
+            Personalise your profile !
+        </div>
+        <br/>
+        <a href="#users/edit_profile"><button class="unset-firsttime edit-profile">Edit profile</button></a>
+        <button class="unset-firsttime">Later</button>
+    </div>
+</div>
+<% } %>

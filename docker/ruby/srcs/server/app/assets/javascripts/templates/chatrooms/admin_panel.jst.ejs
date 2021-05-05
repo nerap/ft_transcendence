@@ -1,7 +1,8 @@
 <div id="admin-panel">
+    <div style="text-align:left;"><img src="assets/previous_b.png" onclick="document.location='#chatrooms/<%= chatroom.id %>'">
+    Back to <%= chatroom.name %></div>
     <div class="header">
         <h1>Admin panel</h1>
-        <button onclick="document.location='#chatrooms/<%= chatroom.id %>'">Back to <%= chatroom.name %></button>
     </div>
     <br/>
     <% if (Transcendence.current_user.toJSON().admin == true || chatroom.owner == Transcendence.current_user.id) { %>

@@ -1,6 +1,17 @@
 Transcendence.Views.HomeAdmin = Backbone.View.extend({
     initialize: function () {
-        this.listenTo(Transcendence.users, 'change:admin change:banned', this.render);
+        this.listenTo(Transcendence.users, 'change:admin', function () {
+            this.render();
+            $("#admins-actions").show();
+        });
+        this.listenTo(Transcendence.users, 'change:banned', function () {
+            this.render();
+            $("#bans-actions").show();
+        });
+        this.listenTo(Transcendence.chatrooms, 'remove', function () {
+            this.render();
+            $("#chatrooms-actions").show();
+        });
     },
     render: function () {
         if (Transcendence.current_user.toJSON().superuser == false && Transcendence.current_user.toJSON().admin == false) {

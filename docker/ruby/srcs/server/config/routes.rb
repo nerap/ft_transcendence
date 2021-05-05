@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
     end
 
+    put '/users/unset_ft'
     put '/users/edit_profile'
     put '/users/block_user'
     put '/users/unblock_user'
