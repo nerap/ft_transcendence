@@ -36,7 +36,8 @@ Transcendence.Routers.Users = Backbone.Router.extend({
             this.cleanUp();
             this.view = new Transcendence.Views.UserProfile({
                 model: Transcendence.users.get(id),
-                id: id
+                id: id,
+                collection : Transcendence.guild_invitations
             });
             $('#main-body').html(this.view.render().$el);
         }

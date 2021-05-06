@@ -11,6 +11,20 @@
         <% if (user.id == Transcendence.current_user.id) { %>
             <a href="/#users/edit_account"><button>Edit account</button></a>
             <a href="/#users/edit_profile"><button>Edit profile</button></a>
+            <div id="users-index">
+            <table>
+                <tr>
+                    <th colspan="4">Current Guild Inviation</th>
+                </tr>
+            <% if (guild_invitations.length == 0) { %>
+                <tr><td style="text-align:center;">You don't have guilds invitations !</td></tr>
+            <% } %>
+            <% guild_invitations.forEach(function(guild_inv) { %>
+                <% guild = Transcendence.guild_invitations.get(guild_inv.toJSON().guild_id).toJSON() %>
+                
+            <% }) %>
+            </table>
+            </div>
         <% } else { %>
             <table style="margin:auto;">
                 <tr>
