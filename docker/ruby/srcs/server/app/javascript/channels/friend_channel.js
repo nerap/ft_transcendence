@@ -11,5 +11,6 @@ consumer.subscriptions.create("FriendChannel", {
 
   received(data) {
     Transcendence.friends.fetch()
+    Transcendence.guild_invitations.fetch()
   }
 });

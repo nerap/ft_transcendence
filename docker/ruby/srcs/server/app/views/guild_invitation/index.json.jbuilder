@@ -1,1 +1,0 @@
-json.array! @guild_invitaions, partial: "guild_invitaions/guild_invitaion", as: :guild_invitaion

@@ -68,7 +68,7 @@
         <tr class="create-chatroom">
             <td style="width:15%;"><img style="width:30px;height:30px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
             <td onclick='document.location = "/#users/<%= model.toJSON().id %>"'><%= model.toJSON().username %></a></td>
-            <% if (model.toJSON().id == Transcendence.current_user.toJSON().id) { %>
+            <% if (model.toJSON().id == guild.owner) { %>
                 <% var action = "Master" %>
             <% } else { %>
                 <% var action = "New" %> 

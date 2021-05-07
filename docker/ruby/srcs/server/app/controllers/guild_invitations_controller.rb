@@ -25,6 +25,7 @@ class GuildInvitationsController < ApplicationController
     if !guild_inv_exists(params[:user_id], params[:guild_id])
       @guild_invitation = GuildInvitation.new(guild_invitation_params)
       if @guild_invitation.save
+        ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
         ActionCable.server.broadcast "guild_channel", content: "ok"
       end
@@ -45,6 +46,7 @@ class GuildInvitationsController < ApplicationController
         user = User.find_by_id(params[:user_id])
         user.guild = params[:guild_id]
         user.save
+        ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
         ActionCable.server.broadcast "guild_channel", content: "ok"
     end
@@ -54,6 +56,7 @@ class GuildInvitationsController < ApplicationController
   def destroy
     @guild_invitation.destroy
     respond_to do |format|
+        ActionCable.server.broadcast "users_channel", content: "profile"
         ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
         ActionCable.server.broadcast "guild_channel", content: "ok"
         format.json { head :no_content }
