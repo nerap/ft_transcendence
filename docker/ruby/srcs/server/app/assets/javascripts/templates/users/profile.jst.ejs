@@ -12,16 +12,40 @@
             <a href="/#users/edit_account"><button>Edit account</button></a>
             <a href="/#users/edit_profile"><button>Edit profile</button></a>
             <div id="users-index">
+            <br></br>
             <table>
                 <tr>
-                    <th colspan="4">Current Guild Inviation</th>
+                    <th colspan="5">Current guild Inv</th>
                 </tr>
             <% if (guild_invitations.length == 0) { %>
                 <tr><td style="text-align:center;">You don't have guilds invitations !</td></tr>
             <% } %>
+            
             <% guild_invitations.forEach(function(guild_inv) { %>
-                <% guild = Transcendence.guild_invitations.get(guild_inv.toJSON().guild_id).toJSON() %>
-                
+                <% guild = Transcendence.guilds.get(guild_inv.toJSON().guild_id).toJSON() %>
+                <tr class="users-list">
+                    <td style="width:15%;" onclick='document.location = "/#guilds/<%= guild.id %>"'><%= guild.name %></a></td>
+                    <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= guild.anagram %></b></td>
+                    <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= guild.points %></b></td> 
+                    <td class="users-action">
+                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="put">
+                            <button type="submit" class="accept-request">accept</button>
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
+                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
+                            <input value="false" type="hidden" name="pending">
+                        </form>
+                    </td>
+                    <td class="users-action">
+                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" class="decline-request">decline</button>
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
+                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
+                            <input value="false" type="hidden" name="pending">
+                        </form>
+                    </td>
+                </tr>
             <% }) %>
             </table>
             </div>

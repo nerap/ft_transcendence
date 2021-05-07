@@ -9,7 +9,7 @@ Transcendence.Views.FriendsIndex = Backbone.View.extend ({
         this.listenTo(Transcendence.guild_invitations , 'change add remove', this.render);
     },
     render: function () {
-        this.$el.html(JST['templates/friends/index']({
+        this.$el.html(JST['templates/users/friends']({
             friends1: this.collection.where({ user_one_id: Transcendence.current_user.id, pending: false }),
             friends2: this.collection.where({ user_two_id: Transcendence.current_user.id, pending: false }),
             pending1: this.collection.where({ user_one_id: Transcendence.current_user.id, pending: true }),

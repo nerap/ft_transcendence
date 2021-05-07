@@ -4,6 +4,8 @@ Transcendence.Views.UsersIndex = Backbone.View.extend ({
     },
     initialize: function () {
         this.listenTo(Transcendence.users, "change:online", this.render)
+        this.listenTo(Transcendence.guild_invitations, 'change add remove', this.render);
+        this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },
     render: function () {
         this.$el.html(JST['templates/users/index']());

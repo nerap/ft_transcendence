@@ -10,6 +10,8 @@ consumer.subscriptions.create("GuildInvitationChannel", {
   },
 
   received(data) {
-    Transcendence.guilds.fetch()
+    console.log("salut")
+    Transcendence.users.fetch()
+    Transcendence.guild_invitations.fetch()
   }
 });

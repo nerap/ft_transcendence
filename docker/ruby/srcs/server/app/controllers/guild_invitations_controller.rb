@@ -40,8 +40,8 @@ class GuildInvitationsController < ApplicationController
 
   # PATCH/PUT /friends/1 or /friends/1.json
   def update
-    if (params[:pending] == 'true')
-        @guild_invitations.destroy
+    if (params[:pending] == 'false')
+        @guild_invitation.destroy
         user = User.find_by_id(params[:user_id])
         user.guild = params[:guild_id]
         user.save
