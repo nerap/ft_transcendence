@@ -1,6 +1,48 @@
 <div id="user-profile">
+    <% if (user.id != Transcendence.current_user.id) { %>
+    <div class="friend-request">
+        <% if (!friend) { %>
+            <%= user.username %> is not your friend
+            <form action="/api/friends" method="post" style="display:inline-block" data-remote="true">
+                <button type="submit">add friend</button>
+                <input value="<%= user.id %>" type="hidden" name="user_one_id">
+                <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
+                <input value="true" type="hidden" name="pending">
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        <% } else if (friend.toJSON().pending == false) { %>
+            <%= user.username %> is your friend
+            <form action="/api/friends/<%= friend.toJSON().id %>" style="display:inline-block" method="post" data-remote="true">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="decline">unfriend</button>
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        <% } else if (friend.toJSON().user_two_id == Transcendence.current_user.id && friend.toJSON().user_one_id == user.id) { %>
+            <%= user.username %> is not your friend
+            <form action="/api/friends/<%= friend.toJSON().id %>" style="display:inline-block" method="post" data-remote="true">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="decline">&times; cancel request</button>
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        <% } else if (friend.toJSON().user_one_id == Transcendence.current_user.id && friend.toJSON().user_two_id == user.id) { %>
+            <%= user.username %> sent you a friend request
+            <form action="/api/friends/<%= friend.toJSON().id %>" style="display:inline-block" method="post" data-remote="true">
+                <input type="hidden" name="_method" value="put">
+                <button type="submit" class="accept">accept</button>
+                <input value="false" type="hidden" name="pending">
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+            <form action="/api/friends/<%= friend.toJSON().id %>" style="display:inline-block" method="post" data-remote="true">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="decline">decline</button>
+                <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            </form>
+        <% } %>
+    </div>
+    <% } %>
     <img src="<%= user.avatar %>">
-    <h1><%= user.username %>'s profile
+    <h1>
+        <%= user.username %>'s profile
         <% if (user.online == true) { %>
         <span class="status online"></span>
         <% } else { %>
@@ -30,43 +72,9 @@
                         <% } %>
                         <form action="/api/users/<%= action %>_user" method="post" data-remote="true">
                             <input type="hidden" name="_method" value="put">
-                            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
+                            <button type="submit" class="<%= action %>"><%= action %></button>
                             <input value="<%= user.id %>" type="hidden" name="user[id]">
                             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                        </form>
-                    </td>
-                </tr>
-            </table>
-            <table style="margin:auto;">
-                <% if (!friend) { %>
-                    <% var action = "add friend" %>
-                    <% var method = "post" %>
-                    <% var url = "friends" %>
-                    <% var pending = "true" %>
-                <% } else if (friend.toJSON().pending == false) { %>
-                    <% action = "remove friendship" %>
-                    <% method = "delete" %>
-                    <% pending = "false" %>
-                    <% url = "friends/" + friend.toJSON().id %>
-                <% } else if (friend.toJSON().user_one_id == Transcendence.current_user.id && friend.toJSON().user_two_id == user.id) { %>
-                    <% action = "accept request" %>
-                    <% method = "put" %>
-                    <% pending = "false" %>
-                    <% url = "friends/" + friend.toJSON().id %>
-                <% } else if (friend.toJSON().user_two_id == Transcendence.current_user.id && friend.toJSON().user_one_id == user.id) { %>
-                    <% action = "pending" %>
-                    <% method = "delete" %>
-                    <% pending = "false" %>
-                    <% url = "friends/" + friend.toJSON().id %>
-                <% } %>
-                <tr>
-                    <td>
-                        <form action="/api/<%= url %>" method="post" data-remote="true">
-                            <input type="hidden" name="_method" value="<%= method %>">
-                            <button type="submit" class="menu-option <%= action %>"><%= action %></button>
-                            <input value="<%= user.id %>" type="hidden" name="user_one_id">
-                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
-                            <input value="<%= pending %>" type="hidden" name="pending">
                         </form>
                     </td>
                 </tr>

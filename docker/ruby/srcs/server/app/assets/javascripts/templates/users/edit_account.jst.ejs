@@ -32,7 +32,7 @@
             </div>
 
             <div class="actions">
-                <input type="submit" name="commit" value="Update" class="edit save" data-disable-with="Update">
+                <input type="submit" name="commit" value="update" class="edit save" data-disable-with="Update">
             </div>
         </form>
     </div>
@@ -44,13 +44,13 @@
         <% if (user.otp_required_for_login == false) { %>
             <form id="enable-2fa" method="post" action="/api/users/enable_2fa" data-remote="true">
                 <input type="hidden" name="_method" value="put">
-                <input class="edit select" type="submit" value="Enable">
+                <input class="edit select" type="submit" value="enable">
                 <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
             </form>
         <% } else if (user.otp_required_for_login == true) { %>
             <form id="disable-2fa" method="post" action="/api/users/disable_2fa" data-remote="true">
                 <input type="hidden" name="_method" value="put">
-                <input class="edit selected" type="submit" value="Disable">
+                <input class="edit selected" type="submit" value="disable">
                 <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
             </form>
             <br/>

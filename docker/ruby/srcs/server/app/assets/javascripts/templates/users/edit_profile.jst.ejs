@@ -21,7 +21,7 @@
             <input type="checkbox" value="remove_avatar" name="user[remove]"> Remove avatar
             <br/>
             <br/>
-            <button type="submit" name="commit" class="edit save" data-disable-with="Save">Save</button>
+            <button type="submit" name="commit" class="edit save" data-disable-with="Save">update</button>
             <input value="<%= user.id %>" type="hidden" name="user[id]">
             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
