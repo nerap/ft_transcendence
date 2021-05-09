@@ -3,11 +3,12 @@
     overflow: auto;
     white-space: nowrap;
     .friend-request {
+        font-style: italic;
         text-align: center;
         background-color: rgb(211, 211, 211);
         width: min-content;
         height: auto;
-        padding: 7px;
+        padding: 8px;
         border-radius: 10px;
         font-size: 15px;
         &:hover {
