@@ -19,6 +19,7 @@ var Transcendence = {
     this.friends = new Transcendence.Collections.Friends(data.friends);
     this.guilds = new Transcendence.Collections.Guilds(data.guilds);
     this.guild_wars = new Transcendence.Collections.GuildWars(data.guild_wars);
+    this.guild_invitations= new Transcendence.Collections.GuildInvitations(data.guild_invitations);
     this.current_user = new window.Transcendence.UserSession(data.current_user);
     this.otp_uri = data.otp_uri;
     new Transcendence.Routers.Home();

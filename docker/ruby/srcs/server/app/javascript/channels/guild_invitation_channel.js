@@ -1,6 +1,6 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("FriendChannel", {
+consumer.subscriptions.create("GuildInvitationChannel", {
   connected() {
     // Called when the subscription is ready for use on the server
   },
@@ -10,7 +10,8 @@ consumer.subscriptions.create("FriendChannel", {
   },
 
   received(data) {
-    Transcendence.friends.fetch()
-    Transcendence.guild_invitations.fetch()
+    Transcendence.guild_invitations.fetch().done(function () {
+      console.log("salut");
+    });
   }
 });

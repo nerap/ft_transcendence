@@ -3,8 +3,11 @@ Transcendence.Views.FriendsIndex = Backbone.View.extend ({
         "click #send-pm": "sendPM"
     },
     initialize: function () {
+        this.listenTo(Transcendence.users, 'change add remove', this.render);
         this.listenTo(Transcendence.current_user, 'change', this.render);
         this.listenTo(Transcendence.friends, 'change add remove', this.render);
+        this.listenTo(Transcendence.guilds, 'change add remove', this.render);
+        this.listenTo(Transcendence.guild_invitations , 'change add remove', this.render);
     },
     render: function () {
         this.$el.html(JST['templates/users/friends']({

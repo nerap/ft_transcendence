@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_05_153422) do
+ActiveRecord::Schema.define(version: 2021_05_05_164253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,14 @@ ActiveRecord::Schema.define(version: 2021_05_05_153422) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "pending"
+  end
+
+  create_table "guild_invitations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "guild_id"
+    t.boolean "pending"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "guild_wars", force: :cascade do |t|
@@ -145,6 +153,7 @@ ActiveRecord::Schema.define(version: 2021_05_05_153422) do
     t.string "provider"
     t.string "uid"
     t.boolean "first_time", default: true
+    t.boolean "member"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider"], name: "index_users_on_provider"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

@@ -6,6 +6,8 @@ Transcendence.Views.UserProfile = Backbone.View.extend ({
         this.listenTo(Transcendence.users, 'change', this.render);
         this.listenTo(Transcendence.current_user, 'change', this.render);
         this.listenTo(Transcendence.friends, 'change add remove', this.render);
+        this.listenTo(Transcendence.guild_invitations, 'change add remove', this.render);
+        this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },
     render: function () {
         var friend = Transcendence.friends.findWhere({ user_one_id: Transcendence.current_user.id, user_two_id: this.model.toJSON().id });
@@ -14,7 +16,8 @@ Transcendence.Views.UserProfile = Backbone.View.extend ({
         }
         this.$el.html(JST['templates/users/profile']({
             user: this.model.toJSON(),
-            friend: friend
+            friend: friend,
+            guild_invitations: this.collection.where({ user_id: Transcendence.current_user.id, pending: true }),
         }));
         return this;
     },
