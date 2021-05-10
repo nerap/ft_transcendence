@@ -4,28 +4,30 @@
     left: 0;
     top: 40px;
     width: min-content;
-    width: 200px;
-    height: 100%;
+    min-width: 200px;
+    height: calc(100% - 40px);
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
-    img {
-        cursor:pointer;
-        width:20px;
-        height:20px;
-        vertical-align: middle;
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.12);
-            border-radius: 50%;
-        }
-    }
+    overflow-x: hidden;
+    overflow-y: auto;
+    // img {
+    //     cursor:pointer;
+    //     width:20px;
+    //     height:20px;
+    //     vertical-align: middle;
+    //     &:hover {
+    //         background-color: rgba(0, 0, 0, 0.12);
+    //         border-radius: 50%;
+    //     }
+    // }
     table {
         width: 100%;
         border-collapse: collapse;
         td {
             font-size: 18px;
             padding: 15px;
-            &:hover {
+            &:not(.pm-opt):hover {
                 background-color: rgba(0, 0, 0, 0.12);
                 cursor: pointer;
             }
@@ -33,6 +35,24 @@
                 background-color: rgba(0, 0, 0, 0.12);
                 &:hover {
                     background-color: rgba(0, 0, 0, 0.281);
+                }
+            }
+        }
+        tr.pm-opts {
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.12);
+                cursor: pointer;
+            }
+        }
+        td.pm-opt {
+            font-size: 18px;
+            padding:7px;
+            border-bottom:1px solid rgba(0, 0, 0, 0.12);
+            div {
+                font-size: 20px;
+                color: rgb(167, 167, 167);
+                &:hover {
+                    color: black;
                 }
             }
         }

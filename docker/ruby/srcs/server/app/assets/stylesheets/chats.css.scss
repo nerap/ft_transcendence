@@ -274,17 +274,22 @@
                 width: 10%;
                 height: 40px;
                 padding: 0;
+                padding-right: 5px;
                 border: none;
-                &:hover {
-                  background: rgba(0, 0, 0, 0.2);
-                  cursor: pointer;
-                }
                 .button-field {
-                  display: block;
-                  margin: auto;
-                  border: none;
-                  height: 35px;
-                  width: 30px;
+                  border-radius: 10px;
+                  border: 0;
+                  font-size: 15px;
+                  color: rgb(59, 132, 156);
+                  font-weight: bold;
+                  width: min-content;
+                  border: 2px solid rgb(59, 132, 156);
+                  background-color: white;
+                  cursor: pointer;
+                  &:hover {
+                      background: rgb(59, 132, 156);
+                      color: white;
+                  }
                 }
               }
             }

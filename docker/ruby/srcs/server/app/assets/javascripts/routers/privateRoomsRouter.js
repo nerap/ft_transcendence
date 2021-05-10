@@ -23,6 +23,7 @@ Transcendence.Routers.PrivateRooms = Backbone.Router.extend({
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.PrivateRoomShow({
+                collection: Transcendence.private_rooms,
                 model: Transcendence.private_rooms.get(id),
                 id: id
             });
