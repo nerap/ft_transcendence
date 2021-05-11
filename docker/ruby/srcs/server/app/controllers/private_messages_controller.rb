@@ -5,6 +5,7 @@ class PrivateMessagesController < ApplicationController
         prid = params[:pm][:pr_id]
         pr = PrivateRoom.find_by_id(prid)
         pm = PrivateMessage.create(pm_params)
+        pm.date_creation = Time.now.strftime('%I:%M %p')
         respond_to do |format|
             if pm.save
                 ActionCable.server.broadcast "pm_channel", content: pm, user: pm.user.try(:username), created_at: pm.created_at.to_s

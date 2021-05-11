@@ -10,11 +10,12 @@
             return usr != Transcendence.current_user.id;
         })).toJSON() %>
         <tr class="pm-opts">
-            <td class="pm-opt" onclick='document.location="/#private_rooms/<%= pr.id %>"'><img
-                    style="vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>">
-                <%= to_user.username %></td>
+            <td class="pm-opt" onclick='document.location="/#private_rooms/<%= pr.id %>"'>
+                <img style="vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>">
+                <%= to_user.username %>
+            </td>
             <td class="pm-opt" style="width:20px;">
-                <a href="/api/private_rooms/<%= pr.id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow" data-confirm="Are you sure ?"><div>&times;</div></a>
+                <a href="/api/private_rooms/<%= pr.id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow" data-confirm="Are you sure ? All messages will be deleted"><div>&times;</div></a>
             </td>
             <div id="destroy-pm-<%= pr.id %>" class="modal">
                 <div class="modal-content">
@@ -49,7 +50,7 @@
                 <td style="width:100%;" onclick="document.location='/#users/<%= user.id %>'"><%= user.toJSON().username %></td>
                 <td>
                     <% if (user.id != Transcendence.current_user.id) { %>
-                        <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user.id %>">
+                        <form action="/api/private_rooms" method="post" data-remote="true" class="send-pm" id="<%= user.id %>">
                             <button type="submit" class="menu-option">send PM</button>
                             <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
                             <input value="<%= user.id %>" type="hidden" name="private_room[user2]">

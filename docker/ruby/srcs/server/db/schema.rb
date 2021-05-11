@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_11_104637) do
+ActiveRecord::Schema.define(version: 2021_05_11_124607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2021_05_11_104637) do
     t.string "message"
     t.bigint "user_id", null: false
     t.bigint "private_room_id", null: false
+    t.string "date_creation"
     t.index ["private_room_id"], name: "index_private_messages_on_private_room_id"
     t.index ["user_id"], name: "index_private_messages_on_user_id"
   end
