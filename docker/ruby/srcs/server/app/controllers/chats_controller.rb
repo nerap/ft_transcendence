@@ -10,6 +10,7 @@ class ChatsController < ApplicationController
     || chatroom.owner == current_user.id \
     || is_sadmin(current_user))
       @chat = Chat.create(chat_params)
+      @chat.date_creation = Time.now.strftime('%I:%M %p')
       respond_to do |format|
         if @chat.save
           ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username), created_at: @chat.created_at.to_s

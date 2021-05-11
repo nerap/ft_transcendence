@@ -6,26 +6,27 @@
 <% if (!Transcendence.current_user.toJSON().block_list.includes(this.user_id)) { %>
 <table class="<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>">
     <tr>
-        <td class="message-header">
-            <% if (Transcendence.current_user.id != this.user_id) { %>
-            <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
-                src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
-            <% } %>
-            <% if (anagram = getAnagram(this.user_id)) { %>
-                [<%= anagram %>]
-            <% } %>
-            <%= Transcendence.users.get(this.user_id).toJSON().username %>
-            <% if (Transcendence.current_user.id == this.user_id) { %>
-            <img class="user-avatar-<%= Transcendence.current_user.id == this.user_id ? 'sent' : 'received' %>"
-                src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
-            <% } %>
+        <% if (Transcendence.current_user.id != this.user_id) { %>
+        <td class="message-user">
+            <img class="user-avatar" src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
+            <div class="message-footer"><%= this.date_creation %></div>
         </td>
-    </tr>
-    <tr>
-        <td class="message-content"><%= this.message %></td>
-    </tr>
-    <tr>
-        <td class="message-footer"><%= this.created_at %></td>
+        <% } %>
+        <td class="message-content">
+            <div class="message-header">
+                <% if (anagram = getAnagram(this.user_id)) { %>
+                    [<%= anagram %>]
+                <% } %>
+                <%= Transcendence.users.get(this.user_id).toJSON().username %>
+            </div>
+            <div class="message-text"><%= this.message %></div>
+        </td>
+        <% if (Transcendence.current_user.id == this.user_id) { %>
+        <td class="message-user">
+            <img class="user-avatar" src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
+            <div class="message-footer"><%= this.date_creation %></div>
+        </td>
+        <% } %>
     </tr>
 </table>
 <% } else { %>

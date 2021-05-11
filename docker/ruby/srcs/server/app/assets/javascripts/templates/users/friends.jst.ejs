@@ -18,17 +18,6 @@
                 <td onclick='document.location = "/#users/<%= user2.id %>"' style="text-align:left;"><%= user2.username %></td>
                 <td><% if (user2.guild) { %>[<%= Transcendence.guilds.get(user2.guild).toJSON().anagram %>] <%= Transcendence.guilds.get(user2.guild).toJSON().name %><% } %></td>
                 <td><%= user2.id %></td>
-                <% if ((user2.guild == null) && (Transcendence.current_user.toJSON().guild != null)) { %>
-                    <td class="users-action">
-                        <form action="/api/guild_invitations" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
-                            <button type="submit" class="menu-option">Inv to Guild</button>
-                            <input value="<%= Transcendence.current_user.toJSON().guild %>" type="hidden" name="guild_id">
-                            <input value="<%= user2.id %>" type="hidden" name="user_id">
-                            <input value="true" type="hidden" name="pending">
-                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                        </form>
-                    </td>
-                    <% } %>
                 <td class="users-action">
                     <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
                         <button type="submit" class="menu-option">send PM</button>
@@ -45,6 +34,17 @@
                         <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
                     </form>
                 </td>
+                <% if ((user2.guild == null) && (Transcendence.current_user.toJSON().guild != null)) { %>
+                    <td class="users-action">
+                        <form action="/api/guild_invitations" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
+                            <button type="submit" class="menu-option">Inv to Guild</button>
+                            <input value="<%= Transcendence.current_user.toJSON().guild %>" type="hidden" name="guild_id">
+                            <input value="<%= user2.id %>" type="hidden" name="user_id">
+                            <input value="true" type="hidden" name="pending">
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+                <% } %>
             </tr>
         <% }) %>
     </table>
