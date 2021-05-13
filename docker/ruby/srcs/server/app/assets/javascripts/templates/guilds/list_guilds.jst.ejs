@@ -1,10 +1,10 @@
-<div id="guilds-list">
+<div id="users-index">
     <table>
         <tr>
             <th colspan="5">Guilds Ranking</th>
         </tr>
         <% Transcendence.guilds.each(function(model) { %>
-        <tr class="guilds-list">
+        <tr class="users-list">
             <td style="width:15%;" onclick='document.location = "/#guilds/<%= model.toJSON().id %>"'><%= model.toJSON().name %></a></td>
             <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().anagram %></b></td>
             <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= model.toJSON().points %></b></td> 
