@@ -18,8 +18,8 @@
                 Change password<br/><i style="font-size:12px">(leave blank if you don't want to change)</i></br>
                 <input autocomplete="off" type="password" name="chatroom[password]">
                 <% } else if (chatroom.chatroom_type == "public") { %>
-                <input type="checkbox" value="private" name="chatroom[chatroom_type]" onclick='$("#edit-password-field").slideToggle(300);'> Change to private<br/>
-                <div id="edit-password-field"><input autocomplete="off" type="password" name="chatroom[password]" placeholder="Type password..."></div>
+                <input type="checkbox" value="private" name="chatroom[chatroom_type]" onclick='$("#edit-panel-password-field").slideToggle(300);'> Change to private<br/>
+                <div id="edit-panel-password-field"><input autocomplete="off" type="password" name="chatroom[password]" placeholder="Type password..."></div>
                 <% } %>
             </div>
             <br/>

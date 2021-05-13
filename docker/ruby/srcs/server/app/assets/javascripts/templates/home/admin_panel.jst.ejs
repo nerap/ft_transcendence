@@ -1,20 +1,20 @@
 <div id="sidenav">
-    <div style="padding:10px;border-bottom: 1px solid rgba(0, 0, 0, 0.12);"><img src="assets/previous_b.png" onclick="window.history.back()">
+    <div style="padding:10px;border-bottom: 1px solid rgba(0, 0, 0, 0.12);"><img class="prev-page" src="assets/previous_b.png" onclick="window.history.back()">
     Previous page</div>
     <table>
         <% if (Transcendence.current_user.toJSON().superuser == true) { %>
         <tr>
-            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$("#admins-actions").slideToggle(300)'>Admins</td>
+            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$(".admin-option").slideUp();$("#admins-actions").slideToggle(300)'>Admins</td>
         </tr>
         <% } %>
         <tr>
-            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$("#bans-actions").slideToggle(300)'>Bans</td>
+            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$(".admin-option").slideUp();$("#bans-actions").slideToggle(300)'>Bans</td>
         </tr>
         <tr>
-            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$("#chatrooms-actions").slideToggle(300)'>Chatrooms</td>
+            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$(".admin-option").slideUp();$("#chatrooms-actions").slideToggle(300)'>Chatrooms</td>
         </tr>
         <tr>
-            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$("#guilds-actions").slideToggle(300)'>Guilds</td>
+            <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$(".admin-option").slideUp();$("#guilds-actions").slideToggle(300)'>Guilds</td>
         </tr>
         <tr>
             <td class="sideopt">Tournaments</td>
@@ -26,7 +26,7 @@
     <div class="header">
         <h1>General Admin panel</h1>
     </div>
-    <div id="admins-actions" style="display:none;">
+    <div id="admins-actions" class="admin-option" style="display:none;">
         <table class="action-type">
             <br/>
             <tr>
@@ -75,7 +75,7 @@
         </table>
         <br/><br/>
     </div>
-    <div id="bans-actions" style="display:none;">
+    <div id="bans-actions" class="admin-option" style="display:none;">
         <table class="action-type">
             <br/>
             <tr>
@@ -124,7 +124,7 @@
         </table>
         <br/><br/>
     </div>
-    <div id="chatrooms-actions" style="display:none;">
+    <div id="chatrooms-actions" class="admin-option" style="display:none;">
         <br/>
         <table class="admin-choices">
         <% if (Transcendence.chatrooms.length == 0) { %>
@@ -150,7 +150,7 @@
         <% }) %>
         </table>
     </div>
-    <div id="guilds-actions" style="display:none;">
+    <div id="guilds-actions" class="admin-option" style="display:none;">
         <br/>
         <table class="admin-choices">
         <% if (Transcendence.guilds.length == 0) { %>

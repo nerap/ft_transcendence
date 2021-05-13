@@ -11,16 +11,16 @@
     white-space: nowrap;
     overflow-x: hidden;
     overflow-y: auto;
-    // img {
-    //     cursor:pointer;
-    //     width:20px;
-    //     height:20px;
-    //     vertical-align: middle;
-    //     &:hover {
-    //         background-color: rgba(0, 0, 0, 0.12);
-    //         border-radius: 50%;
-    //     }
-    // }
+    img.prev-page {
+        cursor:pointer;
+        width:20px;
+        height:20px;
+        vertical-align: middle;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.12);
+            border-radius: 50%;
+        }
+    }
     table {
         width: 100%;
         border-collapse: collapse;
