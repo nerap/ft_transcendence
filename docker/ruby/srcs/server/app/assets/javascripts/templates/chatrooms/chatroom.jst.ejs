@@ -18,7 +18,10 @@
             <td id="optpriv" style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='document.location="/#chatrooms/private"'>Private chatrooms</td>
         </tr>
         <tr>
-            <td id="optmych" class="sideopt" onclick='document.location="/#chatrooms/my_chatrooms"'>My chatrooms</td>
+            <td id="optmych" style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt my-chatrooms" onclick='document.location="/#chatrooms/my_chatrooms"'>My chatrooms</td>
+        </tr>
+        <tr>
+            <td id="optmych" class="sideopt" onclick='document.location="/#private_rooms"'>PM</td>
         </tr>
     </table>
 </div>
@@ -40,20 +43,17 @@
             <td id="room-content">
                 <div id="messages"></div>
                 <div id="send_message">
-                    <form action="/api/chats" class="send-message-field" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden"
-                            name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    <form action="/api/chats" class="send-message-field" accept-charset="UTF-8" data-remote="true" method="post">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         <table>
                             <tr>
                                 <td class="text"><input placeholder="New message..." autocomplete="off" type="text"
                                         class="text-field" id="text-field" required="required" name="chat[message]"></td>
-                                <td class="button"><input type="image" src="/assets/send.png" class="button-field"
-                                        data-disable-with="Send" name="commit"></td>
+                                <td class="button"><input type="submit" class="button-field" value="send" name="commit"></td>
                             </tr>
                         </table>
-                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chat[user_id]"
-                            id="chat_user_id" />
-                        <input as="hidden" type="hidden" value="<%= chatroom.id %>" name="chat[chatroom_id]"
-                            id="chat_chatroom_id" />
+                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="chat[user_id]">
+                        <input as="hidden" type="hidden" value="<%= chatroom.id %>" name="chat[chatroom_id]">
                     </form>
                 </div>
             </td>

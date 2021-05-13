@@ -1,55 +1,51 @@
 div#main-body {
     padding-top: 40px;
-    font-family: sans-serif;
 }
 
-#flash-message {
+#parent-flash {
     position: fixed;
-    top: 40px;
+    top: 45px;
     left: 50%;
     transform: translate(-50%, 0);
-    width: auto;
-    height: auto;
-    font-size: 15px;
-    text-align: center;
-    color: black;
-    z-index: 100;
-    white-space: nowrap;
-    .notice {
-        height: 100%;
-        width: auto;
-        padding: 10px;
-        background-color: rgba(108, 231, 91, 0.6);
-        border: 1px solid;
-        border-color: rgb(53, 116, 45);
-    }
-    .deleted {
-        height: 100%;
-        width: auto;
-        padding: 10px;
-        background-color: rgba(206, 111, 22, 0.6);
-        border: 1px solid;
-        border-color: rgb(129, 80, 16);
-    }
-    .error {
-        height: 100%;
-        width: auto;
-        padding: 10px;
-        background-color: rgba(218, 4, 4, 0.6);
-        border: 1px solid;
-        border-color: rgb(148, 4, 4);
-    }
-    .closebtn {
-        margin-left: 15px;
-        color: rgb(97, 97, 97);
+    z-index: 150;
+    .flash-message {
+        margin: auto;
+        margin-bottom: 5px;
+        height: auto;
+        font-size: 15px;
         font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-      .closebtn:hover {
-        color: black;
-      }
+        text-align: center;
+        white-space: nowrap;
+        color: white;
+        &.notice {
+            width: min-content;
+            padding: 10px;
+            background-color: rgba(69, 160, 77, 0.85);
+            border-radius: 10px;
+        }
+        &.deleted {
+            width: min-content;
+            padding: 10px;
+            background-color: rgba(206, 111, 22, 0.85);
+            border-radius: 10px;
+        }
+        &.error {
+            width: min-content;
+            padding: 10px;
+            background-color: rgba(196, 7, 7, 0.85);
+            border-radius: 10px;
+        }
+        .closebtn {
+            vertical-align: middle;
+            margin-left: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .closebtn:hover {
+          color: black;
+        }
+    }
 }

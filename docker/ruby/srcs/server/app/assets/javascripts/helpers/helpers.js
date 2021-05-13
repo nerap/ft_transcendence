@@ -7,12 +7,11 @@ function getAnagram(userId) {
 }
 
 function flashMessage(type, str) {
-    var flash = `<div class="${type}">` +
-        `<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>` +
-        `${str}` +
+    var flash = `<div class="flash-message ${type}">` +
+        `${str} <span class="closebtn" onclick="$(this.parentElement).remove();">&times;</span>` +
         `</div>`
-    $("#flash-message").append(flash);
+    $("#parent-flash").append(flash);
     setTimeout(function () {
-        $(`.${type}`).slideUp(500);
+        $("#parent-flash").find('div:first').slideUp(500, function () {this.remove()});
     }, 3000);
 } // type: notice, error or deleted; str: message to print

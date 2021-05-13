@@ -40,10 +40,12 @@ class FriendsController < ApplicationController
 
   # DELETE /friends/1 or /friends/1.json
   def destroy
-    @friend.destroy
-    respond_to do |format|
-      ActionCable.server.broadcast "friend_channel", content: "ok"
-      format.json { head :no_content }
+    if @friend.user_one_id == current_user.id || @friend.user_two_id == current_user.id
+      @friend.destroy
+      respond_to do |format|
+        ActionCable.server.broadcast "friend_channel", content: "ok"
+        format.json { head :no_content }
+      end
     end
   end
 

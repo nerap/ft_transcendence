@@ -49,9 +49,9 @@
                 height: 40px;
             }
         }
-        button.unset-firsttime {
-            height: 35px;
-            border-radius: 5px;
+        button.confirm-choice {
+            padding: 7px;
+            border-radius: 10px;
             border: 0;
             color: white;
             font-size: 15px;
@@ -61,6 +61,12 @@
             background: rgba(54, 123, 145, 0.7);
             &:hover {
                 background: rgb(48, 109, 129);
+            }
+            &.yes {
+                background: rgba(220, 20, 60, 0.7);
+                &:hover {
+                    background: rgb(168, 13, 44);
+                }
             }
         }
         .modal-body {
