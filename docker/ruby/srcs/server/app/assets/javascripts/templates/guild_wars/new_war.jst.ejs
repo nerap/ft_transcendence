@@ -14,22 +14,29 @@
         <input type="time" id="time-input-end" required>
         <input type="hidden" id="hidden-input-end" name="end" value="0">
         <br>
+        Prize : 
         <input type="number" name="prize" value="10" min="10" max="100">
         <br>
         <input type="hidden" name="guild_one_id" value="<%= Transcendence.current_user.toJSON().guild %>">
         <input type="hidden" name="guild_two_id" value="<%= guild.id %>">
         <input type="hidden" name="guild_one_points" value="0">
         <input type="hidden" name="guild_two_points" value="0">
+        Unanswered : 
         <input type="number" name="unanswered_match" value="0" min="0" max="20">
         <br>
+        Duels : 
         <input id="duel-id" type="checkbox" name="duels" checked>
         <br>
+        Ladder :
         <input id="ladder-id" type="checkbox" name="ladder" checked>
         <br>
+        Faster :
         <input id="faster-id" type="checkbox" name="faster" checked>
         <br>
+        Giant :
         <input id="giant-id" type="checkbox" name="giant" checked>
         <br>
+        Reverse :
         <input id="reverse-id" type="checkbox" name="reverse" checked>
         <br>
         <input type="hidden" name="pending" value="true">
