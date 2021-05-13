@@ -19,7 +19,7 @@
                 <td><% if (user2.guild) { %>[<%= Transcendence.guilds.get(user2.guild).toJSON().anagram %>] <%= Transcendence.guilds.get(user2.guild).toJSON().name %><% } %></td>
                 <td><%= user2.id %></td>
                 <td class="users-action">
-                    <form action="/api/private_rooms" method="post" data-remote="true" id="send-pm" class="<%= user2.id %>">
+                    <form action="/api/private_rooms" method="post" data-remote="true" class="send-pm" id="<%= user2.id %>">
                         <button type="submit" class="menu-option">send PM</button>
                         <input value="<%= Transcendence.current_user.id %>" type="hidden" name="private_room[user1]">
                         <input value="<%= user2.id %>" type="hidden" name="private_room[user2]">
@@ -36,7 +36,7 @@
                 </td>
                 <% if ((user2.guild == null) && (Transcendence.current_user.toJSON().guild != null)) { %>
                     <td class="users-action">
-                        <form action="/api/guild_invitations" method="post" data-remote="true" class="send-pm" id="<%= user2.id %>">
+                        <form action="/api/guild_invitations" method="post" data-remote="true">
                             <button type="submit" class="menu-option">Inv to Guild</button>
                             <input value="<%= Transcendence.current_user.toJSON().guild %>" type="hidden" name="guild_id">
                             <input value="<%= user2.id %>" type="hidden" name="user_id">

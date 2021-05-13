@@ -1,7 +1,11 @@
-<h1>
-    FT_TRANSCENDENCE
-</h1>
-<a href="#admin_panel">admin panel</a>
+<div id="home-page">
+    <% if (Transcendence.current_user.toJSON().admin) { %>
+        <div style="text-align:right;"><a href="#admin_panel"><button>admin panel</button></a></div>
+    <% } %>
+    <h1>
+        TRANSCENDENCE
+    </h1>
+</div>
 
 <% if (Transcendence.current_user.toJSON().first_time == true) { %>
 <div id="firsttime-modal" class="modal" style="display:block;z-index:150;">

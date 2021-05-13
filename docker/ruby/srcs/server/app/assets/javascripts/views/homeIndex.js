@@ -1,6 +1,6 @@
 Transcendence.Views.HomeIndex = Backbone.View.extend ({
     events : {
-        "click .unset-firsttime": "unset"
+        "click .confirm-choice": "unset"
     },
     render: function () {
         this.$el.html(JST['templates/home/index']());

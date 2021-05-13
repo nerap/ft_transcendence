@@ -18,7 +18,7 @@ Transcendence.Views.FriendsIndex = Backbone.View.extend ({
             pending1: this.collection.where({ user_one_id: Transcendence.current_user.id, pending: true }),
             pending2: this.collection.where({ user_two_id: Transcendence.current_user.id, pending: true })
         }));
-        return this
+        return this;
     },
     sendPM: function (e) {
         pr = Transcendence.private_rooms.find(function (pr) {

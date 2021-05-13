@@ -1,5 +1,30 @@
 div#main-body {
-    padding-top: 40px;
+    padding-top: 20px;
+}
+
+div#home-page {
+    h1 {
+        margin-top: 50px;
+        text-align: center;
+        font-family: monospace;
+        background-color: rgba(150, 189, 190, 0.719);
+        padding: 10px;
+    }
+    button {
+        padding: 7px;
+        border-radius: 10px;
+        border: 0;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+        min-width: 100px;
+        width: auto;
+        cursor: pointer;
+        background: rgba(54, 123, 145, 0.7);
+        &:hover {
+            background: rgb(48, 109, 129);
+        }
+    }
 }
 
 #parent-flash {
