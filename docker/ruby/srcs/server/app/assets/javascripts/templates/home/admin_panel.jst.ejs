@@ -138,12 +138,13 @@
         <% } %>
         <% Transcendence.chatrooms.each(function (cr) { %>
             <tr>
-                <td style="width:80%;" onclick="document.location='#chatrooms/<%= cr.id %>'"><%= cr.toJSON().name %></td>
+                <td style="width:100%;" onclick="document.location='#chatrooms/<%= cr.id %>'"><%= cr.toJSON().name %></td>
+                <td><a href="/#chatrooms/<%= cr.id %>/admin"><button>admin panel</button></a></td>
                 <td>
                     <form action="/api/chatrooms/<%= cr.id %>" method="post" data-remote="true" data-confirm="Are you sure to delete this chatroom?">
-                    <input type="hidden" name="_method" value="delete">
-                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                    <button type="submit" name="commit">Destroy</button>
+                        <input type="hidden" name="_method" value="delete">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        <button type="submit" name="commit" class="destroy">destroy</button>
                     </form>
                 </td>
             </tr>
