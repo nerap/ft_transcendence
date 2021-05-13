@@ -14,6 +14,8 @@ Transcendence.Views.HomeAdmin = Backbone.View.extend({
         });
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-home").addClass("active")
         if (Transcendence.current_user.toJSON().superuser == false && Transcendence.current_user.toJSON().admin == false) {
             this.remove();
             location.hash = "#";

@@ -14,6 +14,8 @@ Transcendence.Views.ChatroomsIndex = Backbone.View.extend({
         return this;
     },
     chatroomType: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-chatrooms").addClass("active")
         if (window.location.hash == "#chatrooms/public" || window.location.hash == "#chatrooms") {
             this.$('#optpublic').addClass('active');
             var chatroomView = JST['templates/chatrooms/public']({ chatrooms: this.collection.where({chatroom_type: "public"}) });

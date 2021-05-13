@@ -33,6 +33,8 @@ Transcendence.Views.ChatroomShow = Backbone.View.extend({
         this.listenTo(Transcendence.current_user, 'change', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-chatrooms").addClass("active")
         this.$el.html(JST['templates/chatrooms/chatroom']({ chatroom: this.model.toJSON() }));
         this.members();
         var msgs = JST['templates/chatrooms/messages']({ chat: this.model.toJSON().chat });

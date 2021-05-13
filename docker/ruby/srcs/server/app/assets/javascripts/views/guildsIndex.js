@@ -5,6 +5,8 @@ Transcendence.Views.GuildsIndex = Backbone.View.extend ({
         this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-guilds").addClass("active")
         this.$el.html(JST['templates/guilds/index']());
         var guildsView = JST['templates/guilds/list_guilds']();
         this.$('.guilds-list').append(guildsView);

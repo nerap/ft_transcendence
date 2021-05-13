@@ -8,6 +8,8 @@ Transcendence.Views.UsersIndex = Backbone.View.extend ({
         this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-members").addClass("active")
         this.$el.html(JST['templates/users/index']());
         return this
     },

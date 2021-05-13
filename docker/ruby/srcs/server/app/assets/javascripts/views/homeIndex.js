@@ -3,6 +3,8 @@ Transcendence.Views.HomeIndex = Backbone.View.extend ({
         "click .confirm-choice": "unset"
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-home").addClass("active")
         this.$el.html(JST['templates/home/index']());
         return this;
     },

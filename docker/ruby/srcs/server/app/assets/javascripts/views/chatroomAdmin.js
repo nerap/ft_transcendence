@@ -11,6 +11,8 @@ Transcendence.Views.ChatroomAdmin = Backbone.View.extend({
         });
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-chatrooms").addClass("active")
         if (
             Transcendence.current_user.toJSON().admin == false
             && Transcendence.current_user.id != Transcendence.chatrooms.get(this.id).toJSON().owner

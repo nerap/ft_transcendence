@@ -17,7 +17,7 @@
                 <td style="width:40px;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
                 <td onclick='document.location = "/#users/<%= user2.id %>"' style="text-align:left;"><%= user2.username %></td>
                 <td><% if (user2.guild) { %>[<%= Transcendence.guilds.get(user2.guild).toJSON().anagram %>] <%= Transcendence.guilds.get(user2.guild).toJSON().name %><% } %></td>
-                <td><%= user2.id %></td>
+                <td><%= user2.score %></td>
                 <td class="users-action">
                     <form action="/api/private_rooms" method="post" data-remote="true" class="send-pm" id="<%= user2.id %>">
                         <button type="submit" class="menu-option">send PM</button>

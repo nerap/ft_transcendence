@@ -10,6 +10,8 @@ Transcendence.Views.FriendsIndex = Backbone.View.extend ({
         this.listenTo(Transcendence.guild_invitations , 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-user").addClass("active")
         var friends1 = this.collection.where({ user_one_id: Transcendence.current_user.id, pending: false });
         var friends2 = this.collection.where({ user_two_id: Transcendence.current_user.id, pending: false });
         var friends = friends1.concat(friends2);
