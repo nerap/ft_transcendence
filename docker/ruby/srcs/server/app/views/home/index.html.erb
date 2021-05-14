@@ -5,6 +5,7 @@
       private_rooms: <%== PrivateRoom.all.to_json(:include => :private_message) %>,
       users: <%== User.all.order(:username).to_json %>,
       friends: <%== Friend.all.to_json %>,
+      games: <%== Game.all.to_json %>,
       guilds: <%== Guild.all.order(:points).to_json %>,
       guild_wars: <%== GuildWar.all.to_json %>,
       guild_invitations: <%== GuildInvitation.all.to_json %>,

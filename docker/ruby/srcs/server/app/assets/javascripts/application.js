@@ -17,6 +17,7 @@ var Transcendence = {
     this.private_rooms = new Transcendence.Collections.PrivateRooms(data.private_rooms);
     this.users = new Transcendence.Collections.Users(data.users);
     this.friends = new Transcendence.Collections.Friends(data.friends);
+    this.games = new Transcendence.Collections.Games(data.games);
     this.guilds = new Transcendence.Collections.Guilds(data.guilds);
     this.guild_wars = new Transcendence.Collections.GuildWars(data.guild_wars);
     this.guild_invitations= new Transcendence.Collections.GuildInvitations(data.guild_invitations);
@@ -27,6 +28,7 @@ var Transcendence = {
     new Transcendence.Routers.PrivateRooms();
     new Transcendence.Routers.Users();
     new Transcendence.Routers.Friends();
+    new Transcendence.Routers.Games();
     new Transcendence.Routers.Guilds();
     new Transcendence.Routers.GuildWars();
     Backbone.history.start();
