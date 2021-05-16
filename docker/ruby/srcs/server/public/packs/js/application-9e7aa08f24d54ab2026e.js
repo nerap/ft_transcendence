@@ -94,15 +94,12 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./chatrooms_channel.js": "./app/javascript/channels/chatrooms_channel.js",
 	"./flash_admin_channel.js": "./app/javascript/channels/flash_admin_channel.js",
 	"./friend_channel.js": "./app/javascript/channels/friend_channel.js",
 	"./guild_channel.js": "./app/javascript/channels/guild_channel.js",
 	"./guild_invitation_channel.js": "./app/javascript/channels/guild_invitation_channel.js",
 	"./guild_war_channel.js": "./app/javascript/channels/guild_war_channel.js",
 	"./online_channel.js": "./app/javascript/channels/online_channel.js",
-	"./pm_channel.js": "./app/javascript/channels/pm_channel.js",
-	"./private_room_channel.js": "./app/javascript/channels/private_room_channel.js",
 	"./room_channel.js": "./app/javascript/channels/room_channel.js",
 	"./users_channel.js": "./app/javascript/channels/users_channel.js"
 };
@@ -126,30 +123,6 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./app/javascript/channels sync recursive _channel\\.js$";
-
-/***/ }),
-
-/***/ "./app/javascript/channels/chatrooms_channel.js":
-/*!******************************************************!*\
-  !*** ./app/javascript/channels/chatrooms_channel.js ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _consumer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./consumer */ "./app/javascript/channels/consumer.js");
-
-var chatroomsChannel = _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("ChatroomsChannel", {
-  connected: function connected() {// Called when the subscription is ready for use on the server
-  },
-  disconnected: function disconnected() {// Called when the subscription has been terminated by the server
-  },
-  received: function received(data) {
-    Transcendence.chatrooms.fetch();
-  }
-});
-/* harmony default export */ __webpack_exports__["default"] = (chatroomsChannel);
 
 /***/ }),
 
@@ -223,6 +196,7 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("FriendCh
   },
   received: function received(data) {
     Transcendence.friends.fetch();
+    Transcendence.guild_invitations.fetch();
   }
 });
 
@@ -280,8 +254,9 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("GuildInv
   disconnected: function disconnected() {// Called when the subscription has been terminated by the server
   },
   received: function received(data) {
-    Transcendence.users.fetch();
-    Transcendence.guild_invitations.fetch();
+    Transcendence.guild_invitations.fetch().done(function () {
+      console.log("salut");
+    });
   }
 });
 
@@ -360,68 +335,12 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("OnlineCh
   received: function received(data) {
     // Called when there's incoming data on the websocket for this channel
     if (data.online == "on" && Transcendence.users) {
-      Transcendence.users.fetch();
       Transcendence.users.get(data.user).set({
         online: true
       });
     } else if (data.online == "off" && Transcendence.users) {
       Transcendence.users.get(data.user).set({
         online: false
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./app/javascript/channels/pm_channel.js":
-/*!***********************************************!*\
-  !*** ./app/javascript/channels/pm_channel.js ***!
-  \***********************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var _consumer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./consumer */ "./app/javascript/channels/consumer.js");
-
-_consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("PmChannel", {
-  connected: function connected() {// Called when the subscription is ready for use on the server
-  },
-  disconnected: function disconnected() {// Called when the subscription has been terminated by the server
-  },
-  received: function received(data) {
-    Transcendence.private_rooms.get(data.content.private_room_id).fetch().done(function () {
-      if (Transcendence.current_user.id == data.content.user_id) $('#text-pm-field').val('');
-    });
-  }
-});
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery/src/jquery */ "./node_modules/jquery/src/jquery.js")))
-
-/***/ }),
-
-/***/ "./app/javascript/channels/private_room_channel.js":
-/*!*********************************************************!*\
-  !*** ./app/javascript/channels/private_room_channel.js ***!
-  \*********************************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _consumer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./consumer */ "./app/javascript/channels/consumer.js");
-
-_consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("PrivateRoomChannel", {
-  connected: function connected() {// Called when the subscription is ready for use on the server
-  },
-  disconnected: function disconnected() {// Called when the subscription has been terminated by the server
-  },
-  received: function received(data) {
-    if (data.content == "destroy") {
-      Transcendence.private_rooms.fetch();
-    } else {
-      Transcendence.private_rooms.fetch().done(function () {
-        if (Transcendence.current_user.id == data.userid) location.hash = "#private_rooms/" + data.roomid;
       });
     }
   }
@@ -446,32 +365,29 @@ var roomChannel = _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscription
   disconnected: function disconnected() {// Called when the subscription has been terminated by the server
   },
   received: function received(data) {
-    Transcendence.chatrooms.get(data.content.chatroom_id).fetch().done(function () {
-      if (Transcendence.current_user.id == data.content.user_id) $('#text-field').val('');
-    }); // let currentRoom = sessionStorage.getItem('chat_roomid')
-    // var loc = "#chatrooms/" + currentRoom;
-    // if (data.content.message && currentRoom == data.content.chatroom_id && location.hash == loc) {
-    //   let currentUser = sessionStorage.getItem('chat_userid')
-    //   let msg_class = currentUser == data.content.user_id ? "sent" : "received"
-    //   if (Transcendence.current_user.toJSON().block_list.includes(data.content.user_id)) {
-    //     var textMessage = `<span style='color:black;font-style:italic;'>&emsp;You have blocked ${data.user}.</span>`
-    //   } else {
-    //     var textMessage1 = `<table class="${msg_class}">`
-    //     if (msg_class == "sent") {
-    //       var textMessage2 = `<tr><td class="message-header">` + data.user + ` <img class="user-avatar-${msg_class}" src="/assets/blank-profile-picture.jpg" /></td></tr>`
-    //     } else {
-    //       var textMessage2 = `<tr><td class="message-header"><img class="user-avatar-${msg_class}" src="/assets/blank-profile-picture.jpg" /> ` + data.user + `</td></tr>`
-    //     }
-    //     var textMessage3 = `<tr><td class="message-content">` + data.content.message + `</td></tr>` +
-    //       `<tr><td class="message-footer">` + data.created_at + `</td></tr>` +
-    //       `</table>`;
-    //     var textMessage = textMessage1 + textMessage2 + textMessage3;
-    //   }
-    //   $('#messages').append(textMessage)
-    //   $('#text-field').val('')
-    //   var chatHistory = document.getElementById("messages");
-    //   chatHistory.scrollTop = chatHistory.scrollHeight;
-    // }
+    if (data.type == "chatrooms") {
+      if (data.action == "chats") {
+        Transcendence.chatrooms.get(data.content.chatroom_id).fetch().done(function () {
+          if (Transcendence.current_user.id == data.content.user_id) $('#text-field').val('');
+        });
+      } else if (data.action == "update") {
+        Transcendence.chatrooms.fetch();
+      }
+    } else if (data.type == "private_rooms") {
+      if (data.action == "chats") {
+        Transcendence.private_rooms.get(data.content.private_room_id).fetch().done(function () {
+          if (Transcendence.current_user.id == data.content.user_id) $('#text-pm-field').val('');
+        });
+      } else if (data.action == "update") {
+        if (data.updateType == "add") {
+          Transcendence.private_rooms.fetch().done(function () {
+            if (Transcendence.current_user.id == data.userid) location.hash = "#private_rooms/" + data.roomid;
+          });
+        } else {
+          Transcendence.private_rooms.fetch();
+        }
+      }
+    }
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (roomChannel);
@@ -32029,4 +31945,4 @@ module.exports = function (module) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-2eaa2b813916443b1b75.js.map
+//# sourceMappingURL=application-9e7aa08f24d54ab2026e.js.map
