@@ -49,7 +49,7 @@ class Registrations::RegistrationsController < Devise::RegistrationsController
     end
     FileUtils.rm_rf("public/avatars/#{user.id}")
     ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
-    ActionCable.server.broadcast "private_room_channel", content: "destroy"
+    ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "update", updateType: "destroy"
     user.destroy
     ActionCable.server.broadcast "users_channel", content: "profile"
     # super
