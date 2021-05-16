@@ -1,7 +1,6 @@
-Transcendence.Routers.Games = Backbone.Router.extend({
+Transcendence.Routers.Pongs = Backbone.Router.extend({
     routes: {
-        "games": "index",
-        "games/:id": "game",
+        "pongs/:id": "pong",
     },
     initialize: function () {
         this.view = null;
@@ -13,25 +12,19 @@ Transcendence.Routers.Games = Backbone.Router.extend({
             success: function(response)
             {
             }
-        });}, 60000);
+        });}, 20000);
         if (this.view)
             this.view.remove();
         this.view = null;
     },
-    index: function () {
-        this.cleanUp();
-        this.view = new Transcendence.Views.GamesIndex({ collection: Transcendence.games });
-        $('#main-body').html(this.view.render().$el);
-    },
-    game: function (id) {
-        if (!Transcendence.games.get(id)) {
+    pong: function (id) {
+        if (!Transcendence.pongs.get(id)) {
             location.hash = "#games";
             flashMessage("error", "This game doesn't exist !");
         } else {
             this.cleanUp();
-            this.view = new Transcendence.Views.GamesGame({
-                model: Transcendence.games.get(id),
-                collection: Transcendence.games,
+            this.view = new Transcendence.Views.PongsGame({
+                model: Transcendence.pongs.get(id),
                 id: id
             });
             $('#main-body').html(this.view.render().$el);

@@ -15,7 +15,7 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
             success: function(response)
             {
             }
-        });}, 20000);
+        });}, 60000);
         if (this.view)
             this.view.remove();
         this.view = null;
