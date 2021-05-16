@@ -8,7 +8,10 @@
                 return usr != Transcendence.current_user.id;
             })).toJSON() %>
         <tr class="pm-opts">
-            <td class="pm-opt" onclick='document.location="/#private_rooms/<%= pr.id %>"'><img style="display:inline;vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>"> <%= to_user.username %></td>
+            <td class="pm-opt" onclick='document.location="/#private_rooms/<%= pr.id %>"'>
+                <img style="display:inline-block;vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>">
+                <%= to_user.username %>
+            </td>
             <td class="pm-opt" style="width:20px;">
                 <a href="/api/private_rooms/<%= pr.id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow" data-confirm="Are you sure ?"><div>&times;</div></a>
             </td>
