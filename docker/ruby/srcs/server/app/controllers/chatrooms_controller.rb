@@ -24,7 +24,7 @@ class ChatroomsController < ApplicationController
         end
         if @chatroom.save
             flash[:notice] = "#{@chatroom.name} was created successfully"
-            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+            ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
             ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
         else
             flash[:error] = ""
@@ -58,7 +58,7 @@ class ChatroomsController < ApplicationController
             end
             if @chatroom.save
                 flash[:notice] = "#{@chatroom.name} was updated successfully"
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
             else
                 flash[:error] = ""
@@ -87,7 +87,7 @@ class ChatroomsController < ApplicationController
             chatroom.destroy
             respond_to do |format|
                 flash[:notice] = "#{name} was deleted successfully"
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                 ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                 format.json { head :no_content }
             end
@@ -103,7 +103,7 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 if chatroom.save
                     flash[:notice] = "You are now a member of #{chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                     ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: chatroom }, status: :ok }
                 end
@@ -129,7 +129,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:notice] = "You have named #{user.username} admin !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", chatroom: chatroom, user: user.id, type: "admin"
                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
@@ -155,7 +155,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:deleted] = "You have been demoted as member in #{chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -197,7 +197,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:notice] = "You have banned #{user.username} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", chatroom: chatroom, user: user.id, type: "ban"
                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
@@ -224,7 +224,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:notice] = "You have been unbanned from #{chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -260,7 +260,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:deleted] = "You have been muted from #{chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -286,7 +286,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if chatroom.save
                         flash[:notice] = "You have been unmuted from #{chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -322,7 +322,7 @@ class ChatroomsController < ApplicationController
             ChatroomMute.where(chatroom_id: chatroom.id, user_id: newowner.id).destroy_all
             respond_to do |format|
                 if chatroom.save
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                     ActionCable.server.broadcast "flash_admin_channel:#{newowner.id}", chatroom: chatroom, user: newowner.id, type: "owner"
                     format.json { render json: { chatroom: chatroom }, status: :ok }
                 end
@@ -345,7 +345,7 @@ class ChatroomsController < ApplicationController
                 respond_to do |format|
                     if @chatroom.save
                         flash[:notice] = "You are now a member of #{@chatroom.name} !"
-                        ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                        ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: @chatroom }, status: :ok }
                     end
@@ -370,7 +370,7 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 if @chatroom.save
                     flash[:deleted] = "You are no longer a member of #{@chatroom.name} !"
-                    ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                    ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                     ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                     format.json { render json: { chatroom: @chatroom }, status: :ok }
                 end
@@ -400,7 +400,7 @@ class ChatroomsController < ApplicationController
                 ban.chatroom.banned.delete(ban.user_id)
                 ban.chatroom.save
                 ban.destroy
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
             end
         end
         if mutes = ChatroomMute.where("end_time < ?", DateTime.now)
@@ -408,7 +408,7 @@ class ChatroomsController < ApplicationController
                 mute.chatroom.muted.delete(mute.user_id)
                 mute.chatroom.save
                 mute.destroy
-                ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+                ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
             end
         end
     end

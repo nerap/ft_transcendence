@@ -18,7 +18,7 @@ class PrivateRoomsController < ApplicationController
             private_room.users.push(user1)
             private_room.users.push(user2)
             if private_room.save
-                ActionCable.server.broadcast "private_room_channel", content: "ok", roomid: private_room.id, userid: current_user.id
+                ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "update", updateType: "add", roomid: private_room.id, userid: current_user.id
             else
                 respond_to do |format|
                     flash[:error] = "Something is wrong"
@@ -32,7 +32,7 @@ class PrivateRoomsController < ApplicationController
     def destroy
         private_room = PrivateRoom.find(params[:id])
         private_room.destroy
-        ActionCable.server.broadcast "private_room_channel", content: "destroy"
+        ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "update", updateType: "destroy"
         # respond_to do |format|
             # flash[:notice] = "This conversation was deleted successfully"
             # ActionCable.server.broadcast "chatrooms_channel", content: "ok"

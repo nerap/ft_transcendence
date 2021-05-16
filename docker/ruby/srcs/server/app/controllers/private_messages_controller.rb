@@ -8,7 +8,7 @@ class PrivateMessagesController < ApplicationController
         pm.date_creation = Time.now.strftime('%I:%M %p')
         respond_to do |format|
             if pm.save
-                ActionCable.server.broadcast "pm_channel", content: pm, user: pm.user.try(:username), created_at: pm.created_at.to_s
+                ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "chats", content: pm
                 format.html { redirect_to pm, notice: "PM was successfully created." }
                 format.json { render :show, status: :created, location: pm }
                 format.js

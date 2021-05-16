@@ -13,7 +13,7 @@ class ChatsController < ApplicationController
       @chat.date_creation = Time.now.strftime('%I:%M %p')
       respond_to do |format|
         if @chat.save
-          ActionCable.server.broadcast 'room_channel', content: @chat, user: @chat.user.try(:username), created_at: @chat.created_at.to_s
+          ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "chats", content: @chat
           format.html { redirect_to @chat, notice: "Chat was successfully created." }
           format.json { render :show, status: :created, location: @chat }
           format.js
@@ -44,7 +44,7 @@ class ChatsController < ApplicationController
             ban.chatroom.banned.delete(ban.user_id)
             ban.chatroom.save
             ban.destroy
-            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+            ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
         end
     end
     if mutes = ChatroomMute.where("end_time < ?", DateTime.now)
@@ -52,7 +52,7 @@ class ChatsController < ApplicationController
             mute.chatroom.muted.delete(mute.user_id)
             mute.chatroom.save
             mute.destroy
-            ActionCable.server.broadcast "chatrooms_channel", content: "ok"
+            ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
         end
     end
   end
