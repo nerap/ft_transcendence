@@ -10,9 +10,10 @@ class Registrations::RegistrationsController < Devise::RegistrationsController
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super
+    ActionCable.server.broadcast "users_channel", content: "profile"
+  end
 
   # GET /resource/edit
   # def edit
