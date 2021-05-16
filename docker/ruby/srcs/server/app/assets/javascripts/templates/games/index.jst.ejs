@@ -1,0 +1,64 @@
+<div id="users-index">
+    <form action="/api/games" method="post" data-remote="true" id="search_game">
+
+        Ladder :
+        <input id="ladder-id" type="checkbox" name="ladder">
+        <br>
+        Faster :
+        <input id="faster-id" type="checkbox" name="faster">
+        <br>
+        Giant :
+        <input id="giant-id" type="checkbox" name="giant">
+        <br>
+        Reverse :
+        <input id="reverse-id" type="checkbox" name="reverse">
+        <br>
+        <input type="hidden" name="pending" value="true">
+        <input type="hidden" id="ladder-id-check" name="ladder" value="false">
+        <input type="hidden" id="duel-id" name="duel" value="false">
+        <input type="hidden" id="classic-id" name="classic" value="true">
+
+        <input type="hidden" id="faster-id-hidden" name="faster" value="false">
+        <input type="hidden" id="giant-id-hidden" name="giant" value="false">
+        <input type="hidden" id="reverse-id-hidden" name="reverse" value="false">
+        <input type="hidden" name="user_one_id" value="<%= Transcendence.current_user.toJSON().id %>">
+        <input type="hidden" name="user_two_id" value="nil">
+
+        <input type="hidden" name="done" value="false">
+        <input type="hidden" name="user_one_score" value="0">
+        <input type="hidden" name="user_two_score" value="0">
+        <input type="hidden" name="done" value="false">
+        <button type="submit" class="menu-option">Search</button>
+        <input type="hidden" name="authenticity_token"
+                        value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+</div>
+<script>
+     $('#search_game').submit(function() {
+        console.log(document.getElementById('ladder-id').value)
+
+        if (document.getElementById('ladder-id').checked == true)
+        {
+            document.getElementById('ladder-id-check').value = "true"
+            document.getElementById('duel-id').value = "false"
+        }
+        else
+        {
+            document.getElementById('ladder-id-check').value = "false"
+            document.getElementById('duel-id').value = "true"
+        }
+        if (document.getElementById("faster-id").checked == true)
+            document.getElementById("faster-id-hidden").value = "true"
+        else
+            document.getElementById("faster-id-hidden").value = "false"
+        if (document.getElementById("giant-id").checked == true)
+            document.getElementById("giant-id-hidden").value = "true"
+        else
+            document.getElementById("giant-id-hidden").value = "false"
+        if (document.getElementById("reverse-id").checked == true)
+            document.getElementById("reverse-id-hidden").value = "true"
+        else
+            document.getElementById("reverse-id-hidden").value = "false"
+        return true;
+    });
+</script>

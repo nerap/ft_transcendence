@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_184252) do
+ActiveRecord::Schema.define(version: 2021_05_16_000226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,23 @@ ActiveRecord::Schema.define(version: 2021_05_13_184252) do
     t.boolean "pending"
   end
 
+  create_table "games", force: :cascade do |t|
+    t.bigint "user_one_id"
+    t.bigint "user_two_id"
+    t.bigint "user_one_score"
+    t.bigint "user_two_score"
+    t.boolean "classic"
+    t.boolean "giant"
+    t.boolean "reverse"
+    t.boolean "faster"
+    t.boolean "pending"
+    t.boolean "done"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "duel"
+    t.boolean "ladder"
+  end
+
   create_table "guild_invitations", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "guild_id"
@@ -104,6 +121,20 @@ ActiveRecord::Schema.define(version: 2021_05_13_184252) do
     t.bigint "win"
     t.bigint "loose"
     t.bigint "war"
+  end
+
+  create_table "pongs", force: :cascade do |t|
+    t.bigint "user_one_id"
+    t.bigint "user_two_id"
+    t.bigint "user_one_score"
+    t.bigint "user_two_score"
+    t.string "mode"
+    t.boolean "ladder"
+    t.boolean "pending"
+    t.boolean "started"
+    t.boolean "done"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "private_messages", force: :cascade do |t|
