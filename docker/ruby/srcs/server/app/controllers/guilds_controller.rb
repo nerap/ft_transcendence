@@ -36,7 +36,7 @@ class GuildsController < ApplicationController
           user_params.guild = Guild.find_by(name: guild_params[:name]).id
           user_params.save
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: current_user.id
+          ActionCable.server.broadcast "guild_channel", content: "ok"
         else
           flash[:error] = ""
           @guild.errors.full_messages.each do |msg|
@@ -69,7 +69,7 @@ class GuildsController < ApplicationController
       user_params.member = false
       if user_params.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "create_guild", userid: current_user.id
+        ActionCable.server.broadcast "guild_channel", content: "ok"
       end
     end
 
@@ -87,7 +87,7 @@ class GuildsController < ApplicationController
 
         if guild_temp.save && user_params.save && guild_temp.save
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
+          ActionCable.server.broadcast "guild_channel", content: "ok"
         end
       elsif User.where(guild: guild_temp.id).length <= 1
         user_params.guild = nil
@@ -96,7 +96,7 @@ class GuildsController < ApplicationController
         if user_params.save
           guild_temp.destroy
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
+          ActionCable.server.broadcast "guild_channel", content: "ok"
         end
       elsif user_params.id == guild_temp.owner
         flash[:error] = "User not viable !"
@@ -107,7 +107,7 @@ class GuildsController < ApplicationController
         user_params.member = false
         if user_params.save
           ActionCable.server.broadcast "users_channel", content: "profile"
-          ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
+          ActionCable.server.broadcast "guild_channel", content: "ok"
         end
       end
     end
@@ -157,12 +157,12 @@ class GuildsController < ApplicationController
         temp.officer = false
         temp.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id       
+        ActionCable.server.broadcast "guild_channel", content: "ok"
       end
       @guild.destroy
       respond_to do |format|
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "leave", userid: current_user.id
+        ActionCable.server.broadcast "guild_channel", content: "ok"
         format.json { head :no_content }
       end
     end

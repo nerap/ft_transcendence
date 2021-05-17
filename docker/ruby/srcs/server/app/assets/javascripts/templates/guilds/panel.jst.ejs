@@ -28,8 +28,7 @@
         <form action="/api/guilds/leave_guild" accept-charset="UTF-8" method="post" data-remote="true">
             <input type="hidden" name="current_id" value="<%= Transcendence.current_user.toJSON().id %>">
             <button type="submit" class="delete">Leave</button>
-            <input type="hidden" name="authenticity_token"
-                    value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         </form>
     </div>
     <% } %>
