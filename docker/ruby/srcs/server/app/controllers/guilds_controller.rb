@@ -52,12 +52,19 @@ class GuildsController < ApplicationController
   
     # PATCH/PUT /guilds/1 or /guilds/1.json
     def update
-      respond_to do |format|
-        if @guild.update(guild_params)
-          ActionCable.server.broadcast "guild_channel", content: "ok"
-          format.json { render :show, status: :ok, location: @guild }
-        else
-          format.json { render json: @guild.errors, status: :unprocessable_entity }
+      if current_user.id == @guild.owner
+        respond_to do |format|
+          if @guild.update(guild_params)
+            ActionCable.server.broadcast "guild_channel", content: "ok"
+            format.json { render :show, status: :ok, location: @guild }
+          else
+            flash[:error] = ""
+            @guild.errors.full_messages.each do |msg|
+              flash[:error] = flash[:error] << msg << "<br/>"
+            end
+            ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+            format.json { render json: { guild: @guild }, status: :unprocessable_entity }
+          end
         end
       end
     end

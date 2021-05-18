@@ -11,13 +11,14 @@
         <input type="hidden" name="loose" value="0">
         <input type="hidden" name="war" value="null">
         <input type="hidden" name="owner" value="<%= Transcendence.current_user.id %>">
-        <div style="padding:5px;"><button type="submit" name="commit" class="edit">Create a guild</button></div>
+        <div style="padding:5px;"><button type="submit" name="commit" class="edit">create a guild</button></div>
         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
     </form>
     <% } else { %>
+    <% guild = Transcendence.guilds.get(Transcendence.current_user.toJSON().guild).toJSON() %>
     <div class="sideform">
         <div style="padding:5px"><a href="#guilds/<%= Transcendence.current_user.toJSON().guild %>"><button class="edit">my guild</button></a></div>
-        <% if (Transcendence.current_user.id == Transcendence.guilds.get(Transcendence.current_user.toJSON().guild).toJSON().owner) {
+        <% if (Transcendence.current_user.id == guild.owner) {
             grade = "Master"
         } else if (Transcendence.current_user.toJSON().officer == true) {
             grade = "Officer"
@@ -26,9 +27,47 @@
         } else {
             grade = "Member"
         } %>
-        Grade: <span style="font-family:Impact;"><%= grade %></span>
+        Grade: <span style="font-family:Impact;"><%= grade %></span><br/>
+        Guild score: <span style="font-family:Impact;"><%= guild.points %></span><br/>
+        Wars won: <span style="font-family:Impact;"><%= guild.win %></span><br/>
+        <form action="/api/guilds/leave_guild" accept-charset="UTF-8" method="post" data-remote="true">
+            <input type="hidden" name="current_id" value="<%= Transcendence.current_user.toJSON().id %>">
+            <button type="submit" class="edit destroy">leave guild</button>
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
     </div>
+    <% if (Transcendence.current_user.id == guild.owner) { %>
+        <form class="sideform" action="/api/guilds/<%= Transcendence.current_user.toJSON().guild %>" style="margin-top:0;border-top:none" accept-charset="UTF-8" method="post" data-remote="true">
+            <input type="hidden" name="_method" value="patch">
+            Edit guild name<br/>
+            <input value="<%= guild.name %>" autocomplete="off" type="text" name="name" minlength="4" maxlength="12">
+            <br>Edit anagram <i style="font-size:12px;">(5 letters)</i><br/>
+            <input value="<%= guild.anagram %>" autocomplete="off" type="text" name="anagram" minlength="5" maxlength="5">
+            <br/>
+            <div style="padding:5px;"><button type="submit" name="commit" class="edit">edit guild</button></div>
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            <button type="button" class="edit destroy" onclick='$("#destroy-modal").show()'>destroy guild</button>
+        </form>
     <% } %>
+    <% } %>
+</div>
+
+<div id="destroy-modal" class="modal">
+    <div class="modal-content">
+        <span id="close" onclick='$("#destroy-modal").hide()'>&times;</span><br/>
+        <div class="modal-header">
+            <img class="padlock-image" src="/assets/warning.png">
+            Are you sure you want to<br/>destroy this guild ?<br/>
+            <i style="font-size:15px">(this action is irreversible)</i>
+        </div>
+        <br/>
+        <form action="/api/guilds/<%= guild.id %>" method="post" data-remote="true">
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+            <button type="submit" name="commit" class="confirm-choice yes">Yes</button>
+            <button type="button" class="confirm-choice" onclick='$("#destroy-modal").hide()'>No</button>
+        </form>
+    </div>
 </div>
 
 <div id="users-index" style="margin-left:200px;">
