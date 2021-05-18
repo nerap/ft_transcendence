@@ -8,10 +8,20 @@ img {
   padding: 0;
 }
 
+h1 {
+  font-family: Impact;
+  text-align: center;
+}
+
 body, p, ol, ul, td {
   font-family: sans-serif, verdana, arial, helvetica;
   font-size: 13px;
   line-height: 18px; }
+
+@font-face {
+  font-family: Impact;
+  src: url('/fonts/impact.ttf') format('truetype');
+}
 
 pre {
   background-color: #eee;

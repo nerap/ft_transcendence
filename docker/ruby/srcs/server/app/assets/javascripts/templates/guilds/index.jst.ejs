@@ -16,7 +16,17 @@
     </form>
     <% } else { %>
     <div class="sideform">
-        <div style="padding:5px"><a href="#guilds/<%= Transcendence.current_user.toJSON().guild %>"><button class="edit">My guild</button></a></div>
+        <div style="padding:5px"><a href="#guilds/<%= Transcendence.current_user.toJSON().guild %>"><button class="edit">my guild</button></a></div>
+        <% if (Transcendence.current_user.id == Transcendence.guilds.get(Transcendence.current_user.toJSON().guild).toJSON().owner) {
+            grade = "Master"
+        } else if (Transcendence.current_user.toJSON().officer == true) {
+            grade = "Officer"
+        } else if (Transcendence.current_user.toJSON().member == true) {
+            grade = "VIP Member"
+        } else {
+            grade = "Member"
+        } %>
+        Grade: <span style="font-family:Impact;"><%= grade %></span>
     </div>
     <% } %>
 </div>

@@ -21,6 +21,7 @@ nav#navbar {
             width: auto;
             background-color: rgb(100, 100, 100);
             a {
+                font-family: sans-serif;
                 font-size: 15px;
                 display: block;
                 padding-top: 5px;
@@ -50,8 +51,9 @@ nav#navbar {
         height: 40px;
         color: white;
         text-decoration: none;
-        font-size: 18px;
+        font-size: 25px;
         font-variant: small-caps;
+        font-family: Impact;
     }
     li a:hover {
         background-color:rgb(3, 139, 180);
