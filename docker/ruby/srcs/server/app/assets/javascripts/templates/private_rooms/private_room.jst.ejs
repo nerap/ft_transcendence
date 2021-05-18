@@ -1,19 +1,17 @@
 <div id="sidenav">
+    <div class="sideform" style="margin-top:0;"><a href="#private_rooms"><button class="edit">search user</button></a></div>
     <table>
-        <tr>
-            <td colspan="2" style="text-align:center;font-variant:small-caps;border-bottom:1px solid rgba(0, 0, 0, 0.5);"><a style="text-decoration:none;" href="#private_rooms">Search user</a></td>
-        </tr>
         <% prs.forEach(function(pr) { %>
-            <% var to_user = Transcendence.users.get(pr.toJSON().users.filter(function(usr) {
-                return usr != Transcendence.current_user.id;
-            })).toJSON() %>
+        <% var to_user = Transcendence.users.get(pr.toJSON().users.filter(function(usr) {
+            return usr != Transcendence.current_user.id;
+        })).toJSON() %>
         <tr class="pm-opts">
             <td class="pm-opt" onclick='document.location="/#private_rooms/<%= pr.id %>"'>
                 <img style="display:inline-block;vertical-align:middle;width:20px;height:20px;border-radius:50%" src="<%= to_user.avatar %>">
                 <%= to_user.username %>
             </td>
             <td class="pm-opt" style="width:20px;">
-                <a href="/api/private_rooms/<%= pr.id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow" data-confirm="Are you sure ?"><div>&times;</div></a>
+                <a href="/api/private_rooms/<%= pr.id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow" data-confirm="Are you sure ? All messages will be deleted"><div style="padding-right:3px;">&times;</div></a>
             </td>
             <div id="destroy-pm-<%= pr.id %>" class="modal">
                 <div class="modal-content">

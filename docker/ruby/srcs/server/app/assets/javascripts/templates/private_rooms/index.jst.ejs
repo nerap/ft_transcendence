@@ -1,10 +1,6 @@
 <div id="sidenav">
+    <div class="sideform" style="margin-top:0;"><a href="#private_rooms"><button class="edit">search user</button></a></div>
     <table>
-        <tr>
-            <td colspan="2"
-                style="text-align:center;font-variant:small-caps;border-bottom:1px solid rgba(0, 0, 0, 0.5);">
-                <a style="text-decoration:none;" href="#private_rooms"></a>Search user</a></td>
-        </tr>
         <% prs.forEach(function(pr) { %>
         <% var to_user = Transcendence.users.get(pr.toJSON().users.filter(function(usr) {
             return usr != Transcendence.current_user.id;
