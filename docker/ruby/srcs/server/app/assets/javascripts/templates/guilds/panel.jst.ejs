@@ -116,7 +116,7 @@
         <% if (model.toJSON().guild == curguild.id) { %>
         <tr>
             <td><img style="width:20px;height:20px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
-            <% if ((curguild.owner == Transcendence.current_user.id || Transcendence.current_user.toJSON().officer == true)
+            <% if ((curguild.owner == Transcendence.current_user.id || (Transcendence.current_user.toJSON().officer == true && Transcendence.current_user.toJSON().guild == curguild.id))
             && (Transcendence.current_user.id != model.id && model.id != curguild.owner)) { %>
             <td style="width:100%;" class="guild-user-menu <%= model.id %>"><%= model.toJSON().username %></td>
             <% } else { %>

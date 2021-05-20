@@ -52,7 +52,7 @@
     <% if (pending1.length > 0) { %>
     <table style="width:min-content;display:inline-table;">
         <tr>
-            <th colspan="4">Friendship Requests</th>
+            <th colspan="4">Friendship requests</th>
         </tr>
         <% pending1.forEach(function(pending) { %>
             <% user2 = Transcendence.users.get(pending.toJSON().user_two_id).toJSON() %>

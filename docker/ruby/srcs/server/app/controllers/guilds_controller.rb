@@ -153,7 +153,7 @@ class GuildsController < ApplicationController
 
     def kick
       user_params = User.find_by_id(params[:current_id])
-      if (current_user.id == @guild.owner || current_user.officer == true) && user_params.officer == false
+      if (current_user.id == @guild.owner || (current_user.officer == true && current_user.guild == @guild.id)) && user_params.officer == false
         user_params.guild = nil
         user_params.officer = false
         if user_params.save
@@ -195,7 +195,7 @@ class GuildsController < ApplicationController
         user = User.find_by_username(username_value)
         if (user && user.guild == guild_id)
           return true
-        return false 
         end
+        return false 
       end
     end
