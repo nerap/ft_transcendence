@@ -23,3 +23,45 @@
         <% }) %>
     </table>
 </div>
+
+
+
+
+<td class="kicks-action">
+    <% if ((guild.owner == Transcendence.current_user.toJSON().id) || (model.toJSON().officer == "true")) { %>
+    <% if ((model.toJSON().id != guild.owner) && (model.toJSON().id != Transcendence.current_user.toJSON().id)) { %>
+    <form action="/api/guilds/kick" method="post" data-remote="true" id="kick_id"
+        class="kick_form">
+        <button type="submit" class="delete">Kick</button>
+        <input type="hidden" name="current_id" value="<%= model.toJSON().id %>">
+        <input type="hidden" name="authenticity_token"
+            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+    <% }} %>
+</td>
+<td class="create-chatroom">
+    <% if (guild.owner == Transcendence.current_user.toJSON().id) { %>
+    <% if (model.toJSON().id != guild.owner) { %>
+    <% if (model.toJSON().officer == false) { %>
+    <form action="/api/guilds/promote" method="post" data-remote="true" id="promote_id"
+        class="promote_form">
+        <button type="submit" class="promote">Promote</button>
+        <input type="hidden" name="current_id" value="<%= model.toJSON().id %>">
+        <input type="hidden" name="authenticity_token"
+            value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+    </form>
+    <% }}} %>
+</td>
+<td class="create-chatroom">
+    <% if (guild.owner == Transcendence.current_user.toJSON().id) { %>
+    <% if (model.toJSON().id != guild.owner) { %>
+    <% if ((model.toJSON().member == true) || (model.toJSON().officer == true)) { %>
+        <form action="/api/guilds/demote" method="post" data-remote="true" id="demote_id"
+            class="demote_form">
+            <button type="submit" class="demote">Demote</button>
+            <input type="hidden" name="current_id" value="<%= model.toJSON().id %>">
+            <input type="hidden" name="authenticity_token"
+                    value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+    <% }}} %>
+</td>

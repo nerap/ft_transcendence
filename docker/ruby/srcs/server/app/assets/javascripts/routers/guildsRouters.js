@@ -1,7 +1,6 @@
 Transcendence.Routers.Guilds = Backbone.Router.extend({
     routes: {
         "guilds": "index",
-        "guilds/new": "new",
         "guilds/:id": "guild",
     },
     initialize: function () {
@@ -22,11 +21,6 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
     index: function () {
         this.cleanUp();
         this.view = new Transcendence.Views.GuildsIndex({ collection: Transcendence.guilds });
-        $('#main-body').html(this.view.render().$el);
-    },
-    new: function () {
-        this.cleanUp();
-        this.view = new Transcendence.Views.GuildsNew();
         $('#main-body').html(this.view.render().$el);
     },
     guild: function (id) {

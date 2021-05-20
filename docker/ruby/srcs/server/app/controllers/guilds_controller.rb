@@ -1,6 +1,6 @@
 class GuildsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_guild, only: %i[ show edit update destroy ]
+    before_action :set_guild, only: %i[ show edit update destroy promote demote kick ]
     before_action { flash.clear }
   
     # GET /guilds or /guilds.json
@@ -106,7 +106,7 @@ class GuildsController < ApplicationController
           ActionCable.server.broadcast "guild_channel", content: "ok"
         end
       elsif user_params.id == guild_temp.owner
-        flash[:error] = "User not viable !"
+        flash[:error] = "User must be a member of the guild !"
         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
       else
         user_params.guild = nil
@@ -121,39 +121,45 @@ class GuildsController < ApplicationController
 
     def promote
       user_params = User.find_by_id(params[:current_id])
-      if user_params.member == true
-        user_params.member = false
-        user_params.officer = true
-      elsif user_params.officer == false && user_params.member == false
-        user_params.member = true
-      end
-      if user_params.save
-        ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+      if current_user.id == @guild.owner
+        if user_params.member == true
+          user_params.member = false
+          user_params.officer = true
+        elsif user_params.officer == false && user_params.member == false
+          user_params.member = true
+        end
+        if user_params.save
+          ActionCable.server.broadcast "users_channel", content: "profile"
+          ActionCable.server.broadcast "guild_channel", content: "ok"
+        end
       end
     end
 
     def demote
       user_params = User.find_by_id(params[:current_id])
-      if user_params.member == true
-        user_params.member = false
-      elsif user_params.officer == true
-        user_params.officer = false
-        user_params.member = true
-      end
-      if user_params.save
-        ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+      if current_user.id == @guild.owner
+        if user_params.member == true
+          user_params.member = false
+        elsif user_params.officer == true
+          user_params.officer = false
+          user_params.member = true
+        end
+        if user_params.save
+          ActionCable.server.broadcast "users_channel", content: "profile"
+          ActionCable.server.broadcast "guild_channel", content: "ok"
+        end
       end
     end
 
     def kick
       user_params = User.find_by_id(params[:current_id])
-      user_params.guild = nil
-      user_params.officer = false
-      if user_params.save
-        ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+      if (current_user.id == @guild.owner || current_user.officer == true) && user_params.officer == false
+        user_params.guild = nil
+        user_params.officer = false
+        if user_params.save
+          ActionCable.server.broadcast "users_channel", content: "profile"
+          ActionCable.server.broadcast "guild_channel", content: "ok"
+        end
       end
     end
   
