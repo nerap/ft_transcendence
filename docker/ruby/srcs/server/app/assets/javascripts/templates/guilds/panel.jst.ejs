@@ -116,7 +116,7 @@
         <% if (model.toJSON().guild == curguild.id) { %>
         <tr>
             <td><img style="width:20px;height:20px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
-            <% if ((curguild.owner == Transcendence.current_user.id || (Transcendence.current_user.toJSON().officer == true && Transcendence.current_user.toJSON().guild == curguild.id))
+            <% if ((Transcendence.current_user.toJSON().admin == true || curguild.owner == Transcendence.current_user.id || (Transcendence.current_user.toJSON().officer == true && Transcendence.current_user.toJSON().guild == curguild.id))
             && (Transcendence.current_user.id != model.id && model.id != curguild.owner)) { %>
             <td style="width:100%;" class="guild-user-menu <%= model.id %>"><%= model.toJSON().username %></td>
             <% } else { %>
@@ -139,7 +139,7 @@
     <div class="actions-menu">
         <ul>
             <li><a class="actions-menu-link" href="#users/">profile</a></li>
-            <% if (Transcendence.current_user.id == curguild.owner) { %>
+            <% if (Transcendence.current_user.toJSON().admin == true || Transcendence.current_user.id == curguild.owner) { %>
             <li>
                 <form action="/api/guilds/promote" method="post" data-remote="true">
                     <input type="submit" value="promote">

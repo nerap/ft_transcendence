@@ -121,7 +121,7 @@ class GuildsController < ApplicationController
 
     def promote
       user_params = User.find_by_id(params[:current_id])
-      if current_user.id == @guild.owner
+      if is_sadmin(current_user) || is_owner(current_user, @guild)
         if user_params.member == true
           user_params.member = false
           user_params.officer = true
@@ -137,7 +137,7 @@ class GuildsController < ApplicationController
 
     def demote
       user_params = User.find_by_id(params[:current_id])
-      if current_user.id == @guild.owner
+      if is_sadmin(current_user) || is_owner(current_user, @guild)
         if user_params.member == true
           user_params.member = false
         elsif user_params.officer == true
@@ -153,7 +153,8 @@ class GuildsController < ApplicationController
 
     def kick
       user_params = User.find_by_id(params[:current_id])
-      if (current_user.id == @guild.owner || (current_user.officer == true && current_user.guild == @guild.id)) && user_params.officer == false
+      if (is_sadmin(current_user) || is_owner(current_user, @guild) || is_officer(current_user, @guild)) \
+        && !is_owner(user_params, @guild) && !is_officer(user_params, @guild) && !is_sadmin(user_params)
         user_params.guild = nil
         user_params.officer = false
         if user_params.save
@@ -180,22 +181,34 @@ class GuildsController < ApplicationController
       end
     end
   
-    private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_guild
-        @guild = Guild.find(params[:id])
-      end
-  
-      # Only allow a list of trusted parameters through.
-      def guild_params
-        params.permit(:name, :anagram, :points, :owner, :win, :loose, :war)
-      end
+  private
+  def set_guild
+    @guild = Guild.find(params[:id])
+  end
 
-      def check_owner(username_value, guild_id)
-        user = User.find_by_username(username_value)
-        if (user && user.guild == guild_id)
-          return true
-        end
-        return false 
-      end
+  def guild_params
+    params.permit(:name, :anagram, :points, :owner, :win, :loose, :war)
+  end
+
+  def check_owner(username_value, guild_id)
+    user = User.find_by_username(username_value)
+    if (user && user.guild == guild_id)
+      return true
     end
+    return false 
+  end
+
+  def is_owner(user, guild)
+    if user.id == guild.owner
+      return true
+    end
+    return false
+  end
+
+  def is_officer(user, guild)
+    if user.officer == true && user.guild == guild.id
+      return true
+    end
+    return false
+  end
+end
