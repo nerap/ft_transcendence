@@ -211,7 +211,7 @@ class GuildWarsController < ApplicationController
   
       # Only allow a list of trusted parameters through.
       def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :faster, :giant, :reverse, :pending, :done, :started, :guild_forfeit)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :pending, :done, :started, :guild_forfeit)
       end
 
 end

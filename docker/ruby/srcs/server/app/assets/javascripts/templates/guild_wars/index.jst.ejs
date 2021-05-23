@@ -33,9 +33,6 @@
                                     <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Prize :  <%= bob.toJSON().prize %></b></p>
                                     <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Duels : <%= bob.toJSON().duels %></b></p>
                                     <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Ladder : <%= bob.toJSON().ladder %></b></p>
-                                    <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Faster : <%= bob.toJSON().faster %></b></p>
-                                    <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Giant : <%= bob.toJSON().giant %></b></p>
-                                    <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Reverse : <%= bob.toJSON().reverse %></b></p>
                                     <input type="hidden" name="pending" value="false">
                                     <input type="hidden" name="_method" value="put">
                                     <button name="button" type="submit" class="button-password" onclick='$("#leave-modal").hide()'>Accept</button>
@@ -66,10 +63,7 @@
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Guild 2 points :  <%= model.toJSON().guild_two_points %></b></p>
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Prize :  <%= model.toJSON().prize %></b></p>
                 <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Duels : <%= model.toJSON().duels %></b></p>
-                <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Ladder : <%= model.toJSON().ladder %></b></p>
-                <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Faster : <%= model.toJSON().faster %></b></p>
-                <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Giant : <%= model.toJSON().giant %></b></p>
-                <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b> Reverse : <%= model.toJSON().reverse %></b></p>
+                <p style="width:15%;font-size: 20px;font-family: Georgia, 'Times New Roman', Times, serif; margin: auto;"><b>Ladder : <%= model.toJSON().ladder %></b></p>
                 <% if (Transcendence.current_user.toJSON().id == guild.owner) { %>
                     <td class="users-action"> 
                         <form action="/api/guild_wars/forfeit/<%= model.toJSON().id %>" method="post" data-remote="true" id="forfeit"

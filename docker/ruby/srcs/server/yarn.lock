@@ -4001,6 +4001,11 @@ jest-worker@^26.5.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
+jquery.qrcode@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/jquery.qrcode/-/jquery.qrcode-1.0.3.tgz#98ad34deb7f401d72981c6769790cbd38aaa39f0"
+  integrity sha1-mK003rf0AdcpgcZ2l5DL04qqOfA=
+
 jquery@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"

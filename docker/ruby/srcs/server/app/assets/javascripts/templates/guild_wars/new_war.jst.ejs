@@ -30,15 +30,6 @@
         Ladder :
         <input id="ladder-id" type="checkbox" name="ladder">
         <br>
-        Faster :
-        <input id="faster-id" type="checkbox" name="faster">
-        <br>
-        Giant :
-        <input id="giant-id" type="checkbox" name="giant">
-        <br>
-        Reverse :
-        <input id="reverse-id" type="checkbox" name="reverse">
-        <br>
         <input type="hidden" name="pending" value="true">
         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
         <button type="submit" class="edit save" data-disable-with="Save">Create</button>
@@ -108,18 +99,6 @@
             document.getElementById("ladder-id").value = "true"
         else
             document.getElementById("ladder-id").value = "false"
-        if (document.getElementById("faster-id").checked == true)
-            document.getElementById("faster-id").value = "true"
-        else
-            document.getElementById("faster-id").value = "false"
-        if (document.getElementById("giant-id").checked == true)
-            document.getElementById("giant-id").value = "true"
-        else
-            document.getElementById("giant-id").value = "false"
-        if (document.getElementById("reverse-id").checked == true)
-            document.getElementById("reverse-id").value = "true"
-        else
-            document.getElementById("reverse-id").value = "false"
         document.getElementById("hidden-input-start").value = document.getElementById("date-input-start").value + "T" +  document.getElementById("time-input-start").value + ".000Z"
         document.getElementById("hidden-input-end").value = document.getElementById("date-input-end").value + "T" +  document.getElementById("time-input-end").value + ".000Z"
         return true;
