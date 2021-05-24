@@ -13,6 +13,11 @@ Transcendence.Routers.Games = Backbone.Router.extend({
     },
     index: function () {
         this.cleanUp();
+        if (Transcendence.current_user.toJSON().pong != 0)
+        {
+            location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+            return
+        }
         this.view = new Transcendence.Views.GamesIndex({ collection: Transcendence.games });
         $('#main-body').html(this.view.render().$el);
     },
