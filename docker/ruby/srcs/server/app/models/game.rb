@@ -12,15 +12,21 @@ class Game < ApplicationRecord
             Redis.current.set("play_channel_#{current_match_id}_l", "#{left}")
 			Redis.current.set("play_channel_#{current_match_id}_r", "#{right}")
             
-            # user_one = User.find_by(email: left)
-            # user_two = User.find_by(email: right)
+            user_one = User.find_by(email: left)
+            user_two = User.find_by(email: right)
 
-            # user_one.pong = current_match_id
-            # user_two.pong = current_match_id
-            # user_one.save
-            # user_two.save
-            # ActionCable.server.broadcast "users_channel", content: "profile"
-            # room_name = "play_channel_#{current_match_id}"
+            user_one.pong = current_match_id
+            user_two.pong = current_match_id
+			puts user_two.pong
+			puts "LOLOLOLOLOLOLOLOLOL>OLOLOLOLOLOLOOL"
+            if user_one.save && user_two.save
+				Redis.current.set("opponent_for:#{left}", right)
+				Redis.current.set("opponent_for:#{right}", left)
+	
+				ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "Left", match_room_id: current_match_id}
+				ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "Right", match_room_id: current_match_id}
+			end
+            #room_name = "play_channel_#{current_match_id}"
 
 			# game = {
 			# 	room_name: room_name,
@@ -40,21 +46,23 @@ class Game < ApplicationRecord
 			# 	player_right_connected: false
 			# }
 			# $games[room_name] = game
-	
 
-            Redis.current.set("opponent_for:#{left}", right)
-            Redis.current.set("opponent_for:#{right}", left)
-
-            ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "Left", match_room_id: current_match_id}
-            ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "Right", match_room_id: current_match_id}
 		end
 	end
 
     def self.disconnected(data)
-        opponent = Redis.current.get("opponent_for:#{data}")
-        puts "SALUTLSLAIFUSOAUFEIOWRHWEOUIHFOWEHFWOHFOI"
-		puts data
-		Redis.current.set("opponent_for:#{data}", nil)
-        ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
+
+		if Redis.current.get("opponent_for:#{data}")
+        	opponent = Redis.current.get("opponent_for:#{data}")
+        	ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
+
+			if user = User.find_by(email: opponent)
+    			user.pong = 0
+    			if user.save
+	      			ActionCable.server.broadcast "users_channel", content: "profile"
+    			end
+			end
+			Redis.current.set("opponent_for:#{data}", nil)
+		end
     end
 end

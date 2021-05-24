@@ -36,6 +36,12 @@ consumer.subscriptions.create("GameChannel", {
           if (data.action === 'game_start') {
             document.getElementById("found").hidden = false;
             document.getElementById("waiting").hidden = true;
+            Transcendence.users.fetch().done(() => {
+              Transcendence.current_user.fetch().done(() => {
+                console.log(Transcendence.current_user.toJSON().pong)
+                location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+              });
+            });
           }
         }
       });
@@ -47,6 +53,7 @@ consumer.subscriptions.create("GameChannel", {
       {
         consumer.subscriptions.remove(game)
         game = null
+        location.hash = "#games"
         document.getElementById("users-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;

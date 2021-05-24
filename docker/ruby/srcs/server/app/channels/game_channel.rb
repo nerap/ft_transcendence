@@ -15,7 +15,10 @@ class GameChannel < ApplicationCable::Channel
     if Redis.current.get('matches_ladder') == current_user.email
       Redis.current.set('matches_ladder', nil)
     end
+    
     user = User.find_by(email: current_user.email)
+    puts user.pong
+    puts "LOLLOLOLOL>OOOOOOOOOOOOOO"
     user.pong = 0
     if user.save
       ActionCable.server.broadcast "users_channel", content: "profile"
@@ -24,8 +27,6 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def disconnected(data)
-    puts "LOLOLOLOLOLOLOLOLOLOLOLOLOLOL"
     Game.disconnected(current_user.email)
-    puts "LOLOLOLOLOLOLOLOLOLOLOLOLOLOL"
   end
 end

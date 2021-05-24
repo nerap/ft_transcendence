@@ -14,6 +14,7 @@ consumer.subscriptions.create("UsersChannel", {
       Transcendence.users.fetch()
     }
     Transcendence.current_user.fetch();
+    console.log("salut")
     if (data.content == "banned") {
       window.location.href = "/"
     }

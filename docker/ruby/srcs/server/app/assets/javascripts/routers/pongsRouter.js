@@ -11,7 +11,7 @@ Transcendence.Routers.Pongs = Backbone.Router.extend({
         this.view = null;
     },
     pong: function (id) {
-        if (Transcendence.current_user.toJSON().pong != id) {
+        if (Transcendence.current_user.toJSON().pong != id || id == 0) {
             location.hash = "#games";
             flashMessage("error", "This game doesn't exist !");
         } else {
