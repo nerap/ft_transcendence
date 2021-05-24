@@ -1,5 +1,6 @@
 <div id="edit-panel">
     <div class="panel edit-account" style="display:inline-block;vertical-align:middle;">
+        <span class="closebtn" onclick="history.back()">&times;</span><br/><br/>
         <div class="header">
             <h1>Start a war</h1>
         </div>
@@ -15,17 +16,17 @@
             <input type="time" id="time-input-end" required>
             <input type="hidden" id="hidden-input-end" name="end" value="0">
             <br/>
-            Prize: 
+            Prize:
             <input type="number" name="prize" value="10" min="10" max="100">
             <br/>
             <input type="hidden" name="guild_one_id" value="<%= Transcendence.current_user.toJSON().guild %>">
             <input class="input-other-guild" type="hidden" name="guild_two_id" value="">
             <input type="hidden" name="guild_one_points" value="0">
             <input type="hidden" name="guild_two_points" value="0">
-            Unanswered: 
+            Unanswered:
             <input type="number" name="unanswered_match" value="0" min="0" max="20">
             <br/>
-            Duels: 
+            Duels:
             <input id="duel-id" type="checkbox" name="duels">
             <br/>
             Ladder:
@@ -38,7 +39,9 @@
     </div>
     &emsp;
     <div class="panel edit-account" style="display:inline-block;vertical-align:middle;">
-        <h1>Choose a guild to defy</h1>
+        <div class="header">
+            <h1>Choose a guild to defy</h1>
+        </div>
         <table class="table-panel">
             <% Transcendence.guilds.each(function(model) { %>
             <% if (Transcendence.current_user.toJSON().guild != model.toJSON().id) { %>
