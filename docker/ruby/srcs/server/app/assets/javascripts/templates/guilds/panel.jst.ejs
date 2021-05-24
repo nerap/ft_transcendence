@@ -109,81 +109,30 @@
     <div style="text-align:center;"><a href="#guild_wars/<%= guild.id %>"><button class="edit">start a war</button></a>
     </div>
     <% } %>
-    <br/>
-    <table class="guild-members-list">
-        <tr><th colspan="3">Members</th></tr>
-        <% Transcendence.users.each(function(model) { %>
-        <% if (model.toJSON().guild == curguild.id) { %>
-        <tr>
-            <td><img style="width:20px;height:20px;border-radius:50%" src="<%= model.toJSON().avatar %>"></td>
-            <% if ((Transcendence.current_user.toJSON().admin == true || curguild.owner == Transcendence.current_user.id || (Transcendence.current_user.toJSON().officer == true && Transcendence.current_user.toJSON().guild == curguild.id))
-            && (Transcendence.current_user.id != model.id && model.id != curguild.owner)) { %>
-            <td style="width:100%;" class="guild-user-menu <%= model.id %>"><%= model.toJSON().username %></td>
-            <% } else { %>
-            <td style="width:100%;" onclick="document.location='/#users/<%= model.id %>'"><%= model.toJSON().username %></td>
-            <% } %>
-            <% if (model.toJSON().id == curguild.owner) {
-                usergrade = "Master"
-            } else if (model.toJSON().officer == true) {
-                usergrade = "Officer"
-            } else if (model.toJSON().member == true) {
-                usergrade = "VIP Member"
-            } else {
-                usergrade = "Member"
-            } %>
-            <td style="font-family:Impact;text-align:right;"><%= usergrade %></td>
-        </tr>
-        <% } %>
-        <% }) %>
-    </table>
-    <div class="actions-menu">
-        <ul>
-            <li><a class="actions-menu-link" href="#users/">profile</a></li>
-            <% if (Transcendence.current_user.toJSON().admin == true || Transcendence.current_user.id == curguild.owner) { %>
-            <li>
-                <form action="/api/guilds/promote" method="post" data-remote="true">
-                    <input type="submit" value="promote">
-                    <input type="hidden" name="current_id" class="actions-menu-option" value="">
-                    <input type="hidden" name="id" value="<%= curguild.id %>">
-                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                </form>
-            </li>
-            <li>
-                <form action="/api/guilds/demote" method="post" data-remote="true">
-                    <input type="submit" value="demote">
-                    <input type="hidden" name="current_id" class="actions-menu-option" value="">
-                    <input type="hidden" name="id" value="<%= curguild.id %>">
-                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                </form>
-            </li>
-            <% } %>
-            <li>
-                <form action="/api/guilds/kick" method="post" data-remote="true">
-                    <input type="submit" value="kick">
-                    <input type="hidden" name="current_id" class="actions-menu-option" value="">
-                    <input type="hidden" name="id" value="<%= curguild.id %>">
-                    <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                </form>
-            </li>
-        </ul>
-    </div>
-</div>
 
-<script type="text/javascript">
-    $(".guild-user-menu").click(function (e) {
-        var userid = $(e.target).attr("class").split(' ')[1];
-        var profile = "/#users/" + userid
-        e.stopPropagation();
-        var top = e.pageY + 5;
-        var left = e.pageX;
-        $(".actions-menu").toggle().css({
-            top: top + "px",
-            left: left + "px"
-        });
-        $(".actions-menu-link").attr("href", profile)
-        $(".actions-menu-option").attr("value", userid)
-    });
-    $(document).bind("click", function () {
-        $(".actions-menu").hide()
-    });
-</script>
+    <div id="users-index">
+        <table>
+            <tr>
+                <th colspan="4">Wars history</th>
+            </tr>
+            <% guildwars.forEach(function(war) { %>
+            <% if (war.toJSON().guild_one_id == curguild.id) { %>
+                <% if (war.toJSON().guild_one_points > war.toJSON().guild_two_points) {
+                    var action = "Victory"
+                } else if (war.toJSON().guild_one_points < war.toJSON().guild_two_points) {
+                    var action = "Defeat"
+                } else {
+                    var action = "Tie"
+                } %>
+                <tr class="users-list">
+                    <td><b><%= model.toJSON().name %></b></td>
+                    <td><b><%= model.toJSON().anagram %></b></td>
+                    <td><b><%= model.toJSON().points %></b></td>    
+                    <td><%= action %></td>
+                </tr>
+            <% }}) %>
+        </table>
+    </div>
+
+    <div id="guild-members"></div>
+</div>
