@@ -8,12 +8,24 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
+    disconnected({player_email: current_user.email})
     if Redis.current.get('matches') == current_user.email
       Redis.current.set('matches', nil)
     end
-    if Redis.current.get('matches_ladder') == current_user
+    if Redis.current.get('matches_ladder') == current_user.email
       Redis.current.set('matches_ladder', nil)
     end
+    user = User.find_by(email: current_user.email)
+    user.pong = 0
+    if user.save
+      ActionCable.server.broadcast "users_channel", content: "profile"
+    end
       # Any cleanup needed when channel is unsubscribed
+  end
+
+  def disconnected(data)
+    puts "LOLOLOLOLOLOLOLOLOLOLOLOLOLOL"
+    Game.disconnected(current_user.email)
+    puts "LOLOLOLOLOLOLOLOLOLOLOLOLOLOL"
   end
 end
