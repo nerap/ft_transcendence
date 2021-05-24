@@ -1,29 +1,70 @@
 import consumer from "./consumer"
 
+
+let game;
+
 consumer.subscriptions.create("GameChannel", {
   connected() {
-    // Called when the subscription is ready for use on the server
+    
   },
 
   disconnected() {
     // Called when the subscription has been terminated by the server
   },
 
+
   received(data) {
-    if (data.content == "create_game") {
-      Transcendence.users.fetch();
-      Transcendence.games.fetch().done(function () {
-        if (Transcendence.current_user.id == data.userid)
-          location.hash = "#games/" + data.game_id;
+    console.log(data.content)
+    if (data.content == "create a match")
+    {
+      game = consumer.subscriptions.create({channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked}, {
+        connected() {
+          console.log("Waiting for opponent 2")
+          document.getElementById("users-index").hidden = true;
+          document.getElementById("waiting").hidden = false;
+          document.getElementById("found").hidden = true;
+
+        },
+        disconnected() {
+          console.log("disconnected matchmaking")
+          game_perform();
+        },
+    
+    
+        received(data) {
+          console.log(data)
+          if (data.action === 'game_start') {
+            document.getElementById("found").hidden = false;
+            document.getElementById("waiting").hidden = true;
+            Transcendence.users.fetch().done(() => {
+              Transcendence.current_user.fetch().done(() => {
+                console.log(Transcendence.current_user.toJSON().pong)
+                location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+              });
+            });
+          }
+        }
       });
-    } else if (data.content == "leave_game"){
-      Transcendence.users.fetch();
-      Transcendence.games.fetch().done(function () {
-        if (Transcendence.current_user.id == data.user_one_id)
-          location.hash = "#games";
-      });
-    } else {
-      Transcendence.games.fetch()
+    }
+    else if (data.content == "disconnected")
+    {
+      console.log("data.content = disconnected")
+      if (game)
+      {
+        consumer.subscriptions.remove(game)
+        game = null
+        location.hash = "#games"
+        document.getElementById("users-index").hidden = false;
+        document.getElementById("waiting").hidden = true;
+        document.getElementById("found").hidden = true;
+      }
     }
   }
 });
+
+function game_perform()
+{
+  game.perform("disconnected", {player_email: Transcendence.current_user.toJSON().email})
+  console.log("perform")
+  return ;
+}

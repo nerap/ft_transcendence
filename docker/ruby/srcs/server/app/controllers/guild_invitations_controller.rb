@@ -26,8 +26,7 @@ class GuildInvitationsController < ApplicationController
       @guild_invitation = GuildInvitation.new(guild_invitation_params)
       if @guild_invitation.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "guild_channel", content: "guild_invitation"
       end
     else
       flash[:error] = ""
@@ -47,8 +46,7 @@ class GuildInvitationsController < ApplicationController
         user.guild = params[:guild_id]
         user.save
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "guild_channel", content: "guild_invitation"
     end
   end
 
@@ -57,8 +55,7 @@ class GuildInvitationsController < ApplicationController
     @guild_invitation.destroy
     respond_to do |format|
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_invitation_channel", content: "ok"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "guild_channel", content: "guild_invitation"
         format.json { head :no_content }
     end
   end

@@ -33,7 +33,7 @@ class GuildWarsController < ApplicationController
                 end
                 war.destroy
                 if guild_two_id.save
-                    ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
                 end
             elsif (guild_two_id == nil)
                 if (war.pending == false && war.done == false)
@@ -41,7 +41,7 @@ class GuildWarsController < ApplicationController
                 end
                 war.destroy
                 if guild_one_id.save
-                    ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
                 end
             end
         end
@@ -50,7 +50,7 @@ class GuildWarsController < ApplicationController
             if (guild.war != nil && GuildWar.find_by_id(guild.war) == nil)
                 guild.war = nil
                 if guild.save
-                    ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
                 end
             end
         end
@@ -62,11 +62,11 @@ class GuildWarsController < ApplicationController
             if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time)
                 if (war.pending == true)
                     war.destroy
-                    ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
                 elsif (war.started == false && war.pending == false)
                     war.started = true
                     if war.save
-                        ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                        ActionCable.server.broadcast "guild_channel", content: "guild_war"
                     end
                 end
             elsif (DateTime.now.change(:offset => "+0000").to_time > war.end.to_time)
@@ -84,7 +84,7 @@ class GuildWarsController < ApplicationController
                     guild_one_id.war = false;
                     guild_two_id.war = false;
                     if war.save && guild_one_id.save && guild_two_id.save
-                        ActionCable.server.broadcast "guild_war_channel", content: "ok"
+                        ActionCable.server.broadcast "guild_channel", content: "guild_war"
                     end
                 end
             end
@@ -98,40 +98,37 @@ class GuildWarsController < ApplicationController
                 if (guild_war_params[:prize].to_i >= 10 && guild_war_params[:prize].to_i <= 100)
                     if (guild_war_params[:guild_one_points].to_i == 0 && guild_war_params[:guild_two_points].to_i == 0)
                         if (guild_war_params[:unanswered_match].to_i >= 0 && guild_war_params[:unanswered_match].to_i <= 10)
-                            if (guild_war_params[:duels] == "false" || guild_war_params[:duels] == "true")
-                                if (guild_war_params[:ladder] == "false" || guild_war_params[:ladder] == "true")
-                                    if (guild_war_params[:pending] == "true")
-                                        guild_one = Guild.find_by_id(params[:guild_one_id])
-                                        guild_two = Guild.find_by_id(params[:guild_two_id])
-                                        if (guild_one.points < params[:prize].to_i)
-                                            flash[:error] = ""
-                                            flash[:error] = flash[:error] << "Your guild has not enough points" << "<br/>"
-                                            respond_to do |format|
-                                              ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                                              format.json { render json: { guild: @guild }, status: :unprocessable_entity }
-                                            end
-                                            return
-                                        elsif (guild_two.points < params[:prize].to_i)
-                                            flash[:error] = ""
-                                            flash[:error] = flash[:error] << "Their guild has not enough points" << "<br/>"
-                                            respond_to do |format|
-                                              ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
-                                              format.json { render json: { guild: @guild }, status: :unprocessable_entity }
-                                            end
-                                            return
-                                        end
-                                        @guild_war = GuildWar.new(guild_war_params)
-                                        guild_one.war = @guild_war.id
-                                        guild_two.war = @guild_war.id
-                                        @guild_war.done = false;
-                                        @guild_war.started = false;
-                                        if @guild_war.save && guild_one.save && guild_two.save
-                                            ActionCable.server.broadcast "guild_channel", content: "ok"
-                                            ActionCable.server.broadcast "guild_war_channel", content: "create_guild_war", userid: current_user.id
-                                        end
-                                        return
+                            if (guild_war_params[:pending] == "true")
+                                guild_one = Guild.find_by_id(params[:guild_one_id])
+                                guild_two = Guild.find_by_id(params[:guild_two_id])
+                                if (guild_one.points < params[:prize].to_i)
+                                    flash[:error] = ""
+                                    flash[:error] = flash[:error] << "Your guild has not enough points" << "<br/>"
+                                    respond_to do |format|
+                                      ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                      format.json { render json: { guild: @guild }, status: :unprocessable_entity }
                                     end
+                                    return
+                                elsif (guild_two.points < params[:prize].to_i)
+                                    flash[:error] = ""
+                                    flash[:error] = flash[:error] << "Their guild has not enough points" << "<br/>"
+                                    respond_to do |format|
+                                      ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                      format.json { render json: { guild: @guild }, status: :unprocessable_entity }
+                                    end
+                                    return
                                 end
+                                @guild_war = GuildWar.new(guild_war_params)
+                                guild_one.war = @guild_war.id
+                                guild_two.war = @guild_war.id
+                                @guild_war.done = false;
+                                @guild_war.started = false;
+                                if @guild_war.save && guild_one.save && guild_two.save
+                                    flash[:notice] = "You have defied #{guild_two.name} in a war !"
+                                    ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
+                                    ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                end
+                                return
                             end
                         end
                     end
@@ -163,8 +160,7 @@ class GuildWarsController < ApplicationController
         guild_one_id.war = false;
         guild_two_id.war = false;
         if @guild_war.save && guild_one_id.save && guild_two_id.save
-            ActionCable.server.broadcast "guild_channel", content: "ok"
-            ActionCable.server.broadcast "guild_war_channel", content: "ok"
+            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
         end
     end
 
@@ -172,8 +168,7 @@ class GuildWarsController < ApplicationController
     def update
       respond_to do |format|
         if @guild_war.update(guild_war_params)
-          ActionCable.server.broadcast "guild_channel", content: "ok"
-          ActionCable.server.broadcast "guild_war_channel", content: "ok"
+          ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
           format.json { render :show, status: :ok, location: @guild_war }
         else
           format.json { render json: @guild_war.errors, status: :unprocessable_entity }
@@ -189,8 +184,7 @@ class GuildWarsController < ApplicationController
         guild_one.war = @guild_war.id
         guild_two.war = @guild_war.id
         if @guild_war.save && guild_one.save && guild_two.save
-            ActionCable.server.broadcast "guild_channel", content: "ok"
-            ActionCable.server.broadcast "guild_war_channel", content: "ok"
+            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
         end
     end
 
@@ -198,8 +192,7 @@ class GuildWarsController < ApplicationController
     def destroy
       @guild_war.destroy
       respond_to do |format|
-        ActionCable.server.broadcast "guild_channel", content: "ok"
-        ActionCable.server.broadcast "guild_war_channel", content: "leave", userid: current_user.id
+        ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
         format.json { head :no_content }
       end
     end
@@ -212,7 +205,7 @@ class GuildWarsController < ApplicationController
   
       # Only allow a list of trusted parameters through.
       def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :faster, :giant, :reverse, :pending, :done, :started, :guild_forfeit)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :pending, :done, :started, :guild_forfeit)
       end
 
 end

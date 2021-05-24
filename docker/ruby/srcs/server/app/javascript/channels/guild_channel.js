@@ -10,6 +10,11 @@ consumer.subscriptions.create("GuildChannel", {
   },
 
   received(data) {
-    Transcendence.guilds.fetch()
+    Transcendence.guilds.fetch();
+    if (data.content == "guild_invitation") {
+      Transcendence.guild_invitations.fetch();
+    } else if (data.content == "guild_war") {
+      Transcendence.guild_wars.fetch();
+    }
   }
 });

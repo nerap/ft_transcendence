@@ -7,19 +7,17 @@ Transcendence.Routers.Games = Backbone.Router.extend({
         this.view = null;
     },
     cleanUp: function () {
-        setInterval(() => {$.ajax({
-            url: '/api/guild_wars/',
-            type: 'get',
-            success: function(response)
-            {
-            }
-        });}, 60000);
         if (this.view)
             this.view.remove();
         this.view = null;
     },
     index: function () {
         this.cleanUp();
+        if (Transcendence.current_user.toJSON().pong != 0)
+        {
+            location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+            return
+        }
         this.view = new Transcendence.Views.GamesIndex({ collection: Transcendence.games });
         $('#main-body').html(this.view.render().$el);
     },

@@ -32,8 +32,8 @@ gem 'omniauth-marvin', '~> 1.2.0'
 
 # gem 'js-routes'
 
-# gem 'redis'
-# gem 'redis-rails'
+gem 'redis'
+gem 'redis-rails'
 
 # for encrypting passwords
 gem 'bcrypt'
