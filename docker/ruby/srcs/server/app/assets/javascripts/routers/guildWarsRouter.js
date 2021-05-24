@@ -2,8 +2,6 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
     routes: {
         "guild_wars/new": "new",
         "guild_wars/new/:id": "new_war",
-        "guild_wars/:id": "wars",
-        "guild_wars/history/:id": "history",
     },
     initialize: function () {
         this.view = null;
@@ -45,19 +43,6 @@ Transcendence.Routers.GuildWars = Backbone.Router.extend({
         } else {
             this.cleanUp();
             this.view = new Transcendence.Views.GuildWarsNewWar({
-                model: Transcendence.guilds.get(id),
-                id: id
-            });
-            $('#main-body').html(this.view.render().$el);
-        }
-    },
-    wars: function (id) {
-        if (!Transcendence.guilds.get(id)) {
-            location.hash = "#guilds";
-            flashMessage("error", "This guild doesn't exist !");
-        } else {
-            this.cleanUp();
-            this.view = new Transcendence.Views.GuildWarsIndex({
                 model: Transcendence.guilds.get(id),
                 id: id
             });

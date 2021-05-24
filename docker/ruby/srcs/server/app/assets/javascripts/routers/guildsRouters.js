@@ -2,18 +2,21 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
     routes: {
         "guilds": "index",
         "guilds/:id": "guild",
+        "guilds/:id/wars": "wars",
+        "guilds/:id/wars/new": "newWar"
     },
     initialize: function () {
         this.view = null;
     },
     cleanUp: function () {
-        setInterval(() => {$.ajax({
-            url: '/api/guild_wars/',
-            type: 'get',
-            success: function(response)
-            {
-            }
-        });}, 60000);
+        setInterval(() => {
+            $.ajax({
+                url: '/api/guild_wars/',
+                type: 'get',
+                success: function (response) {
+                }
+            });
+        }, 60000);
         if (this.view)
             this.view.remove();
         this.view = null;
@@ -36,4 +39,20 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
             $('#main-body').html(this.view.render().$el);
         }
     },
+    wars: function (id) {
+        this.cleanUp();
+        this.view = new Transcendence.Views.GuildWars({
+            model: Transcendence.guilds.get(id),
+            id: id
+        });
+        $('#main-body').html(this.view.render().$el);
+    },
+    newWar: function (id) {
+        this.cleanUp();
+        this.view = new Transcendence.Views.GuildWarsNew({
+            model: Transcendence.guilds.get(id),
+            id: id
+        });
+        $('#main-body').html(this.view.render().$el);
+    }
 });

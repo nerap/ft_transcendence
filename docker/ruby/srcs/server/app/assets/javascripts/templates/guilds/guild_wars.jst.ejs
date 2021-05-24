@@ -1,12 +1,7 @@
-<div id="users-index">
+<div id="sidenav" class="guilds-sidenav"></div>
+
+<div id="users-index" style="margin-left:200px;">
     <% if (guild.war == null) { %>
-    <% if (Transcendence.current_user.toJSON().id == guild.owner) { %>
-    <div class="create-chatroom">
-        <a href="#guild_wars/new"><button class="create">Start a War</button></a>
-    </div>
-    <% } else { %>
-        Ask to your owner to launch a guildwar !
-    <% } %>
     <% if (Transcendence.current_user.toJSON().id == guild.owner) { %>
     <table>
     <tr>

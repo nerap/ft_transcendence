@@ -93,12 +93,13 @@ class GuildWarsController < ApplicationController
 
     # POST /guilds or /guilds.json
     def create
-        if (Guild.find_by_id(guild_war_params[:guild_one_id]).war == nil && Guild.find_by_id(guild_war_params[:guild_two_id]).war == nil)
-            if (guild_war_params[:prize].to_i >= 10 && guild_war_params[:prize].to_i <= 100)
-                if (guild_war_params[:guild_one_points].to_i == 0 && guild_war_params[:guild_two_points].to_i == 0)
-                    if (guild_war_params[:unanswered_match].to_i >= 0 && guild_war_params[:unanswered_match].to_i <= 10)
-                        if (guild_war_params[:duels] == "false" || guild_war_params[:duels] == "true")
-                            if (guild_war_params[:ladder] == "false" || guild_war_params[:ladder] == "true")
+        if (Guild.find_by_id(guild_war_params[:guild_one_id]) && Guild.find_by_id(guild_war_params[:guild_two_id]))
+            if (Guild.find_by_id(guild_war_params[:guild_one_id]).war == nil && Guild.find_by_id(guild_war_params[:guild_two_id]).war == nil)
+                if (guild_war_params[:prize].to_i >= 10 && guild_war_params[:prize].to_i <= 100)
+                    if (guild_war_params[:guild_one_points].to_i == 0 && guild_war_params[:guild_two_points].to_i == 0)
+                        if (guild_war_params[:unanswered_match].to_i >= 0 && guild_war_params[:unanswered_match].to_i <= 10)
+                            if (guild_war_params[:duels] == "false" || guild_war_params[:duels] == "true")
+                                if (guild_war_params[:ladder] == "false" || guild_war_params[:ladder] == "true")
                                     if (guild_war_params[:pending] == "true")
                                         guild_one = Guild.find_by_id(params[:guild_one_id])
                                         guild_two = Guild.find_by_id(params[:guild_two_id])
@@ -125,19 +126,19 @@ class GuildWarsController < ApplicationController
                                         @guild_war.done = false;
                                         @guild_war.started = false;
                                         if @guild_war.save && guild_one.save && guild_two.save
-                                            ActionCable.server.broadcast "users_channel", content: "profile"
                                             ActionCable.server.broadcast "guild_channel", content: "ok"
                                             ActionCable.server.broadcast "guild_war_channel", content: "create_guild_war", userid: current_user.id
                                         end
                                         return
                                     end
+                                end
                             end
                         end
                     end
                 end
             end
         end
-        flash[:error] = "Check your parameter"
+        flash[:error] = "Wrong parameters"
         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
     end
   
