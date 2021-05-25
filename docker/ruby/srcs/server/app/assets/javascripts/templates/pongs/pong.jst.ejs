@@ -1,1 +1,21 @@
-salut
+<div id="pong-index">
+    <div id="user-left">
+        <img src="<%= user_left.avatar %>">
+    <h1>
+        <%= user_left.username %>
+    </h1>
+        <p id="user_left_score"></p>
+    </div>
+    <div id="canvas-div">
+        <canvas id="canvas" width="600" height="350">
+        </canvas>
+    </div>
+    <div id="user-right">
+        <img src="<%= user_right.avatar %>">
+        <h1>
+            <%= user_right.username %>
+        </h1>
+        <p id="user_right_score"></p>
+    </div>
+</div>
+

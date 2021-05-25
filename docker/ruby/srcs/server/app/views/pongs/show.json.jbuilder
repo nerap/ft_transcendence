@@ -1,2 +1,2 @@
-json.extract! @pong, :id, :user_one_id, :user_two_id, :user_one_score, :user_two_score, :pending, :done, :started, :ladder, :mode
+json.extract! @pong, :id, :user_left_id, :user_right_id, :user_left_score, :user_right_score, :done, :started, :mode, :playing, :winner, :looser, :tie, :room_id
 json.url pong_url(@pong, format: :json)
