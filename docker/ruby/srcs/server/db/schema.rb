@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_24_185217) do
+ActiveRecord::Schema.define(version: 2021_05_25_094154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,17 +114,21 @@ ActiveRecord::Schema.define(version: 2021_05_24_185217) do
   end
 
   create_table "pongs", force: :cascade do |t|
-    t.bigint "user_one_id"
-    t.bigint "user_two_id"
-    t.bigint "user_one_score"
-    t.bigint "user_two_score"
+    t.bigint "user_left_id"
+    t.bigint "user_right_id"
+    t.bigint "user_left_score"
+    t.bigint "user_right_score"
     t.string "mode"
-    t.boolean "ladder"
     t.boolean "pending"
     t.boolean "started"
     t.boolean "done"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "playing"
+    t.bigint "winner"
+    t.bigint "looser"
+    t.boolean "tie"
+    t.bigint "room_id"
   end
 
   create_table "private_messages", force: :cascade do |t|

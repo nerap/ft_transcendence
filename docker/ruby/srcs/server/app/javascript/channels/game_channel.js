@@ -1,3 +1,4 @@
+import { escapeSelector } from "jquery";
 import consumer from "./consumer"
 
 
@@ -38,8 +39,10 @@ consumer.subscriptions.create("GameChannel", {
             document.getElementById("waiting").hidden = true;
             Transcendence.users.fetch().done(() => {
               Transcendence.current_user.fetch().done(() => {
-                console.log(Transcendence.current_user.toJSON().pong)
-                location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+                Transcendence.pongs.fetch().done(() => {
+                  console.log(Transcendence.current_user.toJSON().pong)
+                  location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
+                });
               });
             });
           }
@@ -53,10 +56,19 @@ consumer.subscriptions.create("GameChannel", {
       {
         consumer.subscriptions.remove(game)
         game = null
-        location.hash = "#games"
-        document.getElementById("users-index").hidden = false;
-        document.getElementById("waiting").hidden = true;
-        document.getElementById("found").hidden = true;
+        console.log("changinc location hash")
+        console.log(location.hash)
+        if (location.hash != "#games")
+        {
+          console.log("location hash modified")
+          location.hash = "#games"
+        }
+        else
+        {
+          document.getElementById("users-index").hidden = false;
+          document.getElementById("waiting").hidden = true;
+          document.getElementById("found").hidden = true;
+        }
       }
     }
   }

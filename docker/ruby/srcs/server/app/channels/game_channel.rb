@@ -17,8 +17,6 @@ class GameChannel < ApplicationCable::Channel
     end
     
     user = User.find_by(email: current_user.email)
-    puts user.pong
-    puts "LOLLOLOLOL>OOOOOOOOOOOOOO"
     user.pong = 0
     if user.save
       ActionCable.server.broadcast "users_channel", content: "profile"

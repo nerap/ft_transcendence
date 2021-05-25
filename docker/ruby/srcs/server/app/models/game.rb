@@ -17,14 +17,28 @@ class Game < ApplicationRecord
 
             user_one.pong = current_match_id
             user_two.pong = current_match_id
-			puts user_two.pong
-			puts "LOLOLOLOLOLOLOLOLOL>OLOLOLOLOLOLOOL"
             if user_one.save && user_two.save
-				Redis.current.set("opponent_for:#{left}", right)
-				Redis.current.set("opponent_for:#{right}", left)
-	
-				ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "Left", match_room_id: current_match_id}
-				ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "Right", match_room_id: current_match_id}
+				pong = Pong.new
+				pong.user_left_id = user_one.id
+				pong.user_right_id = user_two.id
+				pong.user_left_score = 0
+				pong.user_right_score = 0
+				pong.mode = ranked
+				pong.started = true
+				pong.done = false
+				pong.playing = true
+				pong.winner = 0
+				pong.looser = 0
+				pong.tie = false
+				pong.room_id = current_match_id
+				if pong.save
+					ActionCable.server.broadcast "pong_channel", content: "ok"
+					Redis.current.set("opponent_for:#{left}", right)
+					Redis.current.set("opponent_for:#{right}", left)
+				
+					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "Left", match_room_id: current_match_id}
+					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "Right", match_room_id: current_match_id}
+				end
 			end
             #room_name = "play_channel_#{current_match_id}"
 
@@ -54,15 +68,37 @@ class Game < ApplicationRecord
 
 		if Redis.current.get("opponent_for:#{data}")
         	opponent = Redis.current.get("opponent_for:#{data}")
-        	ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
+			if user_opponent = User.find_by(email: opponent)
+				if user_opponent.pong != 0
+					game = Pong.find_by(room_id: user_opponent.pong)
+					user_current = User.find_by(email: data)
 
-			if user = User.find_by(email: opponent)
-    			user.pong = 0
-    			if user.save
-	      			ActionCable.server.broadcast "users_channel", content: "profile"
-    			end
+					user_opponent.pong = 0
+					user_current.pong = 0
+
+					game.winner = user_opponent.id
+					game.looser = user_current.id
+					game.tie = false
+					game.done = true
+					game.playing = false
+
+					if game.save && user_opponent.save && user_current.save
+						ActionCable.server.broadcast "users_channel", content: "profile"
+						ActionCable.server.broadcast "pong_channel", content: "profile"
+						Redis.current.set("play_channel_#{user_opponent.pong}_l", nil)
+						Redis.current.set("play_channel_#{user_opponent.pong}_r", nil)
+					end
+				else
+    				user_opponent.pong = 0
+    				if user_opponent.save
+	      				ActionCable.server.broadcast "users_channel", content: "profile"
+					end
+				end
+				
 			end
+			ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
 			Redis.current.set("opponent_for:#{data}", nil)
+			Redis.current.set("opponent_for:#{opponent}", nil)
 		end
     end
 end
