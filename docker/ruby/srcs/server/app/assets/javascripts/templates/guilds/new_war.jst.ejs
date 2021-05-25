@@ -59,7 +59,7 @@
     var date = new Date();
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
-    var today = date.getDate() + 1;
+    var today = date.getDate();
     var month_max = date.getMonth() + 2;
     if (today > 28) {
         today = 1;
@@ -100,8 +100,8 @@
             hour_two = parseInt(document.getElementById("time-input-end").value.split(":")[0])
             minute_two = parseInt(document.getElementById("time-input-end").value.split(":")[1])
             timstamp_two = minute_two + (hour_two * 60) + (day_two * 1440) + (month_two * 43800)
-            if (timstamp_two - timstamp_one < 60) {
-                alert("war must at least hold an hour")
+            if (timstamp_two - timstamp_one < 5) {
+                alert("war must last at least 5 minutes")
                 return false;
             }
         }

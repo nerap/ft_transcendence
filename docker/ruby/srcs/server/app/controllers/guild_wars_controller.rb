@@ -106,6 +106,13 @@ class GuildWarsController < ApplicationController
                         if (guild_war_params[:guild_one_points].to_i == 0 && guild_war_params[:guild_two_points].to_i == 0)
                             if (guild_war_params[:unanswered_match].to_i >= 0 && guild_war_params[:unanswered_match].to_i <= 10)
                                 if (guild_war_params[:pending] == "true")
+                                    parse_time = params[:start].to_s
+                                    start_war = DateTime.parse(parse_time) - 2.hours
+                                    if start_war.past?
+                                        flash[:error] = "Start time error"
+                                        ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
+                                        return
+                                    end
                                     if (guild_one.points < params[:prize].to_i)
                                         flash[:error] = "Your guild has not enough points"
                                         respond_to do |format|
@@ -122,11 +129,9 @@ class GuildWarsController < ApplicationController
                                         return
                                     end
                                     @guild_war = GuildWar.new(guild_war_params)
-                                    guild_one.war = @guild_war.id
-                                    guild_two.war = @guild_war.id
                                     @guild_war.done = false;
                                     @guild_war.started = false;
-                                    if @guild_war.save && guild_one.save && guild_two.save
+                                    if @guild_war.save
                                         flash[:notice] = "You have defied #{guild_two.name} in a war !"
                                         ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
                                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
@@ -190,7 +195,7 @@ class GuildWarsController < ApplicationController
         @guild_war = GuildWar.find(params[:id])
         guild_one = Guild.find_by_id(@guild_war.guild_one_id)
         guild_two = Guild.find_by_id(@guild_war.guild_two_id)
-        if current_user.id == guild_two.owner
+        if current_user.id == guild_two.owner && guild_one.war == nil && guild_two.war == nil
             @guild_war.pending = false
             guild_one.war = @guild_war.id
             guild_two.war = @guild_war.id
