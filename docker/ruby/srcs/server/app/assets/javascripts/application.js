@@ -28,11 +28,9 @@ var Transcendence = {
     new Transcendence.Routers.Chatrooms();
     new Transcendence.Routers.PrivateRooms();
     new Transcendence.Routers.Users();
-    new Transcendence.Routers.Friends();
     new Transcendence.Routers.Games();
     new Transcendence.Routers.Pongs();
     new Transcendence.Routers.Guilds();
-    new Transcendence.Routers.GuildWars();
     Backbone.history.start();
   }
 };
