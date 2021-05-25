@@ -2,25 +2,25 @@ class GuildsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_guild, only: %i[ show edit update destroy promote demote kick ]
     before_action { flash.clear }
-  
+
     # GET /guilds or /guilds.json
     def index
       @guilds = Guild.all.order(:points)
     end
-  
+
     # GET /guilds/1 or /guilds/1.json
     def show
     end
-  
+
     # GET /guilds/new
     def new
       @guild = Guild.new
     end
-  
+
     # GET /guilds/1/edit
     def edit
     end
-  
+
     # POST /guilds or /guilds.json
     def create
       if (User.find_by_id(guild_params[:owner]).guild != nil)
@@ -163,24 +163,24 @@ class GuildsController < ApplicationController
         end
       end
     end
-  
+
     # DELETE /guilds/1 or /guilds/1.json
     def destroy
       User.where(guild: params[:id]).each do |temp|
         temp.guild = nil
         temp.officer = false
         temp.save
-        ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
       end
+      GuildWar.where(guild_one_id: @guild.id).destroy_all
+      GuildWar.where(guild_two_id: @guild.id).destroy_all
       @guild.destroy
       respond_to do |format|
         ActionCable.server.broadcast "users_channel", content: "profile"
-        ActionCable.server.broadcast "guild_channel", content: "ok"
+        ActionCable.server.broadcast "guild_channel", content: "guild_war"
         format.json { head :no_content }
       end
     end
-  
+
   private
   def set_guild
     @guild = Guild.find(params[:id])
