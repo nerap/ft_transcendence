@@ -7,7 +7,6 @@ let side;
 let pong;
 let room_id;
 let inter;
-let user_paddle_y = 175
 
 let up = false
 let down = false
@@ -83,15 +82,30 @@ consumer.subscriptions.create("GameChannel", {
           console.log("Waiting for opponent 2")
           document.getElementById("users-index").hidden = true;
           document.getElementById("waiting").hidden = false;
+          document.getElementById("cancel-id").addEventListener("click", () => {
+            game_perform()
+            if (game)
+            {
+              consumer.subscriptions.remove(game)
+              game = null
+              if (location.hash != "#games")
+              {
+                location.hash = "#games"
+              }
+              else
+              {
+                document.getElementById("users-index").hidden = false;
+                document.getElementById("waiting").hidden = true;
+                document.getElementById("found").hidden = true;
+              }
+      }})
           document.getElementById("found").hidden = true;
 
         },
         disconnected() {
           console.log("disconnected matchmaking")
           game_perform();
-        },
-    
-    
+        }, 
         received(data) {
           console.log(data)
           if (data.action === 'game_start') {
@@ -114,6 +128,10 @@ consumer.subscriptions.create("GameChannel", {
                           canvas = document.getElementById("canvas-id")
                           contexte = canvas.getContext('2d');
                           contexte.clearRect(0, 0, 600, 350)
+                          if (document.getElementById("forfeit-right"))
+                            document.getElementById("forfeit-right").addEventListener("click", forfeit);
+                          if (document.getElementById("forfeit-left"))
+                            document.getElementById("forfeit-left").addEventListener("click", forfeit);
                         }
                         if (contexte != null)
                         {
@@ -123,21 +141,6 @@ consumer.subscriptions.create("GameChannel", {
                           clearInterval(inter);
                         }
                       }, 50 );
-                      //   update_pos_paddle(pong);
-                      //   if (contexte != null)
-                      //     ballmove(pong);
-                      //   setTimeout(function() {
-                      //     update(pong)
-                      //     room.perform("get_datas", {room_name: pong.room_name})
-                      //   }, 1000/30);
-                      //   update(pong)
-                      //   //room.perform("get_datas", {room_name: pong.room_name})
-                      //  // if (contexte != null)
-                      //    // ballmove(pong);
-                      //  draw_game(pong)
-                     // }, 50);
-                     // update(pong);
-                     //play();
                     },
                   
                     disconnected() {
@@ -153,13 +156,12 @@ consumer.subscriptions.create("GameChannel", {
                           consumer.subscriptions.remove(room)
                         game = null
                         room = null
-                        console.log("ENENENENENENND")
                         location.hash = "#games"
                       }
                       else
                       {
                         update_datas(data)
-                        if (contexte != null)
+                        if (contexte != null && room != null)
                         {
                           play()
                           if (document.getElementById("user_left_score"))
@@ -185,7 +187,7 @@ consumer.subscriptions.create("GameChannel", {
           pong = new Game(room_id)
           inter = setInterval(() => {
             draw_game(pong)
-            //update(pong)
+            
           }, 50);
         },
       
@@ -220,8 +222,9 @@ consumer.subscriptions.create("GameChannel", {
       {
         consumer.subscriptions.remove(game)
         game = null
-        console.log("changinc location hash")
-        console.log(location.hash)
+        if (room)
+          consumer.subscriptions.remove(room)
+        room = null
         if (location.hash != "#games")
         {
           console.log("location hash modified")
@@ -238,11 +241,36 @@ consumer.subscriptions.create("GameChannel", {
   }
 });
 
+function forfeit()
+{
+    console.log("forfeit")
+    game_perform()
+    if (game)
+    {
+
+      consumer.subscriptions.remove(game)
+      game = null
+      if (room)
+        consumer.subscriptions.remove(room)
+      room = null
+      if (location.hash != "#games")
+      {
+        location.hash = "#games"
+      }
+      
+      else
+      {
+        document.getElementById("users-index").hidden = false;
+        document.getElementById("waiting").hidden = true;
+        document.getElementById("found").hidden = true;
+      }
+  }
+}
+
 function game_perform()
 {
-  game.perform("disconnected", {player_email: Transcendence.current_user.toJSON().email})
-  console.log("perform")
-  return ;
+  if (game)
+    game.perform("disconnected", {player_email: Transcendence.current_user.toJSON().email})
 }
 
 function update_pos_paddle(pong, delta)
@@ -291,26 +319,10 @@ function update_pos_paddle(pong, delta)
   }
 }
 
-function init_terrain()
-{
-  contexte.clearRect(0, 0, 600, 350)
-  contexte.fillStyle = 'black'
-  contexte.fillRect(0, 0, canvas.width, canvas.height)
-
-  contexte.strokeStyle = 'white';
-  contexte.beginPath();
-  contexte.moveTo(canvas.width / 2, 0)
-  contexte.lineTo(canvas.width / 2, canvas.height)
-  contexte.stroke();
-}
-
 function draw_game(pong)
 {
     contexte.clearRect(0, 0, 600, 350)
     
-    /*contexte.fillStyle = 'black'
-    contexte.fillRect(0, 0, canvas.width, canvas.height)
-  */
     contexte.strokeStyle = 'black';
     contexte.beginPath();
     contexte.moveTo(canvas.width / 2, 0)
@@ -335,11 +347,13 @@ function update(pong)
 
   if (side == "left")
   {
-    room.perform("update_left", pong)
+    if (room != null)
+      room.perform("update_left", pong)
   }
   else if (side == "right")
   {
-    room.perform("update_right", {paddle_right_y: pong.right_action, room_name: pong.room_name})
+    if (room != null)
+      room.perform("update_right", {paddle_right_y: pong.right_action, room_name: pong.room_name})
   }
 }
 
@@ -376,9 +390,9 @@ function play()
  // update_pos_paddle(pong, delta);
   setTimeout(function() {
     update(pong)
-    if (side == "left")
+    if (side == "left" && room != null)
       room.perform("get_datas", {room_name: pong.room_name})
-  }, 1000/60);
+  }, 1000/45);
   //update_pos_paddle(pong);
   //animation = requestAnimationFrame(play)
 }
