@@ -1,10 +1,13 @@
 <div id="pong-index">
     <div id="user-left">
         <img src="<%= user_left.avatar %>">
-    <h1>
+        <h1>
         <%= user_left.username %>
-    </h1>
+        </h1>
         <p id="user_left_score">0</p>
+        <% if (Transcendence.current_user.toJSON().id == user_left.id) { %>
+            <button id="forfeit-left">Forfeit</button>
+        <% } %>
     </div>
     <div id="canvas-div">
         <canvas id="canvas-id" width="600" height="350">
@@ -16,6 +19,9 @@
             <%= user_right.username %>
         </h1>
         <p id="user_right_score">0</p>
+        <% if (Transcendence.current_user.toJSON().id == user_right.id) { %>
+            <button id="forfeit-right">Forfeit</button>
+        <% } %>
     </div>
 </div>
 <script>

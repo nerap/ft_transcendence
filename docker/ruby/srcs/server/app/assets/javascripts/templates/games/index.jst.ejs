@@ -12,7 +12,7 @@
                         value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
     </form>
 </div>
-<script>
+<script >
      $('#search_game').submit(function() {
 
         if (document.getElementById('ladder-id').checked == true)
@@ -28,9 +28,9 @@
         return true;
     });
 </script>
-
 <div id="waiting" hidden="true">
     waiting for opponent
+    <button id="cancel-id">Cancel</button>
 </div>
 
 <div id="found" hidden="true">
