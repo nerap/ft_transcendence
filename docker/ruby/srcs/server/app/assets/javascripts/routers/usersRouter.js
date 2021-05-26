@@ -3,7 +3,8 @@ Transcendence.Routers.Users = Backbone.Router.extend({
         "users": "index",
         "users/edit_account": "editAccount",
         "users/edit_profile": "editProfile",
-        "users/:id": "profile",
+        "users/friends": "friends",
+        "users/:id": "profile"
     },
     initialize: function () {
         this.view = null;
@@ -26,6 +27,11 @@ Transcendence.Routers.Users = Backbone.Router.extend({
     editProfile: function () {
         this.cleanUp();
         this.view = new Transcendence.Views.UserEdit({ model: Transcendence.current_user });
+        $('#main-body').html(this.view.render().$el);
+    },
+    friends: function () {
+        this.cleanUp();
+        this.view = new Transcendence.Views.FriendsIndex({ collection: Transcendence.friends });
         $('#main-body').html(this.view.render().$el);
     },
     profile: function (id) {

@@ -40,19 +40,39 @@ Transcendence.Routers.Guilds = Backbone.Router.extend({
         }
     },
     wars: function (id) {
-        this.cleanUp();
-        this.view = new Transcendence.Views.GuildWars({
-            model: Transcendence.guilds.get(id),
-            id: id
-        });
-        $('#main-body').html(this.view.render().$el);
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            flashMessage("error", "This guild doesn't exist !");
+        } else {
+            if (Transcendence.current_user.id == Transcendence.guilds.get(id).toJSON().owner) {
+                this.cleanUp();
+                this.view = new Transcendence.Views.GuildWars({
+                    model: Transcendence.guilds.get(id),
+                    id: id
+                });
+                $('#main-body').html(this.view.render().$el);
+            } else {
+                location.hash = "#guilds";
+                flashMessage("error", "You are not allowed to access this page !");
+            }
+        }
     },
     newWar: function (id) {
-        this.cleanUp();
-        this.view = new Transcendence.Views.GuildWarsNew({
-            model: Transcendence.guilds.get(id),
-            id: id
-        });
-        $('#main-body').html(this.view.render().$el);
+        if (!Transcendence.guilds.get(id)) {
+            location.hash = "#guilds";
+            flashMessage("error", "This guild doesn't exist !");
+        } else {
+            if (Transcendence.current_user.id == Transcendence.guilds.get(id).toJSON().owner) {
+                this.cleanUp();
+                this.view = new Transcendence.Views.GuildWarsNew({
+                    model: Transcendence.guilds.get(id),
+                    id: id
+                });
+                $('#main-body').html(this.view.render().$el);
+            } else {
+                location.hash = "#guilds";
+                flashMessage("error", "You are not allowed to access this page !");
+            }
+        }
     }
 });

@@ -21,13 +21,18 @@ Transcendence.Routers.PrivateRooms = Backbone.Router.extend({
             location.hash = "#private_rooms";
             flashMessage("error", "This page doesn't exist !");
         } else {
-            this.cleanUp();
-            this.view = new Transcendence.Views.PrivateRoomShow({
-                collection: Transcendence.private_rooms,
-                model: Transcendence.private_rooms.get(id),
-                id: id
-            });
-            $('#main-body').html(this.view.render().$el);
+            if (Transcendence.private_rooms.get(id).toJSON().users.includes(Transcendence.current_user.id)) {
+                this.cleanUp();
+                this.view = new Transcendence.Views.PrivateRoomShow({
+                    collection: Transcendence.private_rooms,
+                    model: Transcendence.private_rooms.get(id),
+                    id: id
+                });
+                $('#main-body').html(this.view.render().$el);
+            } else {
+                location.hash = "#private_rooms";
+                flashMessage("error", "You are not allowed to access this page !");
+            }
         }
     }
 });
