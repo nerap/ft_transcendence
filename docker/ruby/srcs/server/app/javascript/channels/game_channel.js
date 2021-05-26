@@ -408,6 +408,8 @@ function ballmove(pong, delta)
   {
     if (side == "left")
     {
+
+      
       if (pong.bally > pong.user_right_y + 100 || pong.bally < pong.user_right_y)
       {
         pong.user_left_score++;
