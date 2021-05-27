@@ -68,11 +68,14 @@ class Game < ApplicationRecord
 			if user_opponent = User.find_by(email: opponent)
 				if user_opponent.pong != 0
 					game = Pong.find_by(room_id: user_opponent.pong)
+					room_name = "play_channel_#{user_opponent.pong}"
+					
 					user_current = User.find_by(email: data)
 
 					user_opponent.pong = 0
 					user_current.pong = 0
-
+					game.user_left_score = $games[room_name][:left_score]
+					game.user_right_score = $games[room_name][:right_score]
 					game.winner = user_opponent.id
 					game.looser = user_current.id
 					game.tie = false

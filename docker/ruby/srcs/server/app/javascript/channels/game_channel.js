@@ -375,26 +375,14 @@ function play()
   var now = Date.now();
   var delta = (now - currentTime) / 1000;
   currentTime = now;
- // update_pos_paddle(pong);
   ballmove(pong, delta);
-  //setTimeout(function() {
-    //update(pong)
-    //room.perform("get_datas", {room_name: pong.room_name})
-  //}, 1000/30);
-  //update(pong)
-                        //room.perform("get_datas", {room_name: pong.room_name})
-                       // if (contexte != null)
-                         // ballmove(pong);
   update_pos_paddle(pong, delta);
+  update(pong)
   draw_game(pong)
- // update_pos_paddle(pong, delta);
   setTimeout(function() {
-    update(pong)
     if (side == "left" && room != null)
       room.perform("get_datas", {room_name: pong.room_name})
   }, 1000/45);
-  //update_pos_paddle(pong);
-  //animation = requestAnimationFrame(play)
 }
 
 function ballmove(pong, delta)

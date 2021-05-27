@@ -6,7 +6,6 @@ Transcendence.Views.GamesGame = Backbone.View.extend ({
         this.listenTo(Transcendence.games, 'change add remove', this.render);
     },
     render: function () {
-        console.log(this.id)
         if (this.collection.get(this.id))
             var match = this.collection.get(this.id).toJSON();
         else
