@@ -4,7 +4,6 @@ class PlayChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
   end
 
   def update_left(data)
@@ -19,7 +18,7 @@ class PlayChannel < ApplicationCable::Channel
     $games[room_name][:ball_dir_y] = data['balldiry']
     $games[room_name][:ball_speed] = data['ballspeed']
 
-    if ($games[room_name][:left_score] == 5)
+    if ($games[room_name][:left_score] == 20)
       game = Pong.find_by(room_id: $games[room_name][:room_id])
 			user_left = User.find_by_id(game.user_left_id)
       user_right = User.find_by_id(game.user_right_id)
@@ -39,7 +38,14 @@ class PlayChannel < ApplicationCable::Channel
         ActionCable.server.broadcast "pong_channel", content: "ok"
         ActionCable.server.broadcast "users_channel", content: "profile"
       end
-    elsif ($games[room_name][:right_score] == 5)
+      users = User.where(pong: $games[room_name][:room_id])
+      users.each do |temp|
+        temp.pong = 0
+        if temp.save
+          ActionCable.server.broadcast data['room_name'], content: "end";
+        end
+     end
+    elsif ($games[room_name][:right_score] == 20)
       game = Pong.find_by(room_id: $games[room_name][:room_id])
 			user_left = User.find_by_id(game.user_left_id)
       user_right = User.find_by_id(game.user_right_id)
@@ -59,6 +65,13 @@ class PlayChannel < ApplicationCable::Channel
         ActionCable.server.broadcast "pong_channel", content: "ok"
         ActionCable.server.broadcast "users_channel", content: "profile"
       end
+      users = User.where(pong: $games[room_name][:room_id])
+      users.each do |temp|
+        temp.pong = 0
+        if temp.save
+          ActionCable.server.broadcast data['room_name'], content: "end";
+        end
+     end
     end
   end
 
@@ -68,5 +81,18 @@ class PlayChannel < ApplicationCable::Channel
 
   def get_datas(data)
     ActionCable.server.broadcast data['room_name'], $games[data['room_name']];
+  end
+
+  def leave(data)
+    puts "LOLOLOLOL"
+    puts data
+    user = User.find_by_id(current_user.id)
+    puts user.email
+    user.pong = 0
+    if user.save
+      puts "LOLOLOLOL"
+      ActionCable.server.broadcast "users_channel", content: "profile"
+      ActionCable.server.broadcast "player_#{user.email}", {content: "disconnected"}
+    end
   end
 end

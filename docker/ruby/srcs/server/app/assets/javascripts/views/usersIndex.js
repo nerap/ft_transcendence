@@ -3,7 +3,7 @@ Transcendence.Views.UsersIndex = Backbone.View.extend ({
         "click .send-pm": "sendPM"
     },
     initialize: function () {
-        this.listenTo(Transcendence.users, "change:username change:guild change:online add remove", this.render)
+        this.listenTo(Transcendence.users, "change:username change:guild change:online change:pong add remove", this.render)
         this.listenTo(Transcendence.guild_invitations, 'change add remove', this.render);
         this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },

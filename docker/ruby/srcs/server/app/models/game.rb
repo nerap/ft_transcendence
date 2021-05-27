@@ -18,6 +18,7 @@ class Game < ApplicationRecord
             user_one.pong = current_match_id
             user_two.pong = current_match_id
             if user_one.save && user_two.save
+				ActionCable.server.broadcast "users_channel", content: "profile"
 				pong = Pong.new
 				pong.user_left_id = user_one.id
 				pong.user_right_id = user_two.id
@@ -81,10 +82,17 @@ class Game < ApplicationRecord
 					game.tie = false
 					game.done = true
 					game.playing = false
-
+					
 					if game.save && user_opponent.save && user_current.save
 						ActionCable.server.broadcast "users_channel", content: "profile"
 						ActionCable.server.broadcast "pong_channel", content: "profile"
+						users = User.where(pong: $games[room_name][:room_id])
+						users.each do |temp|
+					 		temp.pong = 0
+					 		if temp.save
+								ActionCable.server.broadcast "player_#{temp.email}", {content: "disconnected"}
+					 		end
+						end
 						Redis.current.set("play_channel_#{user_opponent.pong}_l", nil)
 						Redis.current.set("play_channel_#{user_opponent.pong}_r", nil)
 					end
