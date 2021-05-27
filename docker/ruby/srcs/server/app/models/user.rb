@@ -13,6 +13,7 @@ class User < ApplicationRecord
   has_many :chatroom_mute, dependent: :destroy
   has_many :chat, dependent: :destroy
   has_many :private_message, dependent: :destroy
+  # belongs_to :tournament, required: false
 
   def as_json(options = {})
     super(options.merge(except: [ :provider, :uid, :otp_secret, :encrypted_otp_secret, :encrypted_otp_secret_iv, :encrypted_otp_secret_salt, :consumed_timestep ]))

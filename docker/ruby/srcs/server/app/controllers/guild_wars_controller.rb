@@ -8,20 +8,20 @@ class GuildWarsController < ApplicationController
     def index
         @guild_wars = GuildWar.all
     end
-  
+
     # GET /guilds/1 or /guilds/1.json
     def show
     end
-  
+
     # GET /guilds/new
     def new
         @guild_wars = GuildWar.new
     end
-  
+
     # GET /guilds/1/edit
     def edit
     end
-  
+
     def check_war
         @guild_wars = GuildWar.where(done: false, started: true)
         @guild_wars.each do |war|
@@ -107,9 +107,9 @@ class GuildWarsController < ApplicationController
                             if (guild_war_params[:unanswered_match].to_i >= 0 && guild_war_params[:unanswered_match].to_i <= 10)
                                 if (guild_war_params[:pending] == "true")
                                     parse_time = params[:start].to_s
-                                    start_war = DateTime.parse(parse_time) - 2.hours
-                                    if start_war.past?
-                                        flash[:error] = "Start time error"
+                                    start_war = DateTime.parse(parse_time)
+                                    if start_war < DateTime.now.change(:offset => "+0000").to_time
+                                        flash[:error] = "You must enter a valid start time !"
                                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                                         return
                                     end
@@ -147,7 +147,7 @@ class GuildWarsController < ApplicationController
         flash[:error] = "Wrong parameters"
         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
     end
-  
+
     def forfeit
         @guild_war = GuildWar.find(params[:id])
         guild_one_id = Guild.find_by_id(@guild_war.guild_one_id)
@@ -210,6 +210,10 @@ class GuildWarsController < ApplicationController
         guild_one = Guild.find_by_id(@guild_war.guild_one_id)
         guild_two = Guild.find_by_id(@guild_war.guild_two_id)
         if current_user.id == guild_one.owner || current_user.id == guild_two.owner
+            guild_one.war = false
+            guild_two.war = false
+            guild_one.save
+            guild_two.save
             @guild_war.destroy
             respond_to do |format|
                 ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
@@ -217,12 +221,12 @@ class GuildWarsController < ApplicationController
             end
         end
     end
-  
+
     private
     def set_guild_war
         @guild_war = GuildWar.find(params[:id])
     end
-  
+
     def guild_war_params
         params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :pending, :done, :started, :guild_forfeit)
     end

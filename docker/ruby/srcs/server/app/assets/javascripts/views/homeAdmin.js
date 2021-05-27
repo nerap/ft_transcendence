@@ -12,6 +12,10 @@ Transcendence.Views.HomeAdmin = Backbone.View.extend({
             this.render();
             $("#chatrooms-actions").show();
         });
+        this.listenTo(Transcendence.tournaments, 'add remove', function () {
+            this.render();
+            $("#tournaments-actions").show();
+        });
     },
     render: function () {
         $(".nav-option").removeClass("active")

@@ -21,7 +21,8 @@ var Transcendence = {
     this.pongs = new Transcendence.Collections.Pongs(data.pongs);
     this.guilds = new Transcendence.Collections.Guilds(data.guilds);
     this.guild_wars = new Transcendence.Collections.GuildWars(data.guild_wars);
-    this.guild_invitations= new Transcendence.Collections.GuildInvitations(data.guild_invitations);
+    this.guild_invitations = new Transcendence.Collections.GuildInvitations(data.guild_invitations);
+    this.tournaments = new Transcendence.Collections.Tournaments(data.tournaments);
     this.current_user = new window.Transcendence.UserSession(data.current_user);
     this.otp_uri = data.otp_uri;
     new Transcendence.Routers.Home();

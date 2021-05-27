@@ -1,6 +1,7 @@
 Transcendence.Routers.Games = Backbone.Router.extend({
     routes: {
         "games": "index",
+        "tournaments": "tournaments",
         "games/:id": "game",
     },
     initialize: function () {
@@ -19,6 +20,11 @@ Transcendence.Routers.Games = Backbone.Router.extend({
             return
         }
         this.view = new Transcendence.Views.GamesIndex({ collection: Transcendence.games });
+        $('#main-body').html(this.view.render().$el);
+    },
+    tournaments: function () {
+        this.cleanUp();
+        this.view = new Transcendence.Views.TournamentsIndex({ collection: Transcendence.tournaments });
         $('#main-body').html(this.view.render().$el);
     },
     game: function (id) {

@@ -4,14 +4,8 @@ Rails.application.routes.draw do
   get "home", to: "home#index"
 
   scope "api" do
-    resources :friends
-    resources :guilds
-    resources :guild_wars
-    resources :guild_invitations
     resources :games
     resources :pongs
-    put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
-    put '/guild_wars/forfeit/:id', to: "guild_wars#forfeit"
     resources :chatrooms do
       member do
         post 'login'
@@ -26,7 +20,9 @@ Rails.application.routes.draw do
         put 'unjoin'
       end
     end
+    post '/chats', to: "chats#create"
 
+    resources :friends
     put '/users/unset_ft'
     put '/users/edit_profile'
     put '/users/block_user'
@@ -39,17 +35,26 @@ Rails.application.routes.draw do
     put 'admin/ban_user'
     put 'admin/unban_user'
 
-    post '/chats', to: "chats#create"
-  
     resources :private_rooms
     post '/private_messages', to: "private_messages#create"
 
+    resources :guilds
+    resources :guild_invitations
     post '/guilds/leave_guild', to: "guilds#leave_guild"
     post '/guilds/join_guild', to: "guilds#join_guild"
     post '/guilds/promote', to: "guilds#promote"
     post '/guilds/demote', to: "guilds#demote"
     post '/guilds/kick', to: "guilds#kick"
- 
+
+    resources :guild_wars
+    put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
+    put '/guild_wars/forfeit/:id', to: "guild_wars#forfeit"
+
+    get '/tournaments', to: "tournaments#index"
+    post '/tournaments', to: "tournaments#create"
+    delete '/tournaments/:id', to: "tournaments#destroy"
+    put '/tournaments/register', to: "tournaments#register"
+    put '/tournaments/unregister', to: "tournaments#unregister"
   end
 
   get 'my_friends', to: "friends#index"

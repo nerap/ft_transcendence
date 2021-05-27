@@ -17,7 +17,7 @@
             <td style="border-bottom: 1px solid rgba(0, 0, 0, 0.12);" class="sideopt" onclick='$(".admin-option").slideUp();$("#guilds-actions").slideToggle(300)'>Guilds</td>
         </tr>
         <tr>
-            <td class="sideopt">Tournaments</td>
+            <td class="sideopt" onclick='$(".admin-option").slideUp();$("#tournaments-actions").slideToggle(300)'>Tournaments</td>
         </tr>
     </table>
 </div>
@@ -169,6 +169,37 @@
             </tr>
         <% }) %>
         </table>
+    </div>
+    <div id="tournaments-actions" class="admin-option" style="display:none;">
+        <br/>
+        <form action="/api/tournaments" class="admin-choices" type="submit" method="post" data-remote="true">
+            Start time*:
+            <input type="date" name="tournament[date]"> <input type="time" name="tournament[time]">
+            <br/>User reward: <input type="number" name="tournament[user_reward]" value="0" min="0" max="1000">
+            <br/>Guild reward: <input type="number" name="tournament[guild_reward]" value="0" min="0" max="1000">
+            <br/><i style="font-size:smaller;">*mandatory</i>
+            <br/><br/><button type="submit">create a tournament</button>
+            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+        </form>
+        <br/>
+        <table class="admin-choices">
+            <% if (Transcendence.tournaments.length == 0) { %>
+                <tr>
+                    <td style="text-align:center;">There are no tournaments !</td>
+                </tr>
+            <% } %>
+            <% Transcendence.tournaments.each(function (tr) { %>
+                <tr>
+                    <td style="font-size:12px;"><%= tr.toJSON().id %></td>
+                    <td style="font-size:12px;">User reward: <%= tr.toJSON().user_reward %><br/>Guild reward: <%= tr.toJSON().guild_reward %></td>
+                    <td style="font-size:12px;">Start time: <%= tr.toJSON().start_time.split("T")[0] %> <%= tr.toJSON().start_time.split("T")[1].split(".")[0] %></td>
+                    <td style="font-size:12px;">Started: <%= tr.toJSON().started %></td>
+                    <td style="font-size:20px;">
+                        <a href="/api/tournaments/<%= tr.toJSON().id %>" style="text-decoration:none;" data-method="delete" data-remote="true" rel="nofollow"><div style="padding-right:3px;">&times;</div></a>
+                    </td>
+                </tr>
+            <% }) %>
+            </table>
     </div>
 </div>
 </div>
