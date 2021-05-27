@@ -27,6 +27,14 @@ class PongsController < ApplicationController
           ActionCable.server.broadcast "pong_channel", content: "ok"
         end
     end
+
+    def spectate
+        user = User.find_by_id(current_user.id)
+        user.pong = params[:room_id]
+        if user.save
+            ActionCable.server.broadcast "player_#{current_user.email}", content: "spectate"
+        end
+    end
   
     # PATCH/PUT /friends/1 or /friends/1.json
     def update

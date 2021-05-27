@@ -8,6 +8,7 @@ let pong;
 let room_id;
 let inter;
 
+
 let up = false
 let down = false
 
@@ -77,11 +78,11 @@ consumer.subscriptions.create("GameChannel", {
     console.log(data.content)
     if (data.content == "create a match")
     {
+      document.getElementById("users-index").hidden = true;
+      document.getElementById("waiting").hidden = false;
       game = consumer.subscriptions.create({channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked}, {
         connected() {
           console.log("Waiting for opponent 2")
-          document.getElementById("users-index").hidden = true;
-          document.getElementById("waiting").hidden = false;
           document.getElementById("cancel-id").addEventListener("click", () => {
             game_perform()
             if (game)
@@ -158,7 +159,9 @@ consumer.subscriptions.create("GameChannel", {
                           consumer.subscriptions.remove(room)
                         game = null
                         room = null
-                        location.hash = "#games"
+                        setTimeout(function() {
+                          location.hash = "#games"
+                        }, 200);
                       }
                       else
                       {
@@ -183,14 +186,30 @@ consumer.subscriptions.create("GameChannel", {
     }
     else if (data.content == "spectate")
     {
+      Transcendence.users.fetch().done(() => {
+        Transcendence.current_user.fetch().done(() => {
+          Transcendence.pongs.fetch().done(() => {
+      location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong
       room = consumer.subscriptions.create({channel: "PlayChannel", game_room_id: Transcendence.current_user.toJSON().pong, role: "spec"}, {
         connected() {
           side = "spectate"
           pong = new Game(room_id)
+          contexte = null
           inter = setInterval(() => {
-            draw_game(pong)
-            
-          }, 50);
+            if (document.getElementById("canvas-id"))
+            {              canvas = document.getElementById("canvas-id")
+              contexte = canvas.getContext('2d');
+              contexte.clearRect(0, 0, 600, 350)
+              if (document.getElementById("leave-spec"))
+                document.getElementById("leave-spec").addEventListener("click", leave);
+            }
+            if (contexte != null)
+            {
+              room.perform("get_datas", {room_name: pong.room_name})
+              currentTime = Date.now();
+              clearInterval(inter);
+            }
+          }, 50 );
         },
       
         disconnected() {
@@ -200,37 +219,47 @@ consumer.subscriptions.create("GameChannel", {
         received(data) {
           if (data.content && data.content == "end")
           {
-            if (animation)
-              cancelAnimationFrame(animation)
+            console.log("end")
             if (game)
               consumer.subscriptions.remove(game)
             if (room)
               consumer.subscriptions.remove(room)
             game = null
             room = null
-            location.hash = "#games"
+            setTimeout(function() {
+              location.hash = "#games"
+            }, 200);          
           }
           else
           {
             update_datas(data)
+            if (contexte != null && room != null)
+            {
+              play()
+              if (document.getElementById("user_left_score"))
+                document.getElementById("user_left_score").textContent = pong.user_left_score
+              if (document.getElementById("user_right_score"))
+                document.getElementById("user_right_score").textContent = pong.user_right_score
+            }
           }
         }
       });
+      });});});
     }
     else if (data.content == "disconnected")
     {
       console.log("data.content = disconnected")
-      if (game)
-      {
-        consumer.subscriptions.remove(game)
+        if (game)
+          consumer.subscriptions.remove(game)
         game = null
         if (room)
           consumer.subscriptions.remove(room)
         room = null
         if (location.hash != "#games")
         {
-          console.log("location hash modified")
-          location.hash = "#games"
+          setTimeout(function() {
+            location.hash = "#games"
+          }, 200);
         }
         else
         {
@@ -238,7 +267,6 @@ consumer.subscriptions.create("GameChannel", {
           document.getElementById("waiting").hidden = true;
           document.getElementById("found").hidden = true;
         }
-      }
     }
   }
 });
@@ -248,25 +276,32 @@ function forfeit()
     console.log("forfeit")
     game_perform()
     if (game)
-    {
-
       consumer.subscriptions.remove(game)
-      game = null
-      if (room)
-        consumer.subscriptions.remove(room)
-      room = null
-      if (location.hash != "#games")
-      {
+    game = null
+    if (room)
+      consumer.subscriptions.remove(room)
+    room = null
+    setTimeout(function() {
+      location.hash = "#games"
+    }, 200);
+}
+
+function leave()
+{
+  game = null
+  if (room)
+    room.perform("leave", {player_email: Transcendence.current_user.toJSON().email})
+  setTimeout(function() {
+    if (room)
+      consumer.subscriptions.remove(room)
+    room = null
+  }, 200);
+  Transcendence.users.fetch().done(() => {
+    Transcendence.current_user.fetch().done(() => {
+      setTimeout(function() {
         location.hash = "#games"
-      }
-      
-      else
-      {
-        document.getElementById("users-index").hidden = false;
-        document.getElementById("waiting").hidden = true;
-        document.getElementById("found").hidden = true;
-      }
-  }
+      }, 200);
+    });});
 }
 
 function game_perform()
@@ -379,7 +414,8 @@ function play()
   currentTime = now;
   ballmove(pong, delta);
   update_pos_paddle(pong, delta);
-  update(pong)
+  if (side != "spec")
+    update(pong)
   draw_game(pong)
   setTimeout(function() {
     if (side == "left" && room != null)

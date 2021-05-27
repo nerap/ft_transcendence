@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_25_094154) do
+ActiveRecord::Schema.define(version: 2021_05_27_120703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,7 +119,6 @@ ActiveRecord::Schema.define(version: 2021_05_25_094154) do
     t.bigint "user_left_score"
     t.bigint "user_right_score"
     t.string "mode"
-    t.boolean "ladder"
     t.boolean "pending"
     t.boolean "started"
     t.boolean "done"
@@ -183,7 +182,7 @@ ActiveRecord::Schema.define(version: 2021_05_25_094154) do
     t.boolean "first_time", default: true
     t.boolean "member"
     t.bigint "score", default: 1000
-    t.bigint "pong"
+    t.bigint "pong", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["provider"], name: "index_users_on_provider"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

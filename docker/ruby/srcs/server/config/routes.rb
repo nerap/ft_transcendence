@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :guild_invitations
     resources :games
     resources :pongs
+
     put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
     put '/guild_wars/forfeit/:id', to: "guild_wars#forfeit"
     resources :chatrooms do
@@ -49,6 +50,8 @@ Rails.application.routes.draw do
     post '/guilds/promote', to: "guilds#promote"
     post '/guilds/demote', to: "guilds#demote"
     post '/guilds/kick', to: "guilds#kick"
+
+    post '/pongs/spectate', to: "pongs#spectate"
  
   end
 
