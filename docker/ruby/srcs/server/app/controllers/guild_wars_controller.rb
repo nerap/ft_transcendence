@@ -210,10 +210,14 @@ class GuildWarsController < ApplicationController
         guild_one = Guild.find_by_id(@guild_war.guild_one_id)
         guild_two = Guild.find_by_id(@guild_war.guild_two_id)
         if current_user.id == guild_one.owner || current_user.id == guild_two.owner
-            guild_one.war = false
-            guild_two.war = false
-            guild_one.save
-            guild_two.save
+            if guild_one.war == @guild_war.id
+                guild_one.war = false
+                guild_one.save
+            end
+            if guild_two.war == @guild_war.id
+                guild_two.war = false
+                guild_two.save
+            end
             @guild_war.destroy
             respond_to do |format|
                 ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id

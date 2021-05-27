@@ -53,8 +53,8 @@ Rails.application.routes.draw do
     get '/tournaments', to: "tournaments#index"
     post '/tournaments', to: "tournaments#create"
     delete '/tournaments/:id', to: "tournaments#destroy"
-    put '/tournaments/register', to: "tournaments#register"
-    put '/tournaments/unregister', to: "tournaments#unregister"
+    put '/tournaments/:id/register', to: "tournaments#register"
+    put '/tournaments/:id/unregister', to: "tournaments#unregister"
   end
 
   get 'my_friends', to: "friends#index"

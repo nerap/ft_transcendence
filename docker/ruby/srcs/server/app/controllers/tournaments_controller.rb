@@ -55,9 +55,21 @@ class TournamentsController < ApplicationController
     end
 
     def register
+        tournament = Tournament.find(params[:id])
+        if tournament.started == false
+            current_user.tournament = tournament.id
+            current_user.save
+            ActionCable.server.broadcast "users_channel", content: "profile"
+        end
     end
 
     def unregister
+        tournament = Tournament.find(params[:id])
+        if tournament.started == false
+            current_user.tournament = nil
+            current_user.save
+            ActionCable.server.broadcast "users_channel", content: "profile"
+        end
     end
 
     private
