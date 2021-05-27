@@ -24,6 +24,9 @@
         <% } %>
     </div>
 </div>
+<% if ((Transcendence.current_user.toJSON().id != user_right.id) && (Transcendence.current_user.toJSON().id != user_left.id)){ %>
+    <button id="leave-spec">Leave Spec mode</button>
+<% } %>
 <script>
 
 </script>

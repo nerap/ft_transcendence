@@ -6,6 +6,12 @@ Rails.application.routes.draw do
   scope "api" do
     resources :games
     resources :pongs
+<<<<<<< HEAD
+=======
+
+    put '/guild_wars/accept_request/:id', to: "guild_wars#accept_request"
+    put '/guild_wars/forfeit/:id', to: "guild_wars#forfeit"
+>>>>>>> 9a45a48844821e3a44bc1ea496cc9138512e1075
     resources :chatrooms do
       member do
         post 'login'
@@ -55,6 +61,8 @@ Rails.application.routes.draw do
     delete '/tournaments/:id', to: "tournaments#destroy"
     put '/tournaments/:id/register', to: "tournaments#register"
     put '/tournaments/:id/unregister', to: "tournaments#unregister"
+
+    post '/pongs/spectate', to: "pongs#spectate"
   end
 
   get 'my_friends', to: "friends#index"

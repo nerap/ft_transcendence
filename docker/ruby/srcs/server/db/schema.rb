@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2021_05_26_170255) do
+=======
+ActiveRecord::Schema.define(version: 2021_05_27_120703) do
+>>>>>>> 9a45a48844821e3a44bc1ea496cc9138512e1075
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,7 +123,6 @@ ActiveRecord::Schema.define(version: 2021_05_26_170255) do
     t.bigint "user_left_score"
     t.bigint "user_right_score"
     t.string "mode"
-    t.boolean "ladder"
     t.boolean "pending"
     t.boolean "started"
     t.boolean "done"
