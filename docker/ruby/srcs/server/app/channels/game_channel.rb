@@ -1,7 +1,12 @@
 class GameChannel < ApplicationCable::Channel
   def subscribed
     stream_from "player_#{current_user.email}"
-    if (params[:is_matchmaking])
+
+    if (params[:ranked] == "joining")
+      puts "Joining matches"
+    elsif (params[:is_duel])
+      Game.start(current_user.email, params[:user_one_email], params[:ranked])
+    elsif (params[:is_matchmaking])
       ranked = params[:ranked] ? "ladder" : "duel"
       Match.create(current_user.email, ranked)
     end

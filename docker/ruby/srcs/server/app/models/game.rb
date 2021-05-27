@@ -36,7 +36,6 @@ class Game < ApplicationRecord
 					ActionCable.server.broadcast "pong_channel", content: "ok"
 					Redis.current.set("opponent_for:#{left}", right)
 					Redis.current.set("opponent_for:#{right}", left)
-				
 					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id}
 					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "right", match_room_id: current_match_id}
 				end
@@ -83,7 +82,21 @@ class Game < ApplicationRecord
 					game.done = true
 					game.playing = false
 					
+					if game.mode == "ladder"
+						if user_opponent.guild != nil
+						  guild = Guild.find_by_id(user_opponent.guild)
+						  guild.points += 10
+						  guild.save
+						end
+						user_opponent.score += 10
+						user_current.score -= 10
+						if (user_current.score < 0)
+							user_current.score = 0
+						end
+					  end
+
 					if game.save && user_opponent.save && user_current.save
+						ActionCable.server.broadcast "guild_channel", content: "ok"
 						ActionCable.server.broadcast "users_channel", content: "profile"
 						ActionCable.server.broadcast "pong_channel", content: "profile"
 						users = User.where(pong: $games[room_name][:room_id])

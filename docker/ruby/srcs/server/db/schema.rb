@@ -119,7 +119,6 @@ ActiveRecord::Schema.define(version: 2021_05_27_120703) do
     t.bigint "user_left_score"
     t.bigint "user_right_score"
     t.string "mode"
-    t.boolean "ladder"
     t.boolean "pending"
     t.boolean "started"
     t.boolean "done"

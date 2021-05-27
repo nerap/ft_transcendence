@@ -35,6 +35,38 @@ class PongsController < ApplicationController
             ActionCable.server.broadcast "player_#{current_user.email}", content: "spectate"
         end
     end
+
+    def duel_demand
+      war = false
+      user_one = User.find_by_id(params[:user_one_id])
+      user_two = User.find_by_id(params[:user_two_id])
+
+      if user_one.guild != nil && user_two.guild != nil
+        guild_one = Guild.find_by_id(user_one.guild)
+        guild_two = Guild.find_by_id(user_two.guild)
+        if guild_one.war != nil && guild_two.war != nil
+          if guild_one.war == guild_two.war
+            guild_war = GuildWar.find_by_id(guild_one.war)
+            if guild_war.started == true && guild_war.done == false
+              war = true
+            end
+          end
+        end
+      end
+      ActionCable.server.broadcast "flash_admin_channel:#{params[:user_two_id]}", type: "duel", user_one_id: params[:user_one_id], user_two_id: params[:user_two_id], war: war
+    end
+
+    def accept_duel
+      if params[:war] == true
+        ranked = "war"
+      else
+        ranked = "duel"
+      end
+      user_one_email = User.find_by_id(params[:user_one_id]).email
+      ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one_email
+      ActionCable.server.broadcast "player_#{user_one_email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
+
+    end
   
     # PATCH/PUT /friends/1 or /friends/1.json
     def update

@@ -78,12 +78,16 @@ consumer.subscriptions.create("GameChannel", {
     console.log(data.content)
     if (data.content == "create a match")
     {
-      document.getElementById("users-index").hidden = true;
-      document.getElementById("waiting").hidden = false;
-      game = consumer.subscriptions.create({channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked}, {
+      if (document.getElementById("users-index"))
+        document.getElementById("users-index").hidden = true;
+      if (document.getElementById("waiting"))
+        document.getElementById("waiting").hidden = false;
+      game = consumer.subscriptions.create({channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email}, {
         connected() {
           console.log("Waiting for opponent 2")
-          document.getElementById("cancel-id").addEventListener("click", () => {
+          if ( document.getElementById("cancel-id"))
+          {
+            document.getElementById("cancel-id").addEventListener("click", () => {
             game_perform()
             if (game)
             {
@@ -102,8 +106,9 @@ consumer.subscriptions.create("GameChannel", {
                 document.getElementById("waiting").hidden = true;
                 document.getElementById("found").hidden = true;
               }
-      }})
-          document.getElementById("found").hidden = true;
+          }})
+        }
+          //document.getElementById("found").hidden = true;
 
         },
         disconnected() {
@@ -113,10 +118,12 @@ consumer.subscriptions.create("GameChannel", {
         received(data) {
           console.log(data)
           if (data.action === 'game_start') {
-            document.getElementById("waiting").hidden = true;
+            if (document.getElementById("waiting"))
+              document.getElementById("waiting").hidden = true;
             room_id = data.match_room_id
             side = data.msg
-            document.getElementById("found").hidden = false;
+            if (document.getElementById("found"))
+              document.getElementById("found").hidden = false;
             Transcendence.users.fetch().done(() => {
               Transcendence.current_user.fetch().done(() => {
                 Transcendence.pongs.fetch().done(() => {

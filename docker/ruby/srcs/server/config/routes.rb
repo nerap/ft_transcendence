@@ -57,6 +57,8 @@ Rails.application.routes.draw do
     put '/tournaments/:id/unregister', to: "tournaments#unregister"
 
     post '/pongs/spectate', to: "pongs#spectate"
+    post '/pongs/duel_demand', to: "pongs#duel_demand"
+    post '/pongs/accept_duel', to: "pongs#accept_duel"
   end
 
   get 'my_friends', to: "friends#index"
