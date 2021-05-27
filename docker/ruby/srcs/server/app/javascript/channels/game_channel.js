@@ -88,6 +88,9 @@ consumer.subscriptions.create("GameChannel", {
             {
               consumer.subscriptions.remove(game)
               game = null
+              if (room)
+                consumer.subscriptions.remove(room)
+              room = null
               if (location.hash != "#games")
               {
                 location.hash = "#games"
@@ -109,14 +112,13 @@ consumer.subscriptions.create("GameChannel", {
         received(data) {
           console.log(data)
           if (data.action === 'game_start') {
+            document.getElementById("waiting").hidden = true;
             room_id = data.match_room_id
             side = data.msg
             document.getElementById("found").hidden = false;
-            document.getElementById("waiting").hidden = true;
             Transcendence.users.fetch().done(() => {
               Transcendence.current_user.fetch().done(() => {
                 Transcendence.pongs.fetch().done(() => {
-                  console.log(Transcendence.current_user.toJSON().pong)
                   location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
                   room = consumer.subscriptions.create({channel: "PlayChannel", game_room_id: Transcendence.current_user.toJSON().pong, role: side}, {
                     connected() {
