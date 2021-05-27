@@ -11,6 +11,8 @@ consumer.subscriptions.create("PongChannel", {
 
   received(data) {
     if (data.content == "ok")
-      Transcendence.pongs.fetch();
+      Transcendence.pongs.fetch().done(() => {
+        console.log("FETCH.DONE")
+      });
   }
 });

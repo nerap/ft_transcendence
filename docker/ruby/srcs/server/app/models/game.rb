@@ -36,30 +36,27 @@ class Game < ApplicationRecord
 					Redis.current.set("opponent_for:#{left}", right)
 					Redis.current.set("opponent_for:#{right}", left)
 				
-					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "Left", match_room_id: current_match_id}
-					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "Right", match_room_id: current_match_id}
+					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id}
+					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "right", match_room_id: current_match_id}
 				end
 			end
-            #room_name = "play_channel_#{current_match_id}"
+            room_name = "play_channel_#{current_match_id}"
 
-			# game = {
-			# 	room_name: room_name,
-			# 	ranked: ranked,
-			# 	ball_pos_x: 0.0,
-			# 	ball_pos_y: 0.0,
-			# 	left_pos: 0.0,
-			# 	right_pos: 0.0,
-			# 	right_score: 0,
-			# 	left_score: 0,
-			# 	ball_speed: 0.0,
-			# 	ball_dir_x: 0.0,
-			# 	ball_dir_y: 0.0,
-			# 	left_action: "w",
-			# 	right_action: "w",
-			# 	player_left_connected: false,
-			# 	player_right_connected: false
-			# }
-			# $games[room_name] = game
+			game = {
+				room_id: current_match_id,
+				room_name: room_name,
+				type: ranked,
+				ball_pos_x: 175.0,
+				ball_pos_y: 300.0,
+				left_action: 's',
+				right_action: 's',
+				right_score: 0,
+				left_score: 0,
+				ball_speed: 400.0,
+				ball_dir_x: 0.5,
+				ball_dir_y: 0.5,
+			}
+			$games[room_name] = game
 
 		end
 	end
@@ -71,11 +68,14 @@ class Game < ApplicationRecord
 			if user_opponent = User.find_by(email: opponent)
 				if user_opponent.pong != 0
 					game = Pong.find_by(room_id: user_opponent.pong)
+					room_name = "play_channel_#{user_opponent.pong}"
+					
 					user_current = User.find_by(email: data)
 
 					user_opponent.pong = 0
 					user_current.pong = 0
-
+					game.user_left_score = $games[room_name][:left_score]
+					game.user_right_score = $games[room_name][:right_score]
 					game.winner = user_opponent.id
 					game.looser = user_current.id
 					game.tie = false

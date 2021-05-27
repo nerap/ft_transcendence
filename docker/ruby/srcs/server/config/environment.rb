@@ -7,3 +7,5 @@ ENV["FT_SECRET"] = "438168fe92c0b66d1f49b736f1d84463dce82e643b85cd84800670999c85
 
 # Initialize the Rails application.
 Rails.application.initialize!
+
+$games = {}
