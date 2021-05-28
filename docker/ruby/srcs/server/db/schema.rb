@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_083714) do
+ActiveRecord::Schema.define(version: 2021_05_28_145859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,9 @@ ActiveRecord::Schema.define(version: 2021_05_28_083714) do
     t.boolean "started"
     t.bigint "unanswered_guild_one", default: 0
     t.bigint "unanswered_guild_two", default: 0
+    t.bigint "winner"
+    t.bigint "looser"
+    t.boolean "tie", default: false
   end
 
   create_table "guilds", force: :cascade do |t|

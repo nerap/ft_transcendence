@@ -63,13 +63,56 @@ class PongsController < ApplicationController
         ranked = "duel"
       end
       user_one_email = User.find_by_id(params[:user_one_id]).email
-      puts ranked
-      puts "LOLOLOLOLOL"
       ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one_email
       ActionCable.server.broadcast "player_#{user_one_email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
-
     end
-  
+
+    def decline_duel
+      user_one = User.find_by_id(params[:user_one_id])
+      user_two = User.find_by_id(params[:user_two_id])
+
+      if user_one.guild != nil && user_two.guild != nil
+        guild_one = Guild.find_by_id(user_one.guild)
+        guild_two = Guild.find_by_id(user_two.guild)
+        if guild_one.war != nil && guild_two.war != nil
+          if guild_one.war == guild_two.war
+            guild_war = GuildWar.find_by_id(guild_one.war)
+            if guild_war.started == true && guild_war.done == false && guild_war.unanswered_match != 0
+              if guild_two.id == guild_war.guild_one_id
+                guild_war.unanswered_guild_two += 1
+                if guild_war.unanswered_guild_two >= guild_war.unanswered_match
+                  guild_one.points -= guild_war.prize
+                  guild_two.points += guild_war.prize
+                  guild_war.winner = guild_two.id
+                  guild_war.looser = guild_one.id
+                  guild_one.loose += 1
+                  guild_two.win += 1
+                  guild_war.done = true
+                  guild_war.started = true 
+                  guild_war.pending = false
+                end
+              else
+                guild_war.unanswered_guild_one += 1
+                if guild_war.unanswered_guild_one >= guild_war.unanswered_match
+                  guild_two.points -= guild_war.prize
+                  guild_one.points += guild_war.prize
+                  guild_war.looser = guild_two.id
+                  guild_war.winner = guild_one.id
+                  guild_two.loose += 1
+                  guild_one.win += 1
+                  guild_war.done = true
+                  guild_war.started = true 
+                  guild_war.pending = false
+                end
+              end
+              if guild_war.save
+                ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: current_user.id
+              end
+            end
+          end
+        end
+      end
+    end
     # PATCH/PUT /friends/1 or /friends/1.json
     def update
       if @pong.update(pong_params)

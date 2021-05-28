@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     post '/pongs/spectate', to: "pongs#spectate"
     post '/pongs/duel_demand', to: "pongs#duel_demand"
     post '/pongs/accept_duel', to: "pongs#accept_duel"
+    post '/pongs/decline_duel', to: "pongs#decline_duel"
   end
 
   get 'my_friends', to: "friends#index"
