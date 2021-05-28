@@ -78,11 +78,21 @@ class TournamentsController < ApplicationController
     end
 
     def check_start
-        if trs = Tournament.where("start_time < ?", DateTime.now.change(:offset => "+0000").to_time)
+        if trs = Tournament.where(started: false).where("start_time < ?", DateTime.now.change(:offset => "+0000").to_time)
             trs.each do |tr|
                 tr.started = true
                 tr.save
+                ActionCable.server.broadcast "tournament_channel", content: "ok"
+                start_tournament(tr)
             end
+        end
+    end
+
+    def start_tournament(tr)
+        competitors = tr.competing.shuffle
+        pairs = []
+        while competitors.length > 1
+            pairs.push([competitors.shift(), competitors.pop()])
         end
     end
 end
