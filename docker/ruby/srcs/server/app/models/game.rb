@@ -84,16 +84,46 @@ class Game < ApplicationRecord
 					
 					if game.mode == "ladder"
 						if user_opponent.guild != nil
-						  guild = Guild.find_by_id(user_opponent.guild)
-						  guild.points += 10
-						  guild.save
+						  	guild = Guild.find_by_id(user_opponent.guild)
+						  	guild.points += 10
+							if guild.war != nil
+								war = GuildWar.find_by_id(guild.war)
+								if war.started && war.done == false
+									if war.guild_one_id == guild.id
+							 			war.guild_one_points += 10
+									else
+							  			war.guild_two_points += 10
+									end
+								end
+								if war.save
+									ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+								end
+							end
+							if guild.save
+								ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+							end
 						end
 						user_opponent.score += 10
 						user_current.score -= 10
 						if (user_current.score < 0)
 							user_current.score = 0
 						end
-					  end
+					elsif game.mode == "war"
+						if user_opponent.guild != nil
+							guild = Guild.find_by_id(user_opponent.guild)
+						  	if guild.war != nil
+								war = GuildWar.find_by_id(guild.war)
+								if war.guild_one_id == guild.id
+							 		war.guild_one_points += 10
+								else
+							  		war.guild_two_points += 10
+								end
+								if war.save
+									ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+								end
+							end
+						end
+					end
 
 					if game.save && user_opponent.save && user_current.save
 						ActionCable.server.broadcast "guild_channel", content: "ok"

@@ -57,12 +57,14 @@ class PongsController < ApplicationController
     end
 
     def accept_duel
-      if params[:war] == true
+      if params[:war] == "true"
         ranked = "war"
       else
         ranked = "duel"
       end
       user_one_email = User.find_by_id(params[:user_one_id]).email
+      puts ranked
+      puts "LOLOLOLOLOL"
       ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one_email
       ActionCable.server.broadcast "player_#{user_one_email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
 

@@ -29,12 +29,42 @@ class PlayChannel < ApplicationCable::Channel
         if user_left.guild != nil
           guild = Guild.find_by_id(user_left.guild)
           guild.points += 10
-          guild.save
+          if guild.war != nil
+            war = GuildWar.find_by_id(guild.war)
+            if war.started && war.done == false
+              if war.guild_one_id == guild.id
+                 war.guild_one_points += 10
+              else
+                  war.guild_two_points += 10
+              end
+            end
+            if war.save
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            end
+          end
+          if guild.save
+            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+          end
         end
         user_left.score += 10
         user_right.score -= 10
         if (user_right.score < 0)
           user_right.score = 0
+        end
+      elsif game.mode == "war"
+        if user_left.guild != nil
+          guild = Guild.find_by_id(user_left.guild)
+          if guild.war != nil
+            war = GuildWar.find_by_id(guild.war)
+            if war.guild_one_id == guild_id
+              war.guild_one_points += 10
+            else
+              war.guild_two_points += 10
+            end
+            if war.save
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            end
+          end
         end
       end
 			game.winner = user_left.id
@@ -68,12 +98,42 @@ class PlayChannel < ApplicationCable::Channel
         if user_right.guild != nil
           guild = Guild.find_by_id(user_right.guild)
           guild.points += 10
-          guild.save
+          if guild.war != nil
+            war = GuildWar.find_by_id(guild.war)
+            if war.started && war.done == false
+              if war.guild_one_id == guild.id
+                 war.guild_one_points += 10
+              else
+                  war.guild_two_points += 10
+              end
+            end
+            if war.save
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            end
+          end
+          if guild.save
+            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+          end
         end
         user_left.score -= 10
         user_right.score += 10
         if (user_left.score < 0)
           user_left.score = 0
+        end
+      elsif game.mode == "war"
+        if user_right.guild != nil
+          guild = Guild.find_by_id(user_right.guild)
+          if guild.war != nil
+            war = GuildWar.find_by_id(guild.war)
+            if war.guild_one_id == guild_id
+              war.guild_one_points += 10
+            else
+              war.guild_two_points += 10
+            end
+            if war.save
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            end
+          end
         end
       end
 			game.winner = user_right.id
@@ -95,7 +155,7 @@ class PlayChannel < ApplicationCable::Channel
         if temp.save
           ActionCable.server.broadcast data['room_name'], content: "end";
         end
-     end
+      end
     end
   end
 

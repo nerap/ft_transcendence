@@ -29,7 +29,7 @@ class GamesController < ApplicationController
     else    
         ranked = false
     end
-    ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: true, ranked: ranked, duel: false, user_two_email: "test@test.fr"
+    ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: true, ranked: ranked, duel: false, user_one_email: "test@test.fr"
     
     #ActionCable.server.unsubscribed "player_#{ current_user }"
   end
