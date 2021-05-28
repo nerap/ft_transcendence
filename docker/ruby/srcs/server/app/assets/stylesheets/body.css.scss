@@ -38,6 +38,7 @@ div#home-page {
         text-align: center;
         white-space: nowrap;
         color: white;
+        font-family: sans-serif;
         &.notice {
             width: min-content;
             padding: 10px;
@@ -67,6 +68,19 @@ div#home-page {
         }
         .closebtn:hover {
           color: black;
+        }
+        .link-form {
+            border: none;
+            background-color: unset;
+            color: white;
+            font-weight: bold;
+            padding: 0;
+            text-decoration: underline;
+            font-size: 15px;
+            &:hover {
+                color: rgb(0, 0, 0);
+                cursor: pointer;
+            }
         }
     }
 }

@@ -53,7 +53,7 @@ class PongsController < ApplicationController
           end
         end
       end
-      ActionCable.server.broadcast "flash_admin_channel:#{params[:user_two_id]}", type: "duel", user_one_id: params[:user_one_id], user_two_id: params[:user_two_id], war: war
+      ActionCable.server.broadcast "flash_admin_channel:#{params[:user_two_id]}", type: "duel", user_one_name: user_one.username, user_one_id: params[:user_one_id], user_two_id: params[:user_two_id], war: war
     end
 
     def accept_duel
