@@ -36,7 +36,7 @@ consumer.subscriptions.create("FlashAdminChannel", {
       setTimeout(function () {
           $("#parent-flash").find('div:first').slideUp(500, function () {this.remove()});
       }, 30000);
-      $(".flash-form").submit(function (e) { $(e.target.parentElement.parentElement).remove(); });
+      $(".flash-form").submit(function (e) { $(e.target.parentElement).remove(); });
     }
   }
 });
