@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_27_120703) do
+ActiveRecord::Schema.define(version: 2021_05_28_083714) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,13 +87,15 @@ ActiveRecord::Schema.define(version: 2021_05_27_120703) do
     t.bigint "guild_one_points"
     t.bigint "guild_two_points"
     t.bigint "unanswered_match"
-    t.boolean "duels", default: false
+    t.boolean "tournaments", default: false
     t.boolean "ladder", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "pending"
     t.boolean "done"
     t.boolean "started"
+    t.bigint "unanswered_guild_one", default: 0
+    t.bigint "unanswered_guild_two", default: 0
   end
 
   create_table "guilds", force: :cascade do |t|

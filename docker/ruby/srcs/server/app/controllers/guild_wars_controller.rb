@@ -232,6 +232,6 @@ class GuildWarsController < ApplicationController
     end
 
     def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :pending, :done, :started, :guild_forfeit)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :tournaments, :ladder, :pending, :done, :started, :guild_forfeit, :unanswered_guild_one, :unanswered_guild_two)
     end
 end
