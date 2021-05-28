@@ -77,13 +77,19 @@ class GuildWarsController < ApplicationController
                     if (war.guild_one_points < war.guild_two_points)
                         guild_one_id.points -= war.prize
                         guild_two_id.points += war.prize
+                        war.winner = guild_two_id.id
+                        war.looser = guild_one_id.id
                         guild_one_id.loose += 1
                         guild_two_id.win += 1
                     elsif (war.guild_one_points > war.guild_two_points)
                         guild_two_id.points -= war.prize
                         guild_one_id.points += war.prize
+                        war.looser = guild_two_id.id
+                        war.winner = guild_one_id.id
                         guild_one_id.win += 1
                         guild_two_id.loose += 1
+                    elsif (war.guild_one_points == war.guild_two_points)
+                        war.tie = true
                     end
                     guild_one_id.war = false;
                     guild_two_id.war = false;
@@ -159,15 +165,15 @@ class GuildWarsController < ApplicationController
             if (params[:guild_forfeit].to_i == @guild_war.guild_one_id)
                 guild_one_id.points -= @guild_war.prize
                 guild_two_id.points += @guild_war.prize
-                @guild_war.guild_one_points = 0
-                @guild_war.guild_two_points = 100
+                @guild_war.winner = guild_two_id.id
+                @guild_war.looser = guild_one_id.id
                 guild_one_id.loose += 1
                 guild_two_id.win += 1
             else
                 guild_two_id.points -= @guild_war.prize
                 guild_one_id.points += @guild_war.prize
-                @guild_war.guild_one_points = 100
-                @guild_war.guild_two_points = 0
+                @guild_war.looser = guild_two_id.id
+                @guild_war.winner = guild_one_id.id
                 guild_one_id.win += 1
                 guild_two_id.loose += 1
             end
@@ -232,6 +238,6 @@ class GuildWarsController < ApplicationController
     end
 
     def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :duels, :ladder, :pending, :done, :started, :guild_forfeit)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :tournaments, :ladder, :pending, :done, :started, :guild_forfeit, :unanswered_guild_one, :unanswered_guild_two)
     end
 end

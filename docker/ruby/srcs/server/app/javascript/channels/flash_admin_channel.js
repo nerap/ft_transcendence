@@ -1,3 +1,4 @@
+import { Events } from "backbone";
 import consumer from "./consumer"
 
 consumer.subscriptions.create("FlashAdminChannel", {
@@ -20,6 +21,30 @@ consumer.subscriptions.create("FlashAdminChannel", {
     }
     else if (data.type == "flash" && data.flash) {
       flashMessage(data.flash[0][0], data.flash[0][1]);
+    }
+    else if (data.war == true)
+    {
+      console.log("war match")
+      var flash = `<div class="flash-message notice"> ` +
+      data.user_one_name + ` sent you a duel request ! ` +
+      `<form action="/api/pongs/accept_duel" method="post" data-remote="true" class="flash-form" style="display:inline-block">` +
+      `<input type="submit" class="link-form" value="accept">` +
+      `<input value="` + data.user_one_id + `" type="hidden" name="user_one_id">` +
+      `<input value="` + data.user_two_id + `" type="hidden" name="user_two_id">` +
+      `<input type="hidden" value="` + data.war + `" type="hidden" name="war">` +
+      `</form>` + `<form id="decline-id" action="/api/pongs/decline_duel" method="post" data-remote="true" class="flash-form" style="display:inline-block">` +
+      `<input type="submit" class="link-form" value="decline">` +
+      `<input value="` + data.user_one_id + `" type="hidden" name="user_one_id">` +
+      `<input value="` + data.user_two_id + `" type="hidden" name="user_two_id">` +
+      `<input type="hidden" value="` + data.war + `" type="hidden" name="war">` +
+      `</form>` + `</div>`
+    $("#parent-flash").append(flash);
+    setTimeout(function () {
+        $("#parent-flash").find('div:first').slideUp(500, function () {this.remove()});
+    }, 30000);
+    $(".flash-form").submit(function (e) { $(e.target.parentElement).remove(); });
+    $("#decline-id").submit(function (e) { $(e.target.parentElement).remove();});
+
     }
     else if (data.type == "duel")
     {

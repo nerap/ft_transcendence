@@ -28,8 +28,8 @@
             Unanswered:
             <input type="number" name="unanswered_match" value="0" min="0" max="20">
             <br/>
-            Duels:
-            <input id="duel-id" type="checkbox" name="duels">
+            Tournaments:
+            <input id="tournaments-id" type="checkbox" name="tournaments">
             <br/>
             Ladder:
             <input id="ladder-id" type="checkbox" name="ladder">
@@ -105,10 +105,10 @@
                 return false;
             }
         }
-        if (document.getElementById("duel-id").checked == true)
-            document.getElementById("duel-id").value = "true"
+        if (document.getElementById("tournaments-id").checked == true)
+            document.getElementById("tournaments-id").value = "true"
         else
-            document.getElementById("duel-id").value = "false"
+            document.getElementById("tournaments-id").value = "false"
         if (document.getElementById("ladder-id").checked == true)
             document.getElementById("ladder-id").value = "true"
         else
