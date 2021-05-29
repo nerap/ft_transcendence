@@ -83,16 +83,8 @@ class TournamentsController < ApplicationController
                 tr.started = true
                 tr.save
                 ActionCable.server.broadcast "tournament_channel", content: "ok"
-                start_tournament(tr)
+                tr.start_tournament
             end
-        end
-    end
-
-    def start_tournament(tr)
-        competitors = tr.competing.shuffle
-        pairs = []
-        while competitors.length > 1
-            pairs.push([competitors.shift(), competitors.pop()])
         end
     end
 end

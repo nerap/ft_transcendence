@@ -33,11 +33,11 @@ class Game < ApplicationRecord
 				pong.tie = false
 				pong.room_id = current_match_id
 				if pong.save
-					ActionCable.server.broadcast "pong_channel", content: "ok"
+					# ActionCable.server.broadcast "pong_channel", content: "ok"
 					Redis.current.set("opponent_for:#{left}", right)
 					Redis.current.set("opponent_for:#{right}", left)
-					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id}
-					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "right", match_room_id: current_match_id}
+					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id, user: user_one, pong: pong}
+					ActionCable.server.broadcast "player_#{right}", {action: "game_start", msg: "right", match_room_id: current_match_id, user: user_two, pong: pong}
 				end
 			end
             room_name = "play_channel_#{current_match_id}"
@@ -62,13 +62,16 @@ class Game < ApplicationRecord
 	end
 
     def self.disconnected(data)
-
 		if Redis.current.get("opponent_for:#{data}")
         	opponent = Redis.current.get("opponent_for:#{data}")
 			if user_opponent = User.find_by(email: opponent)
 				if user_opponent.pong != 0
 					game = Pong.find_by(room_id: user_opponent.pong)
 					room_name = "play_channel_#{user_opponent.pong}"
+					trnmt = false
+					if game.mode == "tournament"
+						trnmt = true
+					end
 					
 					user_current = User.find_by(email: data)
 
@@ -124,7 +127,6 @@ class Game < ApplicationRecord
 							end
 						end
 					end
-
 					if game.save && user_opponent.save && user_current.save
 						ActionCable.server.broadcast "guild_channel", content: "ok"
 						ActionCable.server.broadcast "users_channel", content: "profile"
@@ -145,11 +147,14 @@ class Game < ApplicationRecord
 	      				ActionCable.server.broadcast "users_channel", content: "profile"
 					end
 				end
-				
 			end
 			ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
 			Redis.current.set("opponent_for:#{data}", nil)
 			Redis.current.set("opponent_for:#{opponent}", nil)
+			if trnmt == true
+				tournament = Tournament.find(user_current.tournament)
+				tournament.end_match(user_opponent, user_current)
+			end
 		end
     end
 end

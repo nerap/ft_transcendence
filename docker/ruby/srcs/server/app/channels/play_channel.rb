@@ -8,6 +8,7 @@ class PlayChannel < ApplicationCable::Channel
 
   def update_left(data)
     room_name = data['room_name']
+    trnmt = false
   
     $games[room_name][:ball_pos_x] = data['ballx']
     $games[room_name][:ball_pos_y] = data['bally']
@@ -18,11 +19,14 @@ class PlayChannel < ApplicationCable::Channel
     $games[room_name][:ball_dir_y] = data['balldiry']
     $games[room_name][:ball_speed] = data['ballspeed']
 
-    if ($games[room_name][:left_score] == 20)
+    if ($games[room_name][:left_score] >= 11)
       game = Pong.find_by(room_id: $games[room_name][:room_id])
 			user_left = User.find_by_id(game.user_left_id)
       user_right = User.find_by_id(game.user_right_id)
-    
+      if game.mode == "tournament"
+        trnmt = true
+      end
+
 			user_left.pong = 0
 			user_right.pong = 0
       if game.mode == "ladder"
@@ -86,11 +90,18 @@ class PlayChannel < ApplicationCable::Channel
         if temp.save
           ActionCable.server.broadcast data['room_name'], content: "end";
         end
-     end
-    elsif ($games[room_name][:right_score] == 20)
+      end
+      if trnmt == true
+        tournament = Tournament.find(user_left.tournament)
+        tournament.end_match(user_left, user_right)
+      end
+    elsif ($games[room_name][:right_score] >= 11)
       game = Pong.find_by(room_id: $games[room_name][:room_id])
 			user_left = User.find_by_id(game.user_left_id)
       user_right = User.find_by_id(game.user_right_id)
+      if game.mode == "tournament"
+        trnmt = true
+      end
 
 			user_left.pong = 0
 			user_right.pong = 0
@@ -155,6 +166,10 @@ class PlayChannel < ApplicationCable::Channel
         if temp.save
           ActionCable.server.broadcast data['room_name'], content: "end";
         end
+      end
+      if trnmt == true
+        tournament = Tournament.find(user_left.tournament)
+        tournament.end_match(user_right, user_left)
       end
     end
   end

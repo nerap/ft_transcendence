@@ -124,11 +124,13 @@ consumer.subscriptions.create("GameChannel", {
             side = data.msg
             if (document.getElementById("found"))
               document.getElementById("found").hidden = false;
-            Transcendence.users.fetch().done(() => {
-              Transcendence.current_user.fetch().done(() => {
-                Transcendence.pongs.fetch().done(() => {
-                  location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong.toString()
-                  room = consumer.subscriptions.create({channel: "PlayChannel", game_room_id: Transcendence.current_user.toJSON().pong, role: side}, {
+            // Transcendence.users.fetch().done(() => {
+              // Transcendence.current_user.fetch().done(() => {
+                // Transcendence.pongs.fetch().done(() => {
+                  Transcendence.pongs.set(data.pong)
+                  Transcendence.current_user.set({pong: data.user.pong})
+                  location.hash = "#pongs/" + data.user.toString()
+                  room = consumer.subscriptions.create({channel: "PlayChannel", game_room_id: data.user.pong, role: side}, {
                     connected() {
                       pong = new Game(room_id)
                       contexte = null
@@ -184,9 +186,9 @@ consumer.subscriptions.create("GameChannel", {
                       }
                     }
                   });
-                });
-              });
-            });
+                // });
+              // });
+            // });
           }
         }
       });
