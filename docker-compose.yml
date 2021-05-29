@@ -7,6 +7,9 @@ services:
     volumes:
       - ./docker/ruby/srcs:/data
     environment:
+      REDIS_DB: 0
+      REDIS_URL: "redis://redis"
+      REDIS_PORT: 6379
       SERVER_DATABASE_PASSWORD: root
       TZ: Europe/Paris
       OAUTH_CLIENT: a80eaa8c19ae8af60d94a555cf1628b3d24e31d8cee1bc17604848e1359cbe28
@@ -29,7 +32,7 @@ services:
       TZ: Europe/Paris
   redis:
     image: "redis:alpine"
-    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    command: redis-server --bind redis --port 6379
     volumes:
       - ./docker/redis/redis-data:/var/lib/redis
       - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
