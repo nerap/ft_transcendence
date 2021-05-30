@@ -13,6 +13,7 @@ class Registrations::OmniauthCallbacksController < Devise::OmniauthCallbacksCont
       session["devise.marvin_data"] = request.env["omniauth.auth"]
       redirect_to new_user_registration_url
     end
+    ActionCable.server.broadcast "users_channel", content: "profile"
   end
 
   def after_omniauth_failure_path_for scope

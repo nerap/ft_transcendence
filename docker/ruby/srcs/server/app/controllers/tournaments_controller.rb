@@ -84,7 +84,7 @@ class TournamentsController < ApplicationController
                 tr.started = true
                 tr.save
                 ActionCable.server.broadcast "tournament_channel", content: "ok"
-                tr.start_tournament()
+                tr.start_tournament
             end
         end
     end
