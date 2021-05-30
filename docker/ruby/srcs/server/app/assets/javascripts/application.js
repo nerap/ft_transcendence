@@ -46,6 +46,6 @@ var Transcendence = {
         success: function (response) {
         }
       });
-    }, 60000);
+    }, 10000);
   }
 };
