@@ -32,7 +32,7 @@ class PongsController < ApplicationController
         user = User.find_by_id(current_user.id)
         user.pong = params[:room_id]
         if user.save
-            ActionCable.server.broadcast "player_#{current_user.email}", content: "spectate"
+            ActionCable.server.broadcast "player_#{current_user.email}", content: "spectate", user: user
         end
     end
 
@@ -65,7 +65,7 @@ class PongsController < ApplicationController
       user_one = User.find_by_id(params[:user_one_id])
       if (user_one.online == true)
         ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one.email
-        ActionCable.server.broadcast "player_#{user_one_email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
+        ActionCable.server.broadcast "player_#{user_one.email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
       end
     end
 
