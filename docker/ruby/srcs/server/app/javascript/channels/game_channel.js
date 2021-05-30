@@ -7,7 +7,6 @@ let side;
 let pong;
 let room_id;
 let inter;
-
 let up = false
 let down = false
 
