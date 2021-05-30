@@ -58,6 +58,7 @@ class TournamentsController < ApplicationController
         tournament = Tournament.find(params[:id])
         if tournament.started == false
             current_user.tournament = tournament.id
+            current_user.eliminated = false
             current_user.save
             ActionCable.server.broadcast "users_channel", content: "profile"
         end
@@ -78,10 +79,12 @@ class TournamentsController < ApplicationController
     end
 
     def check_start
-        if trs = Tournament.where("start_time < ?", DateTime.now.change(:offset => "+0000").to_time)
+        if trs = Tournament.where(started: false).where("start_time < ?", DateTime.now.change(:offset => "+0000").to_time)
             trs.each do |tr|
                 tr.started = true
                 tr.save
+                ActionCable.server.broadcast "tournament_channel", content: "ok"
+                tr.start_tournament()
             end
         end
     end

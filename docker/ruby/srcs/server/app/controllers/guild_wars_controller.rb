@@ -91,8 +91,8 @@ class GuildWarsController < ApplicationController
                     elsif (war.guild_one_points == war.guild_two_points)
                         war.tie = true
                     end
-                    guild_one_id.war = false;
-                    guild_two_id.war = false;
+                    guild_one_id.war = nil;
+                    guild_two_id.war = nil;
                     if war.save && guild_one_id.save && guild_two_id.save
                         ActionCable.server.broadcast "guild_channel", content: "guild_war"
                     end
