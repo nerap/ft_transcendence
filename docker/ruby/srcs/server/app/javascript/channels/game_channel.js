@@ -91,7 +91,7 @@ consumer.subscriptions.create("GameChannel", {
                 if (location.hash != "#games") {
                   location.hash = "#games"
                 }
-                else {
+                else if (document.getElementById("users-index")){
                   document.getElementById("users-index").hidden = false;
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
@@ -252,7 +252,7 @@ consumer.subscriptions.create("GameChannel", {
           location.hash = "#games"
         }, 200);
       }
-      else {
+      else if (document.getElementById("users-index")){
         document.getElementById("users-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;
