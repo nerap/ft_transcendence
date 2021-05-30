@@ -224,7 +224,7 @@ consumer.subscriptions.create("GameChannel", {
               }
               else {
                 update_datas(data)
-                if (contexte != null && room != null) {
+                if (contexte != null && room != null && pong.user_left_score < 11 && pong.user_right_score < 11) {
                   play()
                   if (document.getElementById("user_left_score"))
                     document.getElementById("user_left_score").textContent = pong.user_left_score

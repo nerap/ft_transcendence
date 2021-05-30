@@ -11,7 +11,7 @@ Transcendence.Routers.Pongs = Backbone.Router.extend({
         this.view = null;
     },
     pong: function (id) {
-        Transcendence.current_user.fetch().done(() => {
+        // Transcendence.current_user.fetch().done(() => {
         if (Transcendence.current_user.toJSON().pong != id || id == 0) {
             location.hash = "#games";
             flashMessage("error", "This game doesn't exist !");
@@ -23,6 +23,6 @@ Transcendence.Routers.Pongs = Backbone.Router.extend({
             });
             $('#main-body').html(this.view.render().$el);
         }
-        });
+        // });
     },
 });
