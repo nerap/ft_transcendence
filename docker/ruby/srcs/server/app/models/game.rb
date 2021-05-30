@@ -130,7 +130,7 @@ class Game < ApplicationRecord
 					if game.save && user_opponent.save && user_current.save
 						ActionCable.server.broadcast "guild_channel", content: "ok"
 						ActionCable.server.broadcast "users_channel", content: "profile"
-						ActionCable.server.broadcast "pong_channel", content: "profile"
+						ActionCable.server.broadcast "pong_channel", content: "ok"
 						users = User.where(pong: $games[room_name][:room_id])
 						users.each do |temp|
 					 		temp.pong = 0
@@ -148,7 +148,7 @@ class Game < ApplicationRecord
 					end
 				end
 			end
-			ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected"}
+			ActionCable.server.broadcast "player_#{opponent}", {content: "disconnected", loc: "game.rb self.disconnected opponent", usr: opponent}
 			Redis.current.set("opponent_for:#{data}", nil)
 			Redis.current.set("opponent_for:#{opponent}", nil)
 			if trnmt == true

@@ -10,9 +10,10 @@ consumer.subscriptions.create("PongChannel", {
   },
 
   received(data) {
-    if (data.content == "ok")
+    if (data.content == "ok") {
       Transcendence.pongs.fetch().done(() => {
-        console.log("FETCH.DONE")
+        console.log("PONG FETCH DONE")
       });
+    }
   }
 });

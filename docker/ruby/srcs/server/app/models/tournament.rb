@@ -3,12 +3,12 @@ class Tournament < ApplicationRecord
     has_many :competing, -> { where eliminated: false }, class_name: "User", foreign_key: "tournament"
 
     def start_tournament
-        self.competing.each do |user|
-            if user.online == false
-                user.eliminated = true
-                user.save
-            end
-        end
+        # self.competing.each do |user|
+            # if user.online == false
+                # user.eliminated = true
+                # user.save
+            # end
+        # end
         if started == true && m_playing == nil && m_ended == nil && self.user.length <= 1
             self.destroy
             return
@@ -49,7 +49,6 @@ class Tournament < ApplicationRecord
             save
             ActionCable.server.broadcast "player_#{match.first.email}", content: "create a match", is_matchmaking: false, ranked: "tournament", duel: true, user_one_email: match.last.email
             ActionCable.server.broadcast "player_#{match.last.email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
-            # end_match(match.first, match.last)
         end
     end
 

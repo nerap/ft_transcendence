@@ -125,13 +125,14 @@ consumer.subscriptions.create("GameChannel", {
             if (document.getElementById("found"))
               document.getElementById("found").hidden = false;
             // Transcendence.users.fetch().done(() => {
-              // Transcendence.current_user.fetch().done(() => {
+              Transcendence.current_user.fetch().done(() => {
                 // Transcendence.pongs.fetch().done(() => {
                   Transcendence.pongs.set(data.pong)
-                  Transcendence.current_user.set({pong: data.user.pong})
-                  location.hash = "#pongs/" + data.user.toString()
+                  // Transcendence.current_user.set({pong: data.user.pong})
+                  location.hash = "#pongs/" + data.user.pong.toString()
                   room = consumer.subscriptions.create({channel: "PlayChannel", game_room_id: data.user.pong, role: side}, {
                     connected() {
+                      console.log(data.user.username + " connected")
                       pong = new Game(room_id)
                       contexte = null
                       inter = setInterval(() => {
@@ -147,7 +148,7 @@ consumer.subscriptions.create("GameChannel", {
                         }
                         if (contexte != null)
                         {
-                          if (side == "left")
+                          if (side == "left" && room)
                             room.perform("get_datas", {room_name: pong.room_name})
                           currentTime = Date.now();
                           clearInterval(inter);
@@ -162,6 +163,7 @@ consumer.subscriptions.create("GameChannel", {
                     received(data) {
                       if (data.content && data.content == "end")
                       {
+                        console.log("ENDING GAME IN game_channel.js")
                         if (game)
                           consumer.subscriptions.remove(game)
                         if (room)
@@ -175,7 +177,7 @@ consumer.subscriptions.create("GameChannel", {
                       else
                       {
                         update_datas(data)
-                        if (contexte != null && room != null)
+                        if (contexte != null && room != null && pong.user_left_score < 11 && pong.user_right_score < 11)
                         {
                           play()
                           if (document.getElementById("user_left_score"))
@@ -186,7 +188,7 @@ consumer.subscriptions.create("GameChannel", {
                       }
                     }
                   });
-                // });
+                });
               // });
             // });
           }
@@ -258,6 +260,7 @@ consumer.subscriptions.create("GameChannel", {
     else if (data.content == "disconnected")
     {
       console.log("data.content = disconnected")
+      console.log(data.loc + " " + data.usr)
         if (game)
           consumer.subscriptions.remove(game)
         game = null
@@ -308,6 +311,7 @@ function leave()
   Transcendence.users.fetch().done(() => {
     Transcendence.current_user.fetch().done(() => {
       setTimeout(function() {
+        console.log("inside leave game_channel.js")
         location.hash = "#games"
       }, 200);
     });});
