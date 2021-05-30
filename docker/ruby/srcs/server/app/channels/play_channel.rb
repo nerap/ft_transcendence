@@ -43,11 +43,11 @@ class PlayChannel < ApplicationCable::Channel
               end
             end
             if war.save
-              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_left.id
             end
           end
           if guild.save
-            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_left.id
           end
         end
         user_left.score += 10
@@ -60,13 +60,13 @@ class PlayChannel < ApplicationCable::Channel
           guild = Guild.find_by_id(user_left.guild)
           if guild.war != nil
             war = GuildWar.find_by_id(guild.war)
-            if war.guild_one_id == guild_id
+            if war.guild_one_id == guild.id
               war.guild_one_points += 10
             else
               war.guild_two_points += 10
             end
             if war.save
-              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_left.id
             end
           end
         end
@@ -119,11 +119,11 @@ class PlayChannel < ApplicationCable::Channel
               end
             end
             if war.save
-              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_right.id
             end
           end
           if guild.save
-            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+            ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_right.id
           end
         end
         user_left.score -= 10
@@ -136,13 +136,13 @@ class PlayChannel < ApplicationCable::Channel
           guild = Guild.find_by_id(user_right.guild)
           if guild.war != nil
             war = GuildWar.find_by_id(guild.war)
-            if war.guild_one_id == guild_id
+            if war.guild_one_id == guild.id
               war.guild_one_points += 10
             else
               war.guild_two_points += 10
             end
             if war.save
-              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+              ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_right.id
             end
           end
         end

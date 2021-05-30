@@ -63,8 +63,9 @@ class PongsController < ApplicationController
         ranked = "duel"
       end
       user_one = User.find_by_id(params[:user_one_id])
+      user_one_email = user_one.email
       if (user_one.online == true)
-        ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one.email
+        ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one_email
         ActionCable.server.broadcast "player_#{user_one_email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
       end
     end
