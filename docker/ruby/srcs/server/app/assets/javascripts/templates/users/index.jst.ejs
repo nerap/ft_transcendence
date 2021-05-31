@@ -23,8 +23,8 @@
             <td class="users-action">
                 <% if (model.toJSON().id != Transcendence.current_user.id) { %>
                     <% if (model.toJSON().pong != 0) { %>
-                    <form action="/api/pongs/spectate" method="post" data-remote="true" class="send-pm" id="<%= model.toJSON().id %>">
-                        <button type="submit" class="menu-option">Spectate</button>
+                    <form action="/api/pongs/spectate" method="post" data-remote="true">
+                        <button type="submit" class="menu-option">watch game</button>
                         <input value="<%= model.toJSON().pong %>" type="hidden" name="room_id">
                         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                     </form>
