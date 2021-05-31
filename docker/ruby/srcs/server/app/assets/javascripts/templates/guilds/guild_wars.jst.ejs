@@ -4,6 +4,7 @@
     <% Transcendence.guild_wars.each(function(war) { %>
         <% if (curguild.war == war.toJSON().id) { %>
             <div style="margin:auto;padding:10px;border-radius:10px;background:rgb(250, 250, 250);width:500px">
+                <% if (war.toJSON().started == true) { %>
                 <h1>There is a war happening !</h1>
                 <div style="font-size:20px;line-height:30px;">
                     <%= Transcendence.guilds.get(war.toJSON().guild_one_id).toJSON().name %> points: <b><%= war.toJSON().guild_one_points %></b><br/>
@@ -20,6 +21,9 @@
                         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                     </form>
                 </div>
+                <% } else { %>
+                    <h1>War will begin at <%= war.start_time %>!</h1>
+                <% } %>
             </div>
         <% } %>
     <% }) %>

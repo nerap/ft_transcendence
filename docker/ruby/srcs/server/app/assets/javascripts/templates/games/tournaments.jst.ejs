@@ -6,12 +6,15 @@
         </tr>
         <% } %>
         <% Transcendence.tournaments.each(function (tr) { %>
-        <tr class="users-list">
-            <td style="font-size:12px;"><%= tr.toJSON().id %></td>
-            <td style="font-size:12px;">User reward: <%= tr.toJSON().user_reward %><br />Guild reward: <%= tr.toJSON().guild_reward %></td>
+        <% if (tr.toJSON().started == true) { var class_name = "inactive" } else { var class_name = "users-list" } %>
+        <tr class="<%= class_name %>">
+            <td style="font-size:12px;">#<%= tr.toJSON().id %></td>
+            <td style="font-size:12px;">User reward: <%= tr.toJSON().user_reward %><br/>Guild reward: <%= tr.toJSON().guild_reward %></td>
             <td style="font-size:12px;">Start time: <%= tr.toJSON().start_time.split("T")[0] %> <%= tr.toJSON().start_time.split("T")[1].split(".")[0] %></td>
-            <% if (tr.toJSON().started == true) { %>
-            <td style="font-weight:bold;">started</td>
+            <% if (tr.toJSON().started == true && !tr.toJSON().winner) { %>
+            <td><b>started</b></td>
+            <% } else if (tr.toJSON().started == true && tr.toJSON().winner) { %>
+            <td style="font-size:12px;">winner:<br/><b><%= Transcendence.users.get(tr.toJSON().winner).toJSON().username %></b></td>
             <% } else if (Transcendence.current_user.toJSON().tournament != tr.id) { %>
             <td class="users-action">
                 <form action="/api/tournaments/<%= tr.id %>/register" method="post" data-remote="true">

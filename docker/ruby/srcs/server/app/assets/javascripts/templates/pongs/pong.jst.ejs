@@ -5,11 +5,13 @@
         <%= user_left.username %>
         </h1>
         <p id="user_left_score">0</p>
+        <div class="users-forfeit">
         <% if (Transcendence.current_user.toJSON().id == user_left.id) { %>
-            <button id="forfeit-left">Forfeit</button>
+            <button id="forfeit-left">forfeit</button>
         <% } %>
+        </div>
     </div>
-    <div id="canvas-div">
+    <div id="canvas-div" style="border: 2px solid black;">
         <canvas id="canvas-id" width="600" height="350">
         </canvas>
     </div>
@@ -19,9 +21,11 @@
             <%= user_right.username %>
         </h1>
         <p id="user_right_score">0</p>
+        <div class="users-forfeit">
         <% if (Transcendence.current_user.toJSON().id == user_right.id) { %>
-            <button id="forfeit-right">Forfeit</button>
+            <button id="forfeit-right">forfeit</button>
         <% } %>
+        </div>
     </div>
 </div>
 <% if ((Transcendence.current_user.toJSON().id != user_right.id) && (Transcendence.current_user.toJSON().id != user_left.id)){ %>

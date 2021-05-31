@@ -3,10 +3,9 @@ Transcendence.Views.UserAccount = Backbone.View.extend({
         "submit #enable-2fa": "enable2fa",
         "submit #disable-2fa": "disable2fa"
     },
-    // initialize: function () {
-    //     this.listenTo(Transcendence.current_user, "change", this.render);
-    // },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-user").addClass("active")
         this.$el.html(JST['templates/users/edit_account']({ user: this.model.toJSON() }));
         return this;
     },

@@ -7,26 +7,29 @@ let side;
 let pong;
 let room_id;
 let inter;
+
+let xneg;
+let yneg;
+
 let up = false
 let down = false
 
 let canvas = null
 let contexte = null
-
-let animation = null
+let interval = null
 
 let currentTime = Date.now();
 
 class Game {
   constructor(room_id) {
     this.room_name = "play_channel_" + room_id
-    this.ballx = 175.0
-    this.bally = 300.0
+    this.ballx = 300.0
+    this.bally = 175.0
     this.balldirx = 0.5
     this.balldiry = 0.5
     this.left_action = 's'
-    this.user_left_y = 75.0
-    this.user_right_y = 75.0
+    this.user_left_y = 125.0
+    this.user_right_y = 125.0
     this.right_action = 's'
     this.user_left_score = 0
     this.user_right_score = 0
@@ -55,7 +58,8 @@ document.addEventListener("keyup", event => {
 
 consumer.subscriptions.create("GameChannel", {
   connected() {
-
+    
+  
   },
 
   disconnected() {
@@ -71,12 +75,27 @@ consumer.subscriptions.create("GameChannel", {
   received(data) {
     console.log(data.content)
     if (data.content == "create a match") {
-      if (document.getElementById("users-index"))
-        document.getElementById("users-index").hidden = true;
+      if (document.getElementById("matchmaking-index"))
+        document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting"))
         document.getElementById("waiting").hidden = false;
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
+          interval = setInterval(() => {
+            if (!document.getElementById("matchmaking-index") && room == null)
+            {
+              game_perform()
+              if (game) {
+                consumer.subscriptions.remove(game)
+                game = null
+                if (room)
+                  consumer.subscriptions.remove(room)
+                room = null
+                  clearInterval(interval)
+                  interval = null
+              }
+            }
+          }, 200)
           console.log("Waiting for opponent 2")
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
@@ -90,8 +109,8 @@ consumer.subscriptions.create("GameChannel", {
                 if (location.hash != "#games") {
                   location.hash = "#games"
                 }
-                else {
-                  document.getElementById("users-index").hidden = false;
+                else if (document.getElementById("matchmaking-index")){
+                  document.getElementById("matchmaking-index").hidden = false;
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
                 }
@@ -122,6 +141,11 @@ consumer.subscriptions.create("GameChannel", {
               location.hash = "#pongs/" + data.user.pong.toString()
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
+                  if (interval)
+                  {
+                    clearInterval(interval)
+                    interval = null
+                  }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
@@ -223,7 +247,7 @@ consumer.subscriptions.create("GameChannel", {
               }
               else {
                 update_datas(data)
-                if (contexte != null && room != null) {
+                if (contexte != null && room != null && pong.user_left_score < 11 && pong.user_right_score < 11) {
                   play()
                   if (document.getElementById("user_left_score"))
                     document.getElementById("user_left_score").textContent = pong.user_left_score
@@ -251,8 +275,8 @@ consumer.subscriptions.create("GameChannel", {
           location.hash = "#games"
         }, 200);
       }
-      else {
-        document.getElementById("users-index").hidden = false;
+      else if (document.getElementById("matchmaking-index")){
+        document.getElementById("matchmaking-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;
       }
@@ -423,8 +447,12 @@ function ballmove(pong, delta) {
         pong.user_left_score++;
         pong.ballx = canvas.width / 2
         pong.bally = canvas.height / 2
-        pong.balldirx = 0.5
-        pong.balldiry = 0.5
+
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg
         pong.ballspeed = 400.0
         return;
       }
@@ -442,8 +470,12 @@ function ballmove(pong, delta) {
         pong.user_right_score++;
         pong.ballx = canvas.width / 2
         pong.bally = canvas.height / 2
-        pong.balldirx = 0.5
-        pong.balldiry = 0.5
+
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg
         pong.ballspeed = 400.0
         return;
       }

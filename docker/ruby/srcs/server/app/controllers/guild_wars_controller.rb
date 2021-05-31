@@ -59,7 +59,7 @@ class GuildWarsController < ApplicationController
     def check_start_war
         @guild_wars = GuildWar.all
         @guild_wars.each do |war|
-            if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time)
+            if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time && war.started == false)
                 if (war.pending == true)
                     war.destroy
                     ActionCable.server.broadcast "guild_channel", content: "guild_war"
