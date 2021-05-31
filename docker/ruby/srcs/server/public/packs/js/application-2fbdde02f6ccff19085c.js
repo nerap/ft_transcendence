@@ -255,6 +255,8 @@ var side;
 var pong;
 var room_id;
 var inter;
+var xneg;
+var yneg;
 var up = false;
 var down = false;
 var canvas = null;
@@ -266,13 +268,13 @@ var Game = function Game(room_id) {
   _classCallCheck(this, Game);
 
   this.room_name = "play_channel_" + room_id;
-  this.ballx = 175.0;
-  this.bally = 300.0;
+  this.ballx = 300.0;
+  this.bally = 175.0;
   this.balldirx = 0.5;
   this.balldiry = 0.5;
   this.left_action = 's';
-  this.user_left_y = 75.0;
-  this.user_right_y = 75.0;
+  this.user_left_y = 125.0;
+  this.user_right_y = 125.0;
   this.right_action = 's';
   this.user_left_score = 0;
   this.user_right_score = 0;
@@ -311,7 +313,7 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
     console.log(data.content);
 
     if (data.content == "create a match") {
-      if (document.getElementById("users-index")) document.getElementById("users-index").hidden = true;
+      if (document.getElementById("matchmaking-index")) document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting")) document.getElementById("waiting").hidden = false;
       game = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
         channel: "GameChannel",
@@ -335,8 +337,8 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
 
                 if (location.hash != "#games") {
                   location.hash = "#games";
-                } else {
-                  document.getElementById("users-index").hidden = false;
+                } else if (document.getElementById("matchmaking-index")) {
+                  document.getElementById("matchmaking-index").hidden = false;
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
                 }
@@ -357,124 +359,124 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
             room_id = data.match_room_id;
             side = data.msg;
             if (document.getElementById("found")) document.getElementById("found").hidden = false; // Transcendence.users.fetch().done(() => {
-            // Transcendence.current_user.fetch().done(() => {
-            // Transcendence.pongs.fetch().done(() => {
 
-            Transcendence.pongs.set(data.pong);
-            Transcendence.current_user.set({
-              pong: data.user.pong
-            });
-            location.hash = "#pongs/" + data.user.toString();
-            room = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
-              channel: "PlayChannel",
-              game_room_id: data.user.pong,
-              role: side
-            }, {
-              connected: function connected() {
-                pong = new Game(room_id);
-                contexte = null;
-                inter = setInterval(function () {
-                  if (document.getElementById("canvas-id")) {
-                    canvas = document.getElementById("canvas-id");
-                    contexte = canvas.getContext('2d');
-                    contexte.clearRect(0, 0, 600, 350);
-                    if (document.getElementById("forfeit-right")) document.getElementById("forfeit-right").addEventListener("click", forfeit);
-                    if (document.getElementById("forfeit-left")) document.getElementById("forfeit-left").addEventListener("click", forfeit);
-                  }
+            Transcendence.current_user.fetch().done(function () {
+              // Transcendence.pongs.fetch().done(() => {
+              Transcendence.pongs.set(data.pong); // Transcendence.current_user.set({pong: data.user.pong})
 
-                  if (contexte != null) {
-                    if (side == "left" && room) room.perform("get_datas", {
-                      room_name: pong.room_name
-                    });
-                    currentTime = Date.now();
-                    clearInterval(inter);
-                  }
-                }, 50);
-              },
-              disconnected: function disconnected() {},
-              received: function received(data) {
-                if (data.content && data.content == "end") {
-                  if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
-                  if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
-                  game = null;
-                  room = null;
-                  setTimeout(function () {
-                    location.hash = "#games";
-                  }, 200);
-                } else {
-                  update_datas(data);
+              location.hash = "#pongs/" + data.user.pong.toString();
+              room = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
+                channel: "PlayChannel",
+                game_room_id: data.user.pong,
+                role: side
+              }, {
+                connected: function connected() {
+                  console.log(data.user.username + " connected");
+                  pong = new Game(room_id);
+                  contexte = null;
+                  inter = setInterval(function () {
+                    if (document.getElementById("canvas-id")) {
+                      canvas = document.getElementById("canvas-id");
+                      contexte = canvas.getContext('2d');
+                      contexte.clearRect(0, 0, 600, 350);
+                      if (document.getElementById("forfeit-right")) document.getElementById("forfeit-right").addEventListener("click", forfeit);
+                      if (document.getElementById("forfeit-left")) document.getElementById("forfeit-left").addEventListener("click", forfeit);
+                    }
 
-                  if (contexte != null && room != null) {
-                    play();
-                    if (document.getElementById("user_left_score")) document.getElementById("user_left_score").textContent = pong.user_left_score;
-                    if (document.getElementById("user_right_score")) document.getElementById("user_right_score").textContent = pong.user_right_score;
+                    if (contexte != null) {
+                      if (side == "left" && room) room.perform("get_datas", {
+                        room_name: pong.room_name
+                      });
+                      currentTime = Date.now();
+                      clearInterval(inter);
+                    }
+                  }, 50);
+                },
+                disconnected: function disconnected() {},
+                received: function received(data) {
+                  if (data.content && data.content == "end") {
+                    console.log("ENDING GAME IN game_channel.js");
+                    if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
+                    if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
+                    game = null;
+                    room = null;
+                    setTimeout(function () {
+                      location.hash = "#games";
+                    }, 200);
+                  } else {
+                    update_datas(data);
+
+                    if (contexte != null && room != null && pong.user_left_score < 11 && pong.user_right_score < 11) {
+                      play();
+                      if (document.getElementById("user_left_score")) document.getElementById("user_left_score").textContent = pong.user_left_score;
+                      if (document.getElementById("user_right_score")) document.getElementById("user_right_score").textContent = pong.user_right_score;
+                    }
                   }
                 }
-              }
+              });
             }); // });
-            // });
             // });
           }
         }
       });
     } else if (data.content == "spectate") {
-      Transcendence.users.fetch().done(function () {
-        Transcendence.current_user.fetch().done(function () {
-          Transcendence.pongs.fetch().done(function () {
-            location.hash = "#pongs/" + Transcendence.current_user.toJSON().pong;
-            room = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
-              channel: "PlayChannel",
-              game_room_id: Transcendence.current_user.toJSON().pong,
-              role: "spec"
-            }, {
-              connected: function connected() {
-                side = "spectate";
-                pong = new Game(room_id);
-                contexte = null;
-                inter = setInterval(function () {
-                  if (document.getElementById("canvas-id")) {
-                    canvas = document.getElementById("canvas-id");
-                    contexte = canvas.getContext('2d');
-                    contexte.clearRect(0, 0, 600, 350);
-                    if (document.getElementById("leave-spec")) document.getElementById("leave-spec").addEventListener("click", leave);
-                  }
+      // Transcendence.users.fetch().done(() => {
+      Transcendence.current_user.fetch().done(function () {
+        Transcendence.pongs.fetch().done(function () {
+          location.hash = "#pongs/" + data.user.pong.toString();
+          room = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
+            channel: "PlayChannel",
+            game_room_id: data.user.pong,
+            role: "spec"
+          }, {
+            connected: function connected() {
+              side = "spectate";
+              pong = new Game(room_id);
+              contexte = null;
+              inter = setInterval(function () {
+                if (document.getElementById("canvas-id")) {
+                  canvas = document.getElementById("canvas-id");
+                  contexte = canvas.getContext('2d');
+                  contexte.clearRect(0, 0, 600, 350);
+                  if (document.getElementById("leave-spec")) document.getElementById("leave-spec").addEventListener("click", leave);
+                }
 
-                  if (contexte != null) {
-                    room.perform("get_datas", {
-                      room_name: pong.room_name
-                    });
-                    currentTime = Date.now();
-                    clearInterval(inter);
-                  }
-                }, 50);
-              },
-              disconnected: function disconnected() {},
-              received: function received(data) {
-                if (data.content && data.content == "end") {
-                  console.log("end");
-                  if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
-                  if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
-                  game = null;
-                  room = null;
-                  setTimeout(function () {
-                    location.hash = "#games";
-                  }, 200);
-                } else {
-                  update_datas(data);
+                if (contexte != null) {
+                  room.perform("get_datas", {
+                    room_name: pong.room_name
+                  });
+                  currentTime = Date.now();
+                  clearInterval(inter);
+                }
+              }, 50);
+            },
+            disconnected: function disconnected() {},
+            received: function received(data) {
+              if (data.content && data.content == "end") {
+                console.log("end");
+                if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
+                if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
+                game = null;
+                room = null;
+                setTimeout(function () {
+                  location.hash = "#games";
+                }, 200);
+              } else {
+                update_datas(data);
 
-                  if (contexte != null && room != null) {
-                    play();
-                    if (document.getElementById("user_left_score")) document.getElementById("user_left_score").textContent = pong.user_left_score;
-                    if (document.getElementById("user_right_score")) document.getElementById("user_right_score").textContent = pong.user_right_score;
-                  }
+                if (contexte != null && room != null && pong.user_left_score < 11 && pong.user_right_score < 11) {
+                  play();
+                  if (document.getElementById("user_left_score")) document.getElementById("user_left_score").textContent = pong.user_left_score;
+                  if (document.getElementById("user_right_score")) document.getElementById("user_right_score").textContent = pong.user_right_score;
                 }
               }
-            });
+            }
           });
         });
-      });
+      }); // });
     } else if (data.content == "disconnected") {
       console.log("data.content = disconnected");
+      console.log(data.loc + " " + data.usr);
       if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
       game = null;
       if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
@@ -484,8 +486,8 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
         setTimeout(function () {
           location.hash = "#games";
         }, 200);
-      } else {
-        document.getElementById("users-index").hidden = false;
+      } else if (document.getElementById("matchmaking-index")) {
+        document.getElementById("matchmaking-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;
       }
@@ -513,14 +515,14 @@ function leave() {
   setTimeout(function () {
     if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
     room = null;
-  }, 200);
-  Transcendence.users.fetch().done(function () {
-    Transcendence.current_user.fetch().done(function () {
-      setTimeout(function () {
-        location.hash = "#games";
-      }, 200);
-    });
-  });
+  }, 200); // Transcendence.users.fetch().done(() => {
+
+  Transcendence.current_user.fetch().done(function () {
+    setTimeout(function () {
+      console.log("inside leave game_channel.js");
+      location.hash = "#games";
+    }, 200);
+  }); // });
 }
 
 function game_perform() {
@@ -629,8 +631,10 @@ function ballmove(pong, delta) {
         pong.user_left_score++;
         pong.ballx = canvas.width / 2;
         pong.bally = canvas.height / 2;
-        pong.balldirx = 0.5;
-        pong.balldiry = 0.5;
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg;
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg;
         pong.ballspeed = 400.0;
         return;
       }
@@ -648,8 +652,10 @@ function ballmove(pong, delta) {
         pong.user_right_score++;
         pong.ballx = canvas.width / 2;
         pong.bally = canvas.height / 2;
-        pong.balldirx = 0.5;
-        pong.balldiry = 0.5;
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg;
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg;
         pong.ballspeed = 400.0;
         return;
       }
@@ -783,9 +789,11 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("PongChan
   disconnected: function disconnected() {// Called when the subscription has been terminated by the server
   },
   received: function received(data) {
-    if (data.content == "ok") Transcendence.pongs.fetch().done(function () {
-      console.log("FETCH.DONE");
-    });
+    if (data.content == "ok") {
+      Transcendence.pongs.fetch().done(function () {
+        console.log("PONG FETCH DONE");
+      });
+    }
   }
 });
 
@@ -855,12 +863,7 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("Tourname
   disconnected: function disconnected() {// Called when the subscription has been terminated by the server
   },
   received: function received(data) {
-    if (data.content == "bob") {
-      var str = data.user + " in " + data.place;
-      console.log(str);
-    } else {
-      Transcendence.tournaments.fetch();
-    }
+    Transcendence.tournaments.fetch();
   }
 });
 
@@ -32416,4 +32419,4 @@ module.exports = function (module) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-047f7251a9446ab14022.js.map
+//# sourceMappingURL=application-2fbdde02f6ccff19085c.js.map

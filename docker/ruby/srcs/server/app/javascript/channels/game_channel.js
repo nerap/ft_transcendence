@@ -8,6 +8,9 @@ let pong;
 let room_id;
 let inter;
 
+let xneg;
+let yneg;
+
 let up = false
 let down = false
 
@@ -21,13 +24,13 @@ let currentTime = Date.now();
 class Game {
   constructor(room_id) {
     this.room_name = "play_channel_" + room_id
-    this.ballx = 175.0
-    this.bally = 300.0
+    this.ballx = 300.0
+    this.bally = 175.0
     this.balldirx = 0.5
     this.balldiry = 0.5
     this.left_action = 's'
-    this.user_left_y = 75.0
-    this.user_right_y = 75.0
+    this.user_left_y = 125.0
+    this.user_right_y = 125.0
     this.right_action = 's'
     this.user_left_score = 0
     this.user_right_score = 0
@@ -91,7 +94,7 @@ consumer.subscriptions.create("GameChannel", {
                 if (location.hash != "#games") {
                   location.hash = "#games"
                 }
-                else {
+                else if (document.getElementById("matchmaking-index")){
                   document.getElementById("matchmaking-index").hidden = false;
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
@@ -252,7 +255,7 @@ consumer.subscriptions.create("GameChannel", {
           location.hash = "#games"
         }, 200);
       }
-      else {
+      else if (document.getElementById("matchmaking-index")){
         document.getElementById("matchmaking-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;
@@ -424,8 +427,12 @@ function ballmove(pong, delta) {
         pong.user_left_score++;
         pong.ballx = canvas.width / 2
         pong.bally = canvas.height / 2
-        pong.balldirx = 0.5
-        pong.balldiry = 0.5
+
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg
         pong.ballspeed = 400.0
         return;
       }
@@ -443,8 +450,12 @@ function ballmove(pong, delta) {
         pong.user_right_score++;
         pong.ballx = canvas.width / 2
         pong.bally = canvas.height / 2
-        pong.balldirx = 0.5
-        pong.balldiry = 0.5
+
+        xneg = Math.random() < 0.5 ? -1 : 1;
+        yneg = Math.random() < 0.5 ? -1 : 1;
+
+        pong.balldirx = (Math.random() * (0.9 - 0.4) + 0.4) * xneg
+        pong.balldiry = (Math.random() * (0.6 - 0.2) + 0.2) * yneg
         pong.ballspeed = 400.0
         return;
       }

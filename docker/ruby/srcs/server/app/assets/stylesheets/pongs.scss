@@ -3,20 +3,93 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 
-div#pong-index {
-    div#user-left{
-        float: left;
-        width: 25%;
-        height: 350px;
+#pong-index:after {
+    display: block;
+    height: 0px;
+    clear: both;
+    float: none;
+}
+
+#pong-index div {
+    align-content: center;
+    margin: 0 auto;
+    float: left;
+    word-break: break-all;
+    height: 100%;
+
+}
+
+div#user-left{
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+
+    #user_left_score {
+        font-size: 50px;
+        font-weight: bold;
     }
-    div#canvas-id{
-        float: left;
-        width: 50%;
-        height: 350px;
+
+    div.users-forfeit {
+        width: 100%;
+        button {
+            padding: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 10px;
+            color: rgba(54, 123, 145, 0.7);
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid rgba(54, 123, 145, 0.7);
+            background-color: rgb(250, 250, 250);
+        }
     }
-    div#user-right{
-        float:  right;
-        width: 50%;
-        height: 350px;
+}
+
+
+div#user-right{
+    width: 25%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+
+
+    #user_right_score {
+        font-size: 50px;
+        font-weight: bold;
     }
+
+    div.users-forfeit  {
+        width: 100%;
+        button {
+            padding: 3px;
+            padding-left: 5px;
+            padding-right: 5px;
+            border-radius: 10px;
+            color: rgba(54, 123, 145, 0.7);
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid rgba(54, 123, 145, 0.7);
+            background-color: rgb(250, 250, 250);
+        }
+        
+    }
+}
+
+button#leave-spec {
+    margin: auto;
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+    color: rgba(54, 123, 145, 0.7);
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid rgba(54, 123, 145, 0.7);
+    background-color: rgb(250, 250, 250);
 }
