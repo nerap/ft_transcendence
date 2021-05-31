@@ -131,8 +131,6 @@ class Game < ApplicationRecord
 						ActionCable.server.broadcast "guild_channel", content: "ok"
 						ActionCable.server.broadcast "users_channel", content: "profile"
 						ActionCable.server.broadcast "pong_channel", content: "ok"
-						# ActionCable.server.broadcast "flash_admin_channel:#{user_opponent.id}", type: "flash", flash: [[:notice, "You won this match !"]]
-      					# ActionCable.server.broadcast "flash_admin_channel:#{user_current.id}", type: "flash", flash: [[:deleted, "You lost this match !"]]
 						users = User.where(pong: $games[room_name][:room_id])
 						users.each do |temp|
 					 		temp.pong = 0
