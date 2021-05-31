@@ -10,6 +10,8 @@ Transcendence.Views.UserProfile = Backbone.View.extend ({
         this.listenTo(Transcendence.guilds, 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-user").addClass("active")
         var friend = Transcendence.friends.findWhere({ user_one_id: Transcendence.current_user.id, user_two_id: this.model.toJSON().id });
         if (!friend) {
             friend = Transcendence.friends.findWhere({ user_two_id: Transcendence.current_user.id, user_one_id: this.model.toJSON().id });

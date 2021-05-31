@@ -6,6 +6,8 @@ Transcendence.Views.PrivateRoomsIndex = Backbone.View.extend({
         this.listenTo(Transcendence.private_rooms, "add remove", this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-user").addClass("active")
         var prs = this.collection.filter(function(pr){
             return pr.toJSON().users.includes(Transcendence.current_user.id);
         });

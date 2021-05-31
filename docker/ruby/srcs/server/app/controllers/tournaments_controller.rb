@@ -4,7 +4,7 @@ class TournamentsController < ApplicationController
     before_action { flash.clear }
 
     def index
-        @tournaments = Tournament.all
+        @tournaments = Tournament.all.order(:start_time).reverse
     end
 
     def create

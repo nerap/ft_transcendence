@@ -7,6 +7,8 @@ Transcendence.Views.GuildWarsNew = Backbone.View.extend({
         this.listenTo(Transcendence.guild_wars, 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active");
+        $(".option-guilds").addClass("active");
         if (!Transcendence.guilds.get(this.id)) {
             this.remove();
             location.hash = "#guilds";

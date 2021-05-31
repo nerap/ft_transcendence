@@ -56,6 +56,11 @@ div#users-index {
                 cursor: pointer;
                 background: rgba(0, 0, 0, 0.12);
             }
+            &.inactive {
+                color: rgb(180, 180, 180);
+                outline: none;
+                pointer-events: none;
+              }
             th {
                 font-size: 20px;
                 font-variant: small-caps;

@@ -14,6 +14,8 @@ Transcendence.Views.PrivateRoomShow = Backbone.View.extend({
         });
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-user").addClass("active")
         var prs = this.collection.filter(function (pr) {
             return pr.toJSON().users.includes(Transcendence.current_user.id);
         });

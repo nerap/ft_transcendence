@@ -72,8 +72,8 @@ consumer.subscriptions.create("GameChannel", {
   received(data) {
     console.log(data.content)
     if (data.content == "create a match") {
-      if (document.getElementById("users-index"))
-        document.getElementById("users-index").hidden = true;
+      if (document.getElementById("matchmaking-index"))
+        document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting"))
         document.getElementById("waiting").hidden = false;
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
@@ -92,7 +92,7 @@ consumer.subscriptions.create("GameChannel", {
                   location.hash = "#games"
                 }
                 else {
-                  document.getElementById("users-index").hidden = false;
+                  document.getElementById("matchmaking-index").hidden = false;
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
                 }
@@ -253,7 +253,7 @@ consumer.subscriptions.create("GameChannel", {
         }, 200);
       }
       else {
-        document.getElementById("users-index").hidden = false;
+        document.getElementById("matchmaking-index").hidden = false;
         document.getElementById("waiting").hidden = true;
         document.getElementById("found").hidden = true;
       }
