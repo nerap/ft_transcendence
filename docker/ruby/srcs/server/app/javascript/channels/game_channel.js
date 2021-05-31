@@ -16,7 +16,7 @@ let down = false
 
 let canvas = null
 let contexte = null
-let interval = null
+// let interval = null
 
 let currentTime = Date.now();
 
@@ -81,21 +81,21 @@ consumer.subscriptions.create("GameChannel", {
         document.getElementById("waiting").hidden = false;
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
-          interval = setInterval(() => {
-            if (!document.getElementById("matchmaking-index") && room == null)
-            {
-              game_perform()
-              if (game) {
-                consumer.subscriptions.remove(game)
-                game = null
-                if (room)
-                  consumer.subscriptions.remove(room)
-                room = null
-                  clearInterval(interval)
-                  interval = null
-              }
-            }
-          }, 200)
+          // interval = setInterval(() => {
+          //   if (!document.getElementById("matchmaking-index") && room == null)
+          //   {
+          //     game_perform()
+          //     if (game) {
+          //       consumer.subscriptions.remove(game)
+          //       game = null
+          //       if (room)
+          //         consumer.subscriptions.remove(room)
+          //       room = null
+          //         clearInterval(interval)
+          //         interval = null
+          //     }
+          //   }
+          // }, 200)
           console.log("Waiting for opponent 2")
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
@@ -141,11 +141,11 @@ consumer.subscriptions.create("GameChannel", {
               location.hash = "#pongs/" + data.user.pong.toString()
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  if (interval)
-                  {
-                    clearInterval(interval)
-                    interval = null
-                  }
+                  // if (interval)
+                  // {
+                  //   clearInterval(interval)
+                  //   interval = null
+                  // }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
