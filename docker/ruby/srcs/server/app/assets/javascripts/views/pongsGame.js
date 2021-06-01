@@ -3,6 +3,8 @@ Transcendence.Views.PongsGame = Backbone.View.extend ({
         this.listenTo(Transcendence.current_user, 'change', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-play").addClass("active")
         if (Transcendence.current_user.toJSON().pong == 0 || this.id == 0)
         {
             this.remove();
