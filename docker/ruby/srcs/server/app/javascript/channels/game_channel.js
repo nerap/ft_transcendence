@@ -3,7 +3,7 @@ import consumer from "./consumer"
 
 let game;
 let room;
-let side;
+let side = "none"
 let pong;
 let room_id;
 let inter;
@@ -17,7 +17,9 @@ let down = false
 let canvas = null
 let contexte = null
 
-let animation = null
+let  match = false
+
+let interv = null
 
 let currentTime = Date.now();
 
@@ -59,7 +61,8 @@ document.addEventListener("keyup", event => {
 
 consumer.subscriptions.create("GameChannel", {
   connected() {
-
+    interv = null
+    match = false
   },
 
   disconnected() {
@@ -82,6 +85,36 @@ consumer.subscriptions.create("GameChannel", {
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
           console.log("Waiting for opponent 2")
+         // if (data.is_duel == false)
+         // {
+           setTimeout(() => {
+            interv = setInterval(() => {
+              if (!document.getElementById("matchmaking-index") && room == null && side == "none")
+              {
+                console.log("hi")
+                game_perform()
+                if (game)
+                {
+                  consumer.subscriptions.remove(game)
+                  game = null
+                  if (room)
+                    consumer.subscriptions.remove(room)
+                  room = null
+                  if (document.getElementById("matchmaking-index"))
+                  {
+                    document.getElementById("matchmaking-index").hidden = false;
+                    document.getElementById("waiting").hidden = true;
+                    document.getElementById("found").hidden = true;
+                  }
+                  if (interv)
+                  {
+                    clearInterval(interv)
+                    interv = null
+                  }
+                }
+              }
+            }, 200)
+          }, 2000);
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
               game_perform()
@@ -126,6 +159,11 @@ consumer.subscriptions.create("GameChannel", {
               location.hash = "#pongs/" + data.user.pong.toString()
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
+                  if (interv)
+                  {
+                    clearInterval(interv)
+                    interv = null
+                  }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
