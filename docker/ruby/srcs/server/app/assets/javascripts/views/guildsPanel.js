@@ -36,6 +36,9 @@ Transcendence.Views.GuildsPanel = Backbone.View.extend({
                 else
                     curr_war = null
             }
+            console.log(war_time)
+            console.log(curr_war)
+            console.log(guild_two)
             this.$el.html(JST['templates/guilds/panel']({
                 curguild: this.model.toJSON(),
                 guildwars: Transcendence.guild_wars.where({ done: true })

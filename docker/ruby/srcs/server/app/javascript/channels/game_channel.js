@@ -118,7 +118,7 @@ consumer.subscriptions.create("GameChannel", {
                 }
               }
             }, 200)
-          }, 800);
+          }, 2000);
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
               game_perform()
@@ -194,6 +194,11 @@ consumer.subscriptions.create("GameChannel", {
                 },
 
                 received(data) {
+                  if (contexte != null && document.getElementById("canvas-id") == null)
+                  { 
+                    forfeit()
+                    return;
+                  }
                   if (data.content && data.content == "end") {
                     console.log("ENDING GAME IN game_channel.js")
                     if (game)
@@ -255,7 +260,7 @@ consumer.subscriptions.create("GameChannel", {
             },
 
             received(data) {
-              if (data.content && data.content == "end") {
+              if ((contexte != null && document.getElementById("canvas-id") == null) || (data.content && data.content == "end")) {
                 console.log("end")
                 if (game)
                   consumer.subscriptions.remove(game)

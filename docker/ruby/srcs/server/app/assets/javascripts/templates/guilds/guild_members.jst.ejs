@@ -28,7 +28,7 @@
                 </form>
             </td>
         <% } else if (war_time == true) { %>
-            <% if (Transcendence.current_user.toJSON().guild == guild_two.id) { %>
+            <% if ((Transcendence.current_user.toJSON().guild == guild_two.id) && (model.toJSON().online = true)) { %>
                 <td class="users-action"> 
                     <form action="/api/pongs/duel_demand" method="post" data-remote="true" class="send-pm" id="owner-<%= model.toJSON().id %>">
                         <button type="submit" class="menu-option">war duel</button>
