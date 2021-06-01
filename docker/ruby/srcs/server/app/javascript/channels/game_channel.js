@@ -82,23 +82,12 @@ consumer.subscriptions.create("GameChannel", {
         document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting"))
         document.getElementById("waiting").hidden = false;
+      setTimeout(() => {
+        if (location.hash != "#games")
+          location.hash = "#games"
+      }, 200);
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
-          // interval = setInterval(() => {
-          //   if (!document.getElementById("matchmaking-index") && room == null)
-          //   {
-          //     game_perform()
-          //     if (game) {
-          //       consumer.subscriptions.remove(game)
-          //       game = null
-          //       if (room)
-          //         consumer.subscriptions.remove(room)
-          //       room = null
-          //         clearInterval(interval)
-          //         interval = null
-          //     }
-          //   }
-          // }, 200)
           console.log("Waiting for opponent 2")
          // if (data.is_duel == false)
          // {
@@ -129,7 +118,7 @@ consumer.subscriptions.create("GameChannel", {
                 }
               }
             }, 200)
-          }, 2000);
+          }, 800);
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
               game_perform()
