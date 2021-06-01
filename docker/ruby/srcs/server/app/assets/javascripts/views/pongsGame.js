@@ -9,11 +9,15 @@ Transcendence.Views.PongsGame = Backbone.View.extend ({
             location.hash = "#games";
             return;
         }
-        pong = this.collection.findWhere({room_id: parseInt(this.id)}).toJSON(),
+        console.log(this.id)
+        console.log(this.collection.findWhere({room_id: parseInt(this.id)}))
+        setTimeout(() => {
+        pong = this.collection.findWhere({room_id: parseInt(this.id)}).toJSON()
         this.$el.html(JST['templates/pongs/pong']({
             user_left: Transcendence.users.findWhere({id: pong.user_left_id}).toJSON(),
             user_right: Transcendence.users.findWhere({id: pong.user_right_id}).toJSON(),
         }));
+        }, 200);
         return this;
     },
 });
