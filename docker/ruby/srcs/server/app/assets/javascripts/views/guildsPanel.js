@@ -3,6 +3,7 @@ Transcendence.Views.GuildsPanel = Backbone.View.extend({
         this.listenTo(Transcendence.users, 'change:username change:guild change:officer change:member change:pong add remove', this.render);
         this.listenTo(Transcendence.guilds, 'change add remove', this.render);
         this.listenTo(Transcendence.guild_wars, 'change add remove', this.render);
+        this.listenTo(Transcendence.pongs, 'change add remove', this.render);
     },
     render: function () {
         $(".nav-option").removeClass("active");
@@ -22,7 +23,7 @@ Transcendence.Views.GuildsPanel = Backbone.View.extend({
                     else
                         guild_two = Transcendence.guilds.get(curr_war.guild_one_id).toJSON()
                     war_time = true
-                    Transcendence.pongs.where({ playing: true, mode: "war" }).forEach(element => {
+                    Transcendence.pongs.where({ done: false, mode: "war" }).forEach(element => {
                         guild_one_id = Transcendence.users.get(element.toJSON().user_left_id).toJSON().guild
                         guild_two_id = Transcendence.users.get(element.toJSON().user_right_id).toJSON().guild
                         if (guild_one_id && guild_two_id && guild_one_id != guild_two_id) {
