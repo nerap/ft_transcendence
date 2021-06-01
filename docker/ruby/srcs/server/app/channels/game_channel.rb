@@ -29,7 +29,6 @@ class GameChannel < ApplicationCable::Channel
   end
 
   def disconnected(data)
-    puts "IN GAME CHANNEL"
     Game.disconnected(current_user.email)
   end
 end

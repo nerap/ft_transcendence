@@ -5,10 +5,8 @@
     <p class="points-guild" style="padding:30px"><span style="font-family:Impact;"><%= curguild.points %></span> points</p>
     <div class="points-guild" style="padding:5px;font-size:20px">Wars won: <span style="font-family:Impact;color:rgb(68, 146, 68);"><%= curguild.win %></span></div>
     <div class="points-guild" style="padding:5px;font-size:20px">Wars lost: <span style="font-family:Impact;color:rgb(207, 40, 40)"><%= curguild.loose %></span></div>
-    <% if (Transcendence.current_user.id == curguild.owner) { %>
     <br/>
     <div style="text-align:center;"><a href="#guilds/<%= curguild.id %>/wars"><button class="edit">war page</button></a></div>
-    <% } %>
     <br/>
     <div id="users-index">
         <table>

@@ -62,7 +62,6 @@ class Game < ApplicationRecord
 	end
 
 	def self.disconnected(data)
-		puts "game.rb DISCONNECTED"
 		if Redis.current.get("opponent_for:#{data}")
         	opponent = Redis.current.get("opponent_for:#{data}")
 			if user_opponent = User.find_by(email: opponent)

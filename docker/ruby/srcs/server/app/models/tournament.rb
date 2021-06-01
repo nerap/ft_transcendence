@@ -28,6 +28,16 @@ class Tournament < ApplicationRecord
                     guild = Guild.find(user_winner.guild)
                     guild.points += self.guild_reward
                     guild.save
+                    if guild.war
+                        war = GuildWar.find(guild.war)
+                        if war.started == true && war.done == false && war.tournaments == true
+                            if guild.id == war.guild_one_id
+                                war.guild_one_points += 50
+                            elsif guild.id == war.guild_two_id
+                                war.guild_two_id += 50
+                            end
+                        end
+                    end
                 end
                 ActionCable.server.broadcast "flash_admin_channel:#{user_winner.id}", type: "flash", flash: [[:notice, "Congratulations, you won the tournament !"]]
             end
