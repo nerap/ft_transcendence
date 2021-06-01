@@ -265,8 +265,10 @@ consumer.subscriptions.create("GameChannel", {
 });
 
 function forfeit() {
-  console.log("forfeit")
-  game_perform()
+  console.log("forfeited")
+  setTimeout(function () {
+    game_perform()
+  }, 200);
   if (game)
     consumer.subscriptions.remove(game)
   game = null
@@ -287,19 +289,18 @@ function leave() {
       consumer.subscriptions.remove(room)
     room = null
   }, 200);
-  // Transcendence.users.fetch().done(() => {
   Transcendence.current_user.fetch().done(() => {
     setTimeout(function () {
       console.log("inside leave game_channel.js")
       location.hash = "#games"
     }, 200);
   });
-  // });
 }
 
 function game_perform() {
-  if (game)
-    game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  if (game) {
+      game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  }
 }
 
 function update_pos_paddle(pong, delta) {

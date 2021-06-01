@@ -26,10 +26,10 @@ class GameChannel < ApplicationCable::Channel
     if user.save
       ActionCable.server.broadcast "users_channel", content: "profile"
     end
-      # Any cleanup needed when channel is unsubscribed
   end
 
   def disconnected(data)
+    puts "IN GAME CHANNEL"
     Game.disconnected(current_user.email)
   end
 end

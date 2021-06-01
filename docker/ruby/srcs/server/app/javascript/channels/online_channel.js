@@ -11,9 +11,9 @@ consumer.subscriptions.create("OnlineChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    if (data.online == "on" && Transcendence.users) {
+    if (data.online == "on" && Transcendence.users && Transcendence.users.get(data.user)) {
       Transcendence.users.get(data.user).set({online: true})
-    } else if (data.online == "off" && Transcendence.users) {
+    } else if (data.online == "off" && Transcendence.users && Transcendence.users.get(data.user)) {
       Transcendence.users.get(data.user).set({online: false})
     }
   }

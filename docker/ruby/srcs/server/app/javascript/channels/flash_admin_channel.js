@@ -32,12 +32,12 @@ consumer.subscriptions.create("FlashAdminChannel", {
       `<input value="` + data.user_one_id + `" type="hidden" name="user_one_id">` +
       `<input value="` + data.user_two_id + `" type="hidden" name="user_two_id">` +
       `<input type="hidden" value="` + data.war + `" type="hidden" name="war">` +
-      `</form>` + `<form id="decline-id" action="/api/pongs/decline_duel" method="post" data-remote="true" class="flash-form" style="display:inline-block">` +
+      `</form> | <form id="decline-id" action="/api/pongs/decline_duel" method="post" data-remote="true" class="flash-form" style="display:inline-block">` +
       `<input type="submit" class="link-form" value="decline">` +
       `<input value="` + data.user_one_id + `" type="hidden" name="user_one_id">` +
       `<input value="` + data.user_two_id + `" type="hidden" name="user_two_id">` +
       `<input type="hidden" value="` + data.war + `" type="hidden" name="war">` +
-      `</form>` + `</div>`
+      `</form></div>`
     $("#parent-flash").append(flash);
     setTimeout(function () {
         $("#parent-flash").find('div:first').slideUp(500, function () {this.remove()});
@@ -55,7 +55,7 @@ consumer.subscriptions.create("FlashAdminChannel", {
         `<input value="` + data.user_one_id + `" type="hidden" name="user_one_id">` +
         `<input value="` + data.user_two_id + `" type="hidden" name="user_two_id">` +
         `<input type="hidden" value="` + data.war + `" type="hidden" name="war">` +
-        `</form>` + ` | <button class="link-form" onclick="$(this.parentElement).remove();">decline</button>` +
+        `</form> | <button class="link-form" onclick="$(this.parentElement).remove();">decline</button>` +
         `</div>`
       $("#parent-flash").append(flash);
       setTimeout(function () {
