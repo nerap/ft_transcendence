@@ -14,34 +14,29 @@ Transcendence.Views.GuildsPanel = Backbone.View.extend({
             let curr_war = null
             let guild_two = null
             let war_time = null
-            if (this.model.toJSON().war)
-            {
+            if (this.model.toJSON().war) {
                 curr_war = Transcendence.guild_wars.get(this.model.toJSON().war).toJSON()
-                if (curr_war.started == true && curr_war.done == false)
-                {
+                if (curr_war.started == true && curr_war.done == false) {
                     if (curr_war.guild_one_id == this.model.toJSON().id)
                         guild_two = Transcendence.guilds.get(curr_war.guild_two_id).toJSON()
                     else
                         guild_two = Transcendence.guilds.get(curr_war.guild_one_id).toJSON()
                     war_time = true
-                    Transcendence.pongs.where({playing: true, mode: "war"}).forEach(element => {
+                    Transcendence.pongs.where({ playing: true, mode: "war" }).forEach(element => {
                         guild_one_id = Transcendence.users.get(element.toJSON().user_left_id).toJSON().guild
                         guild_two_id = Transcendence.users.get(element.toJSON().user_right_id).toJSON().guild
-                        if (guild_one_id && guild_two_id && guild_one_id != guild_two_id)
-                            if ((guild_one_id == this.model.toJSON().id || guild_one_id == guild_two.id) && (guild_two_id == guild_two.id || guild_two_id == this.model.toJSON().id))
-                            {
-                              war_time = false
-                              return
+                        if (guild_one_id && guild_two_id && guild_one_id != guild_two_id) {
+                            if ((guild_one_id == this.model.toJSON().id || guild_one_id == guild_two.id) && (guild_two_id == guild_two.id || guild_two_id == this.model.toJSON().id)) {
+                                war_time = false
+                                return;
                             }
+                        }
                     });
                 }
                 else
                     curr_war = null
             }
-            console.log(curr_war)
-            console.log(guild_two)
-            console.log(war_time)
-           this.$el.html(JST['templates/guilds/panel']({
+            this.$el.html(JST['templates/guilds/panel']({
                 curguild: this.model.toJSON(),
                 guildwars: Transcendence.guild_wars.where({ done: true })
             }));

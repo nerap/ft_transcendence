@@ -31,7 +31,7 @@
             <% if (Transcendence.current_user.toJSON().guild == guild_two.id) { %>
                 <td class="users-action"> 
                     <form action="/api/pongs/duel_demand" method="post" data-remote="true" class="send-pm" id="owner-<%= model.toJSON().id %>">
-                        <button type="submit" class="menu-option">war time</button>
+                        <button type="submit" class="menu-option">war duel</button>
                         <input value="<%= Transcendence.current_user.id %>" type="hidden" name="user_one_id">
                         <input value="<%= model.toJSON().id %>" type="hidden" name="user_two_id">
                         <input type="hidden" value="true" type="hidden" name="war">

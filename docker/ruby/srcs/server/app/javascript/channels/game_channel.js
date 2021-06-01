@@ -163,11 +163,11 @@ consumer.subscriptions.create("GameChannel", {
               location.hash = "#pongs/" + data.user.pong.toString()
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  if (interv)
-                  {
-                    clearInterval(interv)
-                    interv = null
-                  }
+                  // if (interv)
+                  // {
+                    // clearInterval(interv)
+                    // interv = null
+                  // }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
