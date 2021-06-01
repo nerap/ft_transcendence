@@ -4,7 +4,7 @@ class Tournament < ApplicationRecord
 
     def start_tournament
         self.competing.each do |user|
-            if user.online == false || user.pong > 0
+            if user.online == false
                 user.eliminated = true
                 user.save
                 self.competing.reload
@@ -34,8 +34,10 @@ class Tournament < ApplicationRecord
                             if guild.id == war.guild_one_id
                                 war.guild_one_points += 50
                             elsif guild.id == war.guild_two_id
-                                war.guild_two_id += 50
+                                war.guild_two_points += 50
                             end
+                            war.save
+                            ActionCable.server.broadcast "guild_channel", content: "guild_war"
                         end
                     end
                 end

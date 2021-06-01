@@ -16,37 +16,25 @@
             <% guildwars.forEach(function(war) { %>
             <% if (war.toJSON().guild_one_id == curguild.id) { %>
                 <% if (Transcendence.guilds.get(war.toJSON().guild_two_id)) { %>
-                <% var vsguild = Transcendence.guilds.get(war.toJSON().guild_two_id).toJSON() %>
-                <% if (war.toJSON().guild_one_points > war.toJSON().guild_two_points) {
-                    var action = "Victory"
-                } else if (war.toJSON().guild_one_points < war.toJSON().guild_two_points) {
-                    var action = "Defeat"
-                } else {
-                    var action = "Tie"
-                } %>
-                <tr class="users-list">
-                    <td>[<%= vsguild.anagram %>] <%= vsguild.name %></td>
-                    <td style="width:min-content;font-family:Impact;"><%= vsguild.points %></td>    
-                    <td><%= action %></td>
-                </tr>
+                    <% var vsguild = Transcendence.guilds.get(war.toJSON().guild_two_id).toJSON() %>
                 <% } %>
             <% } else if (war.toJSON().guild_two_id == curguild.id) { %>
                 <% if (Transcendence.guilds.get(war.toJSON().guild_one_id)) { %>
-                <% var vsguild = Transcendence.guilds.get(war.toJSON().guild_one_id).toJSON() %>
-                <% if (war.toJSON().guild_two_points > war.toJSON().guild_one_points) {
-                    var action = "Victory"
-                } else if (war.toJSON().guild_two_points < war.toJSON().guild_one_points) {
-                    var action = "Defeat"
-                } else {
-                    var action = "Tie"
-                } %>
-                <tr class="users-list">
-                    <td>[<%= vsguild.anagram %>] <%= vsguild.name %></td>
-                    <td style="width:min-content;font-family:Impact;"><%= vsguild.points %></td>    
-                    <td><%= action %></td>
-                </tr>
+                    <% var vsguild = Transcendence.guilds.get(war.toJSON().guild_one_id).toJSON() %>
                 <% } %>
             <% } %>
+            <% if (war.toJSON().winner == curguild.id) {
+                var action = "Victory"
+            } else if (war.toJSON().looser == curguild.id) {
+                var action = "Defeat"
+            } else if (war.toJSON().tie == true) {
+                var action = "Tie"
+            } %>
+            <tr class="users-list">
+                <td>[<%= vsguild.anagram %>] <%= vsguild.name %></td>
+                <td style="width:min-content;font-family:Impact;"><%= vsguild.points %></td>    
+                <td><%= action %></td>
+            </tr>
             <% }) %>
         </table>
     </div>
