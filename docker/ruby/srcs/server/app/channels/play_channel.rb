@@ -120,13 +120,9 @@ class PlayChannel < ApplicationCable::Channel
   end
 
   def leave(data)
-    puts "LOLOLOLOL"
-    puts data
     user = User.find_by_id(current_user.id)
-    puts user.email
     user.pong = 0
     if user.save
-      puts "LOLOLOLOL"
       ActionCable.server.broadcast "users_channel", content: "profile"
       ActionCable.server.broadcast "player_#{user.email}", {content: "disconnected"}
     end

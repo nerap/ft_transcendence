@@ -39,7 +39,7 @@ class ChatsController < ApplicationController
   end
 
   def end_of_ban_mute
-    if bans = ChatroomBan.where("end_time < ?", DateTime.now)
+    if bans = ChatroomBan.where("end_time < ?", DateTime.now.change(:offset => "+0000").to_time)
         bans.each do |ban|
             ban.chatroom.banned.delete(ban.user_id)
             ban.chatroom.save
@@ -47,7 +47,7 @@ class ChatsController < ApplicationController
             ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
         end
     end
-    if mutes = ChatroomMute.where("end_time < ?", DateTime.now)
+    if mutes = ChatroomMute.where("end_time < ?", DateTime.now.change(:offset => "+0000").to_time)
         mutes.each do |mute|
             mute.chatroom.muted.delete(mute.user_id)
             mute.chatroom.save

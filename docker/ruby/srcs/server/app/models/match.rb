@@ -1,7 +1,5 @@
 class Match < ApplicationRecord
     def self.create(player_mail, ranked)
-		puts player_mail
-		puts "is searching for a match"
         if ranked == "ladder"
             if Redis.current.get("matches_ladder").blank? && Redis.current.get('matches_ranked') != player_mail
                 Redis.current.set("matches_ladder", player_mail)

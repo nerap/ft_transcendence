@@ -3,7 +3,7 @@ import consumer from "./consumer"
 
 let game;
 let room;
-let side;
+let side = "none"
 let pong;
 let room_id;
 let inter;
@@ -16,7 +16,10 @@ let down = false
 
 let canvas = null
 let contexte = null
-// let interval = null
+
+let  match = false
+
+let interv = null
 
 let currentTime = Date.now();
 
@@ -58,8 +61,8 @@ document.addEventListener("keyup", event => {
 
 consumer.subscriptions.create("GameChannel", {
   connected() {
-    
-  
+    interv = null
+    match = false
   },
 
   disconnected() {
@@ -97,6 +100,36 @@ consumer.subscriptions.create("GameChannel", {
           //   }
           // }, 200)
           console.log("Waiting for opponent 2")
+         // if (data.is_duel == false)
+         // {
+           setTimeout(() => {
+            interv = setInterval(() => {
+              if (!document.getElementById("matchmaking-index") && room == null && side == "none")
+              {
+                console.log("hi")
+                game_perform()
+                if (game)
+                {
+                  consumer.subscriptions.remove(game)
+                  game = null
+                  if (room)
+                    consumer.subscriptions.remove(room)
+                  room = null
+                  if (document.getElementById("matchmaking-index"))
+                  {
+                    document.getElementById("matchmaking-index").hidden = false;
+                    document.getElementById("waiting").hidden = true;
+                    document.getElementById("found").hidden = true;
+                  }
+                  if (interv)
+                  {
+                    clearInterval(interv)
+                    interv = null
+                  }
+                }
+              }
+            }, 200)
+          }, 2000);
           if (document.getElementById("cancel-id")) {
             document.getElementById("cancel-id").addEventListener("click", () => {
               game_perform()
@@ -141,11 +174,11 @@ consumer.subscriptions.create("GameChannel", {
               location.hash = "#pongs/" + data.user.pong.toString()
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  // if (interval)
-                  // {
-                  //   clearInterval(interval)
-                  //   interval = null
-                  // }
+                  if (interv)
+                  {
+                    clearInterval(interv)
+                    interv = null
+                  }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
@@ -285,8 +318,10 @@ consumer.subscriptions.create("GameChannel", {
 });
 
 function forfeit() {
-  console.log("forfeit")
-  game_perform()
+  console.log("forfeited")
+  setTimeout(function () {
+    game_perform()
+  }, 200);
   if (game)
     consumer.subscriptions.remove(game)
   game = null
@@ -307,19 +342,18 @@ function leave() {
       consumer.subscriptions.remove(room)
     room = null
   }, 200);
-  // Transcendence.users.fetch().done(() => {
   Transcendence.current_user.fetch().done(() => {
     setTimeout(function () {
       console.log("inside leave game_channel.js")
       location.hash = "#games"
     }, 200);
   });
-  // });
 }
 
 function game_perform() {
-  if (game)
-    game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  if (game) {
+      game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  }
 }
 
 function update_pos_paddle(pong, delta) {

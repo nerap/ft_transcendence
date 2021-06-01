@@ -19,27 +19,27 @@
         } else {
             usergrade = "Member"
         } %>
-        <td class="users-action"> 
-            <% if ((model.toJSON().id != Transcendence.current_user.id) && (model.toJSON().pong != 0)) { %>
+        <% if ((model.toJSON().id != Transcendence.current_user.id) && (model.toJSON().pong != 0)) { %>
+            <td class="users-action"> 
                 <form action="/api/pongs/spectate" method="post" data-remote="true" class="send-pm" id="<%= model.toJSON().id %>">
-                    <button type="submit" class="menu-option">Spectate</button>
+                    <button type="submit" class="menu-option">watch game</button>
                     <input value="<%= model.toJSON().pong %>" type="hidden" name="room_id">
                     <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                 </form>
-            <% } else if (war_time == true) { %>
-                <% if (Transcendence.current_user.toJSON().guild == guild_two.id) { %>
-                    <% if (war_time == true) { %>
-                        <form action="/api/pongs/duel_demand" method="post" data-remote="true" class="send-pm" id="owner-<%= model.toJSON().id %>">
-                            <button type="submit" class="menu-option">war time</button>
-                            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="user_one_id">
-                            <input value="<%= model.toJSON().id %>" type="hidden" name="user_two_id">
-                            <input type="hidden" value="true" type="hidden" name="war">
-                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                        </form>
-                    <% } %>
-                <% } %>
+            </td>
+        <% } else if (war_time == true) { %>
+            <% if (Transcendence.current_user.toJSON().guild == guild_two.id) { %>
+                <td class="users-action"> 
+                    <form action="/api/pongs/duel_demand" method="post" data-remote="true" class="send-pm" id="owner-<%= model.toJSON().id %>">
+                        <button type="submit" class="menu-option">war time</button>
+                        <input value="<%= Transcendence.current_user.id %>" type="hidden" name="user_one_id">
+                        <input value="<%= model.toJSON().id %>" type="hidden" name="user_two_id">
+                        <input type="hidden" value="true" type="hidden" name="war">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    </form>
+                </td>
             <% } %>
-        </td>
+        <% } %>
         <td style="font-family:Impact;text-align:right;"><%= usergrade %></td>
     </tr>
     <% } %>

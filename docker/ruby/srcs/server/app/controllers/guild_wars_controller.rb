@@ -6,7 +6,7 @@ class GuildWarsController < ApplicationController
 
     # GET /guilds or /guilds.json
     def index
-        @guild_wars = GuildWar.all
+        @guild_wars = GuildWar.all.order(:end).reverse
     end
 
     # GET /guilds/1 or /guilds/1.json
