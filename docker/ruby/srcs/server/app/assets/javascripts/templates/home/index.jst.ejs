@@ -1,11 +1,10 @@
 <div id="home-page">
-    <% if (Transcendence.current_user.toJSON().admin) { %>
-        <div style="text-align:right;"><a href="#admin_panel"><button>admin panel</button></a></div>
-    <% } %>
     <h1>
         WELCOME TO TRANSCENDENCE
     </h1>
-    <br>
+    <% if (Transcendence.current_user.toJSON().admin) { %>
+        <div style="text-align:center;"><a href="#admin_panel"><button>admin panel</button></a></div>
+    <% } %>
     <h1>
         Friends and Chatrooms
     </h1>
@@ -43,7 +42,7 @@
         What are you wating for ?
     </p>
     <br>
-    <a href="#games"><button id="play-id" href="#games">PLAY</button></a>
+    <a href="#games" style="text-decoration:none;"><button id="play-id">PLAY</button></a>
 </div>
 
 <% if (Transcendence.current_user.toJSON().first_time == true) { %>
