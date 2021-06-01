@@ -6,6 +6,8 @@ Transcendence.Views.GamesGame = Backbone.View.extend ({
         this.listenTo(Transcendence.games, 'change add remove', this.render);
     },
     render: function () {
+        $(".nav-option").removeClass("active")
+        $(".option-play").addClass("active")
         if (this.collection.get(this.id))
             var match = this.collection.get(this.id).toJSON();
         else

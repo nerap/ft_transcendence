@@ -33,7 +33,7 @@ class Game < ApplicationRecord
 				pong.tie = false
 				pong.room_id = current_match_id
 				if pong.save
-					# ActionCable.server.broadcast "pong_channel", content: "ok"
+					ActionCable.server.broadcast "pong_channel", content: "set", pong: pong
 					Redis.current.set("opponent_for:#{left}", right)
 					Redis.current.set("opponent_for:#{right}", left)
 					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id, user: user_one, pong: pong}
@@ -57,7 +57,6 @@ class Game < ApplicationRecord
 				ball_dir_y: 0.5,
 			}
 			$games[room_name] = game
-
 		end
 	end
 
