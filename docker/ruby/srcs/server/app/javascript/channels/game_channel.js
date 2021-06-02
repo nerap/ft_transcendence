@@ -134,6 +134,11 @@ consumer.subscriptions.create("GameChannel", {
                   document.getElementById("waiting").hidden = true;
                   document.getElementById("found").hidden = true;
                 }
+                if (interv)
+                {
+                  clearInterval(interv)
+                  interv = null
+                }
               }
             })
           }
