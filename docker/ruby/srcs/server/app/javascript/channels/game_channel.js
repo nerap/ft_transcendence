@@ -118,29 +118,33 @@ consumer.subscriptions.create("GameChannel", {
             }, 200)
           }, 2000);
           if (document.getElementById("cancel-id")) {
-            document.getElementById("cancel-id").addEventListener("click", () => {
-              game_perform()
-              if (game) {
-                consumer.subscriptions.remove(game)
-                game = null
-                if (room)
-                  consumer.subscriptions.remove(room)
-                room = null
-                if (location.hash != "#games") {
-                  location.hash = "#games"
+            setTimeout(function () {
+              document.getElementById("cancel-id").addEventListener("click", () => {
+                game_perform()
+                if (game) {
+                  consumer.subscriptions.remove(game)
+                  game = null
+                  if (room)
+                    consumer.subscriptions.remove(room)
+                  room = null
+                  if (location.hash != "#games") {
+                    location.hash = "#games"
+                  }
+                  else if (document.getElementById("matchmaking-index")){
+                    setTimeout(function () {
+                      document.getElementById("matchmaking-index").hidden = false;
+                      document.getElementById("waiting").hidden = true;
+                      document.getElementById("found").hidden = true;
+                    }, 2000)
+                  }
+                  if (interv)
+                  {
+                    clearInterval(interv)
+                    interv = null
+                  }
                 }
-                else if (document.getElementById("matchmaking-index")){
-                  document.getElementById("matchmaking-index").hidden = false;
-                  document.getElementById("waiting").hidden = true;
-                  document.getElementById("found").hidden = true;
-                }
-                if (interv)
-                {
-                  clearInterval(interv)
-                  interv = null
-                }
-              }
-            })
+              })
+            }, 2000);
           }
           //document.getElementById("found").hidden = true;
 
