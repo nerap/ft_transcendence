@@ -79,10 +79,11 @@ class PongsController < ApplicationController
         if guild_one.war != nil && guild_two.war != nil
           if guild_one.war == guild_two.war
             guild_war = GuildWar.find_by_id(guild_one.war)
-            if guild_war.started == true && guild_war.done == false && guild_war.unanswered_match != 0
+            if guild_war.started == true && guild_war.done == false 
               if guild_two.id == guild_war.guild_one_id
                 guild_war.unanswered_guild_two += 1
-                if guild_war.unanswered_guild_two >= guild_war.unanswered_match
+                guild_war.guild_two_points += 10
+                if guild_war.unanswered_guild_two >= guild_war.unanswered_match && guild_war.unanswered_match != 0
                   guild_one.points -= guild_war.prize
                   guild_two.points += guild_war.prize
                   guild_war.winner = guild_two.id
@@ -95,7 +96,8 @@ class PongsController < ApplicationController
                 end
               else
                 guild_war.unanswered_guild_one += 1
-                if guild_war.unanswered_guild_one >= guild_war.unanswered_match
+                guild_war.guild_one_points += 10
+                if guild_war.unanswered_guild_one >= guild_war.unanswered_match && guild_war.unanswered_match != 0
                   guild_two.points -= guild_war.prize
                   guild_one.points += guild_war.prize
                   guild_war.looser = guild_two.id

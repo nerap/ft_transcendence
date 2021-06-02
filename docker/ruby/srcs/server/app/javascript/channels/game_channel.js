@@ -17,7 +17,6 @@ let canvas = null
 let contexte = null
 
 let  match = false
-
 let interv = null
 
 let currentTime = Date.now();

@@ -33,6 +33,13 @@ Transcendence.Views.GuildsPanel = Backbone.View.extend({
                             }
                         }
                     });
+                    if (war_time == true)
+                    {
+                        if (curr_war.war_time == true)
+                            war_time = true
+                        else
+                            war_time = false
+                    }
                 }
                 else
                     curr_war = null

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_28_172424) do
+ActiveRecord::Schema.define(version: 2021_06_02_122303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,9 @@ ActiveRecord::Schema.define(version: 2021_05_28_172424) do
     t.bigint "winner"
     t.bigint "looser"
     t.boolean "tie", default: false
+    t.datetime "start_war_time"
+    t.datetime "end_war_time"
+    t.boolean "war_time"
   end
 
   create_table "guilds", force: :cascade do |t|
