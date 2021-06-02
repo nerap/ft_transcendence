@@ -80,4 +80,29 @@
             }
         }
     }
+    .games-history {
+        text-align: center;
+        table {
+            border-radius: 10px;
+            margin: auto;
+            width: 50%;
+            border-collapse: collapse;
+            background-color: rgba(250, 250, 250, 0.74);
+            box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+            tr {
+                border-top: 1px solid rgba(0, 0, 0, 0.12);
+                &:first-child {
+                    border: none;
+                }
+                &:hover {
+                    cursor: pointer;
+                    background: rgba(0, 0, 0, 0.12);
+                }
+                td {
+                    padding: 5px;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
 }

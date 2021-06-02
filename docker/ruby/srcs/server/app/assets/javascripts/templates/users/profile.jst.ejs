@@ -53,9 +53,10 @@
         <% if (user.id == Transcendence.current_user.id) { %>
             <a href="/#users/edit_account"><button>Edit account</button></a>
             <a href="/#users/edit_profile"><button>Edit profile</button></a>
+            <a href="/#users/friends"><button>Friends</button></a>
             <div id="users-index">
             <br></br>
-            <%= Transcendence.current_user.toJSON().score %>
+            
             <table>
                 <tr>
                     <th colspan="5">Current guild Inv</th>
@@ -119,8 +120,28 @@
                 </tr>
             </table>
         <% } %>
+        <div style="font-size:30px;">Score: <span style="font-family:Impact;"><%= user.score %></span></div>
+        <div class="games-history">
+        <table>
+        <% Transcendence.pongs.each(function(pong) { %>
+            <% if (pong.toJSON().user_left_id == user.id || pong.toJSON().user_right_id == user.id) { %>
+                <tr>
+                    <td><%= Transcendence.users.get(pong.toJSON().user_left_id).toJSON().username %></td>
+                    <td>
+                        <b style="font-family:Impact;"><%= pong.toJSON().user_left_score %>&emsp;-&emsp;<%= pong.toJSON().user_right_score %></b><br/>
+                        <span style="font-size:15px"><% if (pong.toJSON().tie == true) { %>Tie
+                        <% } else if (pong.toJSON().winner == user.id) { %>Victory
+                        <% } else if (pong.toJSON().looser == user.id) { %>Defeat<% } %></span>
+                    </td>
+                    <td><%= Transcendence.users.get(pong.toJSON().user_right_id).toJSON().username %></td>
+                </tr>
+            <% } %>
+        <% }) %>
+        </table>
+        </div>
         <% if (user.guild != null) { %>
             <a href="/#guilds/<%= user.guild %>"><button>Guild</button></a>
         <% } %>
+
     </div>
 </div>
