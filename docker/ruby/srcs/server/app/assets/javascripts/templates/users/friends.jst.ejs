@@ -34,8 +34,19 @@
                         <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_two_id">
                     </form>
                 </td>
+                <td class="users-action">
+                    <% if (friend.toJSON().id != Transcendence.current_user.id) { %>
+                        <% if (friend.toJSON().pong != 0) { %>
+                        <form action="/api/pongs/spectate" method="post" data-remote="true">
+                            <button type="submit" class="menu-option">watch game</button>
+                            <input value="<%= friend.toJSON().pong %>" type="hidden" name="room_id">
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                        <% } %>
+                    <% } %>
+                </td>
+                <td class="users-action">
                 <% if ((user2.guild == null) && (Transcendence.current_user.toJSON().guild != null)) { %>
-                    <td class="users-action">
                         <form action="/api/guild_invitations" method="post" data-remote="true">
                             <button type="submit" class="menu-option">invite to guild</button>
                             <input value="<%= Transcendence.current_user.toJSON().guild %>" type="hidden" name="guild_id">
@@ -43,8 +54,8 @@
                             <input value="true" type="hidden" name="pending">
                             <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                         </form>
-                    </td>
                 <% } %>
+                </td>
             </tr>
         <% }) %>
     </table>
