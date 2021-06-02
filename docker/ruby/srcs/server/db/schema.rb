@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_02_122303) do
+ActiveRecord::Schema.define(version: 2021_06_02_140904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,10 +164,9 @@ ActiveRecord::Schema.define(version: 2021_06_02_122303) do
     t.bigint "user_reward", default: 0
     t.bigint "guild_reward", default: 0
     t.boolean "started", default: false
-    t.bigint "user_id"
     t.bigint "m_playing"
     t.bigint "m_ended"
-    t.index ["user_id"], name: "index_tournaments_on_user_id"
+    t.boolean "auto", default: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -211,5 +210,4 @@ ActiveRecord::Schema.define(version: 2021_06_02_122303) do
   add_foreign_key "chats", "users"
   add_foreign_key "private_messages", "private_rooms"
   add_foreign_key "private_messages", "users"
-  add_foreign_key "tournaments", "users"
 end

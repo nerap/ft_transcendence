@@ -1,6 +1,7 @@
 class TournamentsController < ApplicationController
     before_action :authenticate_user!
     before_action :check_start
+    before_action :auto_create
     before_action { flash.clear }
 
     def index
@@ -86,6 +87,15 @@ class TournamentsController < ApplicationController
                 ActionCable.server.broadcast "tournament_channel", content: "ok"
                 tr.start_tournament
             end
+        end
+    end
+
+    def auto_create
+        if DateTime.now.change(:offset => "+0000").hour == 16 && Tournament.where(started: false, auto: true).length == 0
+            start = DateTime.now.change(:offset => "+0000").to_time + 1.day
+            tournament = Tournament.new(start_time: start, user_reward: 50, auto: true)
+            tournament.save
+            ActionCable.server.broadcast "tournament_channel", content: "ok"
         end
     end
 end
