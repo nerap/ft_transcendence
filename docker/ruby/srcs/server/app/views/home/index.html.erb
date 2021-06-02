@@ -7,7 +7,7 @@
       friends: <%== Friend.all.to_json %>,
       pongs: <%== Pong.all.order(:updated_at).reverse.to_json %>,
       games: <%== Game.all.to_json %>,
-      guilds: <%== Guild.all.order(:points).to_json %>,
+      guilds: <%== Guild.all.order(:points).reverse.to_json %>,
       guild_wars: <%== GuildWar.all.order(:end).reverse.to_json %>,
       guild_invitations: <%== GuildInvitation.all.to_json %>,
       tournaments: <%== Tournament.all.order(:start_time).reverse.to_json %>,
