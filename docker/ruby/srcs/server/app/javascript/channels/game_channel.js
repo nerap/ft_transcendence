@@ -159,7 +159,9 @@ consumer.subscriptions.create("GameChannel", {
               // Transcendence.pongs.fetch().done(() => {
               Transcendence.pongs.set(data.pong)
               // Transcendence.current_user.set({pong: data.user.pong})
-              location.hash = "#pongs/" + data.user.pong.toString()
+              setTimeout(() =>{
+                location.hash = "#pongs/" + data.user.pong.toString()
+              }, 200);
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
                   // if (interv)
