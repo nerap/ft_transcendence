@@ -1,18 +1,31 @@
 <div id="sidenav" class="guilds-sidenav"></div>
 
 <div id="users-index" style="margin-left:200px;">
+    <% if (!curguild.war) { %>
+        <div style="margin:auto;padding:10px;border-radius:10px;background:rgb(250, 250, 250);width:500px">
+            <h1>There is no war happening...</h1>
+        </div>
+    <% } %>
     <% Transcendence.guild_wars.each(function(war) { %>
         <% if (curguild.war == war.toJSON().id) { %>
-            <div style="margin:auto;padding:10px;border-radius:10px;background:rgb(250, 250, 250);width:500px">
+            <div style="margin:auto;padding:10px;border-radius:10px;background:rgb(250, 250, 250);min-width:500px;width:min-content;">
                 <% if (war.toJSON().started == true) { %>
-                <h1>There is a war happening !</h1>
+                    <h1>There is a war happening !</h1>
+                <% } else { %>
+                    <h1>A war will begin on the <%= war.toJSON().start.split("T")[0] %> at <%= war.toJSON().start.split("T")[1].split(".")[0] %> !</h1>
+                <% } %>
                 <div style="font-size:20px;line-height:30px;">
+                    End date: <b><%= war.toJSON().end.split("T")[0] %> at <%= war.toJSON().end.split("T")[1].split(".")[0] %></b><br/>
+                    War time start: <b><%= war.toJSON().start_war_time.split("T")[0] %> at <%= war.toJSON().start_war_time.split("T")[1].split(".")[0] %></b><br/>
+                    War time end: <b><%= war.toJSON().end_war_time.split("T")[0] %> at <%= war.toJSON().end_war_time.split("T")[1].split(".")[0] %></b><br/>
                     <%= Transcendence.guilds.get(war.toJSON().guild_one_id).toJSON().name %> points: <b><%= war.toJSON().guild_one_points %></b><br/>
                     <%= Transcendence.guilds.get(war.toJSON().guild_two_id).toJSON().name %> points: <b><%= war.toJSON().guild_two_points %></b><br/>
                     Prize: <b><%= war.toJSON().prize %></b><br/>
                     Tournaments: <b><%= war.toJSON().tournaments %></b><br/>
                     Ladder: <b><%= war.toJSON().ladder %></b><br/>
-                </div><br/>
+                </div>
+                <% if (Transcendence.current_user.toJSON().id == curguild.owner) { %>
+                <br/>
                 <div class="users-action" style="margin:auto;"> 
                     <form action="/api/guild_wars/forfeit/<%= war.toJSON().id %>" method="post" data-remote="true">
                         <input type="hidden" name="_method" value="put">
@@ -21,13 +34,12 @@
                         <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
                     </form>
                 </div>
-                <% } else { %>
-                    <h1>War will begin at <%= war.start_time %>!</h1>
                 <% } %>
             </div>
         <% } %>
     <% }) %>
     <br/>
+    <% if (Transcendence.current_user.toJSON().id == curguild.owner) { %>
     <table>
         <tr>
             <th colspan="7">Wars request</th>
@@ -70,6 +82,8 @@
                     <div style="font-size:20px;line-height:30px;">
                         Start date: <b><%= req.toJSON().start.split("T")[0] %> <%= req.toJSON().start.split("T")[1].split(".")[0] %></b><br/>
                         End date: <b><%= req.toJSON().end.split("T")[0] %> <%= req.toJSON().end.split("T")[1].split(".")[0] %></b><br/>
+                        Start war time date: <b><%= req.toJSON().start_war_time.split("T")[0] %> <%= req.toJSON().start_war_time.split("T")[1].split(".")[0] %></b><br/>
+                        End war time date: <b><%= req.toJSON().end_war_time.split("T")[0] %> <%= req.toJSON().end_war_time.split("T")[1].split(".")[0] %></b><br/>
                         Prize: <b><%= req.toJSON().prize %></b><br/>
                         Tournaments: <b><%= req.toJSON().tournaments %></b><br/>
                         Ladder: <b><%= req.toJSON().ladder %></b><br/>
@@ -119,5 +133,6 @@
             <% } %>
         <% }) %>
     </table>
+    <% } %>
     <% } %>
 </div>

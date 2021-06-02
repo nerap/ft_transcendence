@@ -131,6 +131,7 @@ class ChatroomsController < ApplicationController
                         flash[:notice] = "You have named #{user.username} admin !"
                         ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", chatroom: chatroom, user: user.id, type: "admin"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: [[:notice, "You have been promoted as admin of #{chatroom.name} !"]]
                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -182,8 +183,8 @@ class ChatroomsController < ApplicationController
                 chatroom.banned.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
-                    end_ban = DateTime.parse(parse_time) - 2.hours
-                    if !end_ban.past?
+                    end_ban = DateTime.parse(parse_time)
+                    if end_ban > DateTime.now.change(:offset => "+0000").to_time
                         chatroom_ban = ChatroomBan.new(user_id: user.id, chatroom_id: chatroom.id, end_time: end_ban)
                         chatroom_ban.save
                     end
@@ -199,6 +200,7 @@ class ChatroomsController < ApplicationController
                         flash[:notice] = "You have banned #{user.username} !"
                         ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
                         ActionCable.server.broadcast "flash_admin_channel:#{user.id}", chatroom: chatroom, user: user.id, type: "ban"
+                        ActionCable.server.broadcast "flash_admin_channel:#{user.id}", type: "flash", flash: [[:error, "You have been banned from #{chatroom.name} !"]]
                         ActionCable.server.broadcast "flash_admin_channel:#{current_user.id}", type: "flash", flash: flash
                         format.json { render json: { chatroom: chatroom }, status: :ok }
                     end
@@ -251,8 +253,8 @@ class ChatroomsController < ApplicationController
                 chatroom.muted.push(user.id)
                 if !params[:chatroom][:end_date].empty?
                     parse_time = params[:chatroom][:end_date].to_s + " " + params[:chatroom][:end_time].to_s
-                    end_mute = DateTime.parse(parse_time) - 2.hours
-                    if !end_mute.past?
+                    end_mute = DateTime.parse(parse_time)
+                    if end_mute > DateTime.now.change(:offset => "+0000").to_time
                         chatroom_mute = ChatroomMute.new(user_id: user.id, chatroom_id: chatroom.id, end_time: end_mute)
                         chatroom_mute.save
                     end
@@ -323,6 +325,7 @@ class ChatroomsController < ApplicationController
             respond_to do |format|
                 if chatroom.save
                     ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
+                    ActionCable.server.broadcast "flash_admin_channel:#{newowner.id}", type: "flash", flash: [[:notice, "You are the new owner of #{chatroom.name} !"]]
                     ActionCable.server.broadcast "flash_admin_channel:#{newowner.id}", chatroom: chatroom, user: newowner.id, type: "owner"
                     format.json { render json: { chatroom: chatroom }, status: :ok }
                 end
@@ -395,7 +398,7 @@ class ChatroomsController < ApplicationController
     end
 
     def end_of_ban_mute
-        if bans = ChatroomBan.where("end_time < ?", DateTime.now)
+        if bans = ChatroomBan.where("end_time < ?", DateTime.now.change(:offset => "+0000").to_time)
             bans.each do |ban|
                 ban.chatroom.banned.delete(ban.user_id)
                 ban.chatroom.save
@@ -403,7 +406,7 @@ class ChatroomsController < ApplicationController
                 ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
             end
         end
-        if mutes = ChatroomMute.where("end_time < ?", DateTime.now)
+        if mutes = ChatroomMute.where("end_time < ?", DateTime.now.change(:offset => "+0000").to_time)
             mutes.each do |mute|
                 mute.chatroom.muted.delete(mute.user_id)
                 mute.chatroom.save

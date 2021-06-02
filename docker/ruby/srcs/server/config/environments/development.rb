@@ -79,7 +79,7 @@ Rails.application.configure do
 
   config.web_console.whitelisted_ips = '192.168.1.12'
   ActionCable.server.config.logger = Logger.new(nil) # hide logs
-  # config.active_record.logger = nil # hide logs
+  config.active_record.logger = nil # hide logs
 
   config.action_mailer.default_url_options = { :host => "192.168.1.12:3000" } # optional, for mailer
 end

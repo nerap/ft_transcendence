@@ -9,7 +9,7 @@
             <tr>
                 <% if (Transcendence.current_user.id != this.user_id) { %>
                 <td class="message-user">
-                    <img class="user-avatar" src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>">
+                    <a href="/#users/<%= this.user_id %>"><img class="user-avatar" src="<%= Transcendence.users.get(this.user_id).toJSON().avatar %>"></a>
                     <div class="message-footer"><%= this.date_creation %></div>
                 </td>
                 <% } %>

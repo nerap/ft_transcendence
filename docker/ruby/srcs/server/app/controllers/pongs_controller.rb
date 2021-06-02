@@ -4,7 +4,7 @@ class PongsController < ApplicationController
   
     # GET /friends or /friends.json
     def index
-      @pongs = Pong.all
+      @pongs = Pong.all.order(:updated_at).reverse
     end
   
     # GET /friends/1 or /friends/1.json
@@ -41,19 +41,21 @@ class PongsController < ApplicationController
       user_one = User.find_by_id(params[:user_one_id])
       user_two = User.find_by_id(params[:user_two_id])
 
-      if user_one.guild != nil && user_two.guild != nil
-        guild_one = Guild.find_by_id(user_one.guild)
-        guild_two = Guild.find_by_id(user_two.guild)
-        if guild_one.war != nil && guild_two.war != nil
-          if guild_one.war == guild_two.war
-            guild_war = GuildWar.find_by_id(guild_one.war)
-            if guild_war.started == true && guild_war.done == false
-              war = true
+      if user_two.pong == 0
+        if user_one.guild != nil && user_two.guild != nil
+          guild_one = Guild.find_by_id(user_one.guild)
+          guild_two = Guild.find_by_id(user_two.guild)
+          if guild_one.war != nil && guild_two.war != nil
+            if guild_one.war == guild_two.war
+              guild_war = GuildWar.find_by_id(guild_one.war)
+              if guild_war.started == true && guild_war.done == false
+                war = true
+              end
             end
           end
         end
+        ActionCable.server.broadcast "flash_admin_channel:#{params[:user_two_id]}", type: "duel", user_one_name: user_one.username, user_one_id: params[:user_one_id], user_two_id: params[:user_two_id], war: war
       end
-      ActionCable.server.broadcast "flash_admin_channel:#{params[:user_two_id]}", type: "duel", user_one_name: user_one.username, user_one_id: params[:user_one_id], user_two_id: params[:user_two_id], war: war
     end
 
     def accept_duel
@@ -63,7 +65,7 @@ class PongsController < ApplicationController
         ranked = "duel"
       end
       user_one = User.find_by_id(params[:user_one_id])
-      if (user_one.online == true)
+      if (user_one.online == true && user_one.pong == 0)
         ActionCable.server.broadcast "player_#{current_user.email}", content: "create a match", is_matchmaking: false, ranked: ranked, duel: true, user_one_email: user_one.email
         ActionCable.server.broadcast "player_#{user_one.email}", content: "create a match", is_matchmaking: false, ranked: "joining", duel: true, user_one_email: "test@test.fr"
       end
@@ -79,10 +81,11 @@ class PongsController < ApplicationController
         if guild_one.war != nil && guild_two.war != nil
           if guild_one.war == guild_two.war
             guild_war = GuildWar.find_by_id(guild_one.war)
-            if guild_war.started == true && guild_war.done == false && guild_war.unanswered_match != 0
+            if guild_war.started == true && guild_war.done == false 
               if guild_two.id == guild_war.guild_one_id
                 guild_war.unanswered_guild_two += 1
-                if guild_war.unanswered_guild_two >= guild_war.unanswered_match
+                guild_war.guild_two_points += 10
+                if guild_war.unanswered_guild_two >= guild_war.unanswered_match && guild_war.unanswered_match != 0
                   guild_one.points -= guild_war.prize
                   guild_two.points += guild_war.prize
                   guild_war.winner = guild_two.id
@@ -95,7 +98,8 @@ class PongsController < ApplicationController
                 end
               else
                 guild_war.unanswered_guild_one += 1
-                if guild_war.unanswered_guild_one >= guild_war.unanswered_match
+                guild_war.guild_one_points += 10
+                if guild_war.unanswered_guild_one >= guild_war.unanswered_match && guild_war.unanswered_match != 0
                   guild_two.points -= guild_war.prize
                   guild_one.points += guild_war.prize
                   guild_war.looser = guild_two.id

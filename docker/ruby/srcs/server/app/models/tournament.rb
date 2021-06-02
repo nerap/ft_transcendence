@@ -3,12 +3,13 @@ class Tournament < ApplicationRecord
     has_many :competing, -> { where eliminated: false }, class_name: "User", foreign_key: "tournament"
 
     def start_tournament
-        # self.competing.each do |user|
-            # if user.online == false
-                # user.eliminated = true
-                # user.save
-            # end
-        # end
+        self.competing.each do |user|
+            if user.online == false
+                user.eliminated = true
+                user.save
+                self.competing.reload
+            end
+        end
         if started == true && m_playing == nil && m_ended == nil && self.user.length <= 1
             self.destroy
             return
@@ -27,6 +28,18 @@ class Tournament < ApplicationRecord
                     guild = Guild.find(user_winner.guild)
                     guild.points += self.guild_reward
                     guild.save
+                    if guild.war
+                        war = GuildWar.find(guild.war)
+                        if war.started == true && war.done == false && war.tournaments == true
+                            if guild.id == war.guild_one_id
+                                war.guild_one_points += 50
+                            elsif guild.id == war.guild_two_id
+                                war.guild_two_points += 50
+                            end
+                            war.save
+                            ActionCable.server.broadcast "guild_channel", content: "guild_war"
+                        end
+                    end
                 end
                 ActionCable.server.broadcast "flash_admin_channel:#{user_winner.id}", type: "flash", flash: [[:notice, "Congratulations, you won the tournament !"]]
             end

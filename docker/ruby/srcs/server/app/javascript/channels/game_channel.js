@@ -7,7 +7,6 @@ let side = "none"
 let pong;
 let room_id;
 let inter;
-
 let xneg;
 let yneg;
 
@@ -18,7 +17,6 @@ let canvas = null
 let contexte = null
 
 let  match = false
-
 let interv = null
 
 let currentTime = Date.now();
@@ -82,6 +80,10 @@ consumer.subscriptions.create("GameChannel", {
         document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting"))
         document.getElementById("waiting").hidden = false;
+      setTimeout(() => {
+        if (location.hash != "#games")
+          location.hash = "#games"
+      }, 200);
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
           console.log("Waiting for opponent 2")
@@ -156,14 +158,16 @@ consumer.subscriptions.create("GameChannel", {
               // Transcendence.pongs.fetch().done(() => {
               Transcendence.pongs.set(data.pong)
               // Transcendence.current_user.set({pong: data.user.pong})
-              location.hash = "#pongs/" + data.user.pong.toString()
+              // setTimeout(() =>{
+                location.hash = "#pongs/" + data.user.pong.toString()
+              // }, 500);
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  if (interv)
-                  {
-                    clearInterval(interv)
-                    interv = null
-                  }
+                  // if (interv)
+                  // {
+                    // clearInterval(interv)
+                    // interv = null
+                  // }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
@@ -190,6 +194,11 @@ consumer.subscriptions.create("GameChannel", {
                 },
 
                 received(data) {
+                  if (contexte != null && document.getElementById("canvas-id") == null)
+                  { 
+                    forfeit()
+                    return;
+                  }
                   if (data.content && data.content == "end") {
                     console.log("ENDING GAME IN game_channel.js")
                     if (game)
@@ -251,7 +260,7 @@ consumer.subscriptions.create("GameChannel", {
             },
 
             received(data) {
-              if (data.content && data.content == "end") {
+              if ((contexte != null && document.getElementById("canvas-id") == null) || (data.content && data.content == "end")) {
                 console.log("end")
                 if (game)
                   consumer.subscriptions.remove(game)
@@ -303,8 +312,10 @@ consumer.subscriptions.create("GameChannel", {
 });
 
 function forfeit() {
-  console.log("forfeit")
-  game_perform()
+  console.log("forfeited")
+  setTimeout(function () {
+    game_perform()
+  }, 200);
   if (game)
     consumer.subscriptions.remove(game)
   game = null
@@ -325,19 +336,18 @@ function leave() {
       consumer.subscriptions.remove(room)
     room = null
   }, 200);
-  // Transcendence.users.fetch().done(() => {
   Transcendence.current_user.fetch().done(() => {
     setTimeout(function () {
       console.log("inside leave game_channel.js")
       location.hash = "#games"
     }, 200);
   });
-  // });
 }
 
 function game_perform() {
-  if (game)
-    game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  if (game) {
+      game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+  }
 }
 
 function update_pos_paddle(pong, delta) {

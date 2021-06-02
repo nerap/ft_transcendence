@@ -18,6 +18,16 @@
             <input type="time" id="time-input-end" required>
             <input type="hidden" id="hidden-input-end" name="end" value="0">
             <br/>
+            Start date of war time:
+            <input type="date" id="date-input-start-war">
+            <input type="time" id="time-input-start-war" required>
+            <input type="hidden" id="hidden-input-start-war" name="start_war_time" value="0">
+            <br/>
+            End date of war time:
+            <input type="date" id="date-input-end-war">
+            <input type="time" id="time-input-end-war" required>
+            <input type="hidden" id="hidden-input-end-war" name="end_war_time" value="0">
+            <br/>
             Prize:
             <input type="number" name="prize" value="10" min="10" max="100">
             <br/>
@@ -25,6 +35,7 @@
             <input class="input-other-guild" type="hidden" name="guild_two_id" value="">
             <input type="hidden" name="guild_one_points" value="0">
             <input type="hidden" name="guild_two_points" value="0">
+            <input type="hidden" name="war_time" value="false">
             Unanswered:
             <input type="number" name="unanswered_match" value="0" min="0" max="20">
             <br/>
@@ -61,11 +72,6 @@
     var month = date.getMonth() + 1;
     var today = date.getDate();
     var month_max = date.getMonth() + 2;
-   /* if (today > 28) {
-        today = 1;
-        month++;
-        month_max++;
-    }*/
     if (month > 12) {
         month = 1;
         month_max = 2;
@@ -82,6 +88,12 @@
     document.getElementById("date-input-end").min = datePattern;
     document.getElementById("date-input-end").value = datePattern;
     document.getElementById("date-input-end").max = datePatternMax;
+    document.getElementById("date-input-start-war").min = datePattern;
+    document.getElementById("date-input-start-war").value = datePattern;
+    document.getElementById("date-input-start-war").max = datePatternMax;
+    document.getElementById("date-input-end-war").min = datePattern;
+    document.getElementById("date-input-end-war").value = datePattern;
+    document.getElementById("date-input-end-war").max = datePatternMax;
 
     $('#create-chatroom').submit(function () {
         if (document.getElementById("date-input-start").value > document.getElementById("date-input-end").value) {
@@ -100,10 +112,34 @@
             hour_two = parseInt(document.getElementById("time-input-end").value.split(":")[0])
             minute_two = parseInt(document.getElementById("time-input-end").value.split(":")[1])
             timstamp_two = minute_two + (hour_two * 60) + (day_two * 1440) + (month_two * 43800)
-            if (timstamp_two - timstamp_one < 5) {
-                alert("war must last at least 5 minutes")
+            if (timstamp_two - timstamp_one < 10) {
+                alert("war must last at least 10 minutes")
                 return false;
             }
+            var start_war = timstamp_one
+            var end_war = timstamp_two
+
+            month_one = parseInt(document.getElementById("date-input-start-war").value.split("-")[1])
+            day_one = parseInt(document.getElementById("date-input-start-war").value.split("-")[2])
+            hour_one = parseInt(document.getElementById("time-input-start-war").value.split(":")[0])
+            minute_one = parseInt(document.getElementById("time-input-start-war").value.split(":")[1])
+            timstamp_one = minute_one + (hour_one * 60) + (day_one * 1440) + (month_one * 43800);
+
+            month_two = parseInt(document.getElementById("date-input-end-war").value.split("-")[1])
+            day_two = parseInt(document.getElementById("date-input-end-war").value.split("-")[2])
+            hour_two = parseInt(document.getElementById("time-input-end-war").value.split(":")[0])
+            minute_two = parseInt(document.getElementById("time-input-end-war").value.split(":")[1])
+            timstamp_two = minute_two + (hour_two * 60) + (day_two * 1440) + (month_two * 43800)
+            if (timstamp_two - timstamp_one < 5) {
+                alert("war time must last at least 5 minutes")
+                return false;
+            }
+            if (timstamp_one < start_war || timstamp_two > end_war)
+            {
+                alert("war time cant start or end if the war doesn't last enough")
+                return false;
+            }
+
         }
         if (document.getElementById("tournaments-id").checked == true)
             document.getElementById("tournaments-id").value = "true"
@@ -115,6 +151,9 @@
             document.getElementById("ladder-id").value = "false"
         document.getElementById("hidden-input-start").value = document.getElementById("date-input-start").value + "T" +  document.getElementById("time-input-start").value + ".000Z"
         document.getElementById("hidden-input-end").value = document.getElementById("date-input-end").value + "T" +  document.getElementById("time-input-end").value + ".000Z"
+        document.getElementById("hidden-input-start-war").value = document.getElementById("date-input-start-war").value + "T" +  document.getElementById("time-input-start-war").value + ".000Z"
+        document.getElementById("hidden-input-end-war").value = document.getElementById("date-input-end-war").value + "T" +  document.getElementById("time-input-end-war").value + ".000Z"
+ 
         return true;
     });
 </script>

@@ -23,11 +23,11 @@ class PlayChannel < ApplicationCable::Channel
             end
           end
           if war.save
-            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: winner.id
           end
         end
         if guild.save
-          ActionCable.server.broadcast "guild_channel", content: "ok", userid: user_opponent.id
+          ActionCable.server.broadcast "guild_channel", content: "ok", userid: winner.id
         end
       end
       winner.score += 10
@@ -46,7 +46,7 @@ class PlayChannel < ApplicationCable::Channel
             war.guild_two_points += 10
           end
           if war.save
-            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: user_opponent.id
+            ActionCable.server.broadcast "guild_channel", content: "guild_war", userid: winner.id
           end
         end
       end
@@ -120,13 +120,9 @@ class PlayChannel < ApplicationCable::Channel
   end
 
   def leave(data)
-    puts "LOLOLOLOL"
-    puts data
     user = User.find_by_id(current_user.id)
-    puts user.email
     user.pong = 0
     if user.save
-      puts "LOLOLOLOL"
       ActionCable.server.broadcast "users_channel", content: "profile"
       ActionCable.server.broadcast "player_#{user.email}", {content: "disconnected"}
     end

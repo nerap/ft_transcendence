@@ -33,7 +33,7 @@ class Game < ApplicationRecord
 				pong.tie = false
 				pong.room_id = current_match_id
 				if pong.save
-					# ActionCable.server.broadcast "pong_channel", content: "ok"
+					ActionCable.server.broadcast "pong_channel", content: "set", pong: pong
 					Redis.current.set("opponent_for:#{left}", right)
 					Redis.current.set("opponent_for:#{right}", left)
 					ActionCable.server.broadcast "player_#{left}", {action: "game_start", msg: "left", match_room_id: current_match_id, user: user_one, pong: pong}
@@ -57,11 +57,10 @@ class Game < ApplicationRecord
 				ball_dir_y: 0.5,
 			}
 			$games[room_name] = game
-
 		end
 	end
 
-    def self.disconnected(data)
+	def self.disconnected(data)
 		if Redis.current.get("opponent_for:#{data}")
         	opponent = Redis.current.get("opponent_for:#{data}")
 			if user_opponent = User.find_by(email: opponent)
@@ -72,9 +71,7 @@ class Game < ApplicationRecord
 					if game.mode == "tournament"
 						trnmt = true
 					end
-					
 					user_current = User.find_by(email: data)
-
 					user_opponent.pong = 0
 					user_current.pong = 0
 					game.user_left_score = $games[room_name][:left_score]
@@ -84,7 +81,7 @@ class Game < ApplicationRecord
 					game.tie = false
 					game.done = true
 					game.playing = false
-					
+
 					if game.mode == "ladder"
 						if user_opponent.guild != nil
 						  	guild = Guild.find_by_id(user_opponent.guild)
@@ -131,8 +128,8 @@ class Game < ApplicationRecord
 						ActionCable.server.broadcast "guild_channel", content: "ok"
 						ActionCable.server.broadcast "users_channel", content: "profile"
 						ActionCable.server.broadcast "pong_channel", content: "ok"
-						# ActionCable.server.broadcast "flash_admin_channel:#{user_opponent.id}", type: "flash", flash: [[:notice, "You won this match !"]]
-      					# ActionCable.server.broadcast "flash_admin_channel:#{user_current.id}", type: "flash", flash: [[:deleted, "You lost this match !"]]
+						ActionCable.server.broadcast "flash_admin_channel:#{user_opponent.id}", type: "flash", flash: [[:notice, "You won this match !"]]
+      					ActionCable.server.broadcast "flash_admin_channel:#{user_current.id}", type: "flash", flash: [[:deleted, "You forfeited this match !"]]
 						users = User.where(pong: $games[room_name][:room_id])
 						users.each do |temp|
 					 		temp.pong = 0

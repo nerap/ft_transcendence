@@ -5,7 +5,7 @@ class GuildsController < ApplicationController
 
     # GET /guilds or /guilds.json
     def index
-      @guilds = Guild.all.order(:points)
+      @guilds = Guild.all.order(:points).reverse
     end
 
     # GET /guilds/1 or /guilds/1.json
@@ -125,7 +125,7 @@ class GuildsController < ApplicationController
         if user_params.member == true
           user_params.member = false
           user_params.officer = true
-        elsif user_params.officer == false && user_params.member == false
+        elsif !user_params.officer && !user_params.member
           user_params.member = true
         end
         if user_params.save
