@@ -4,7 +4,7 @@ class PongsController < ApplicationController
   
     # GET /friends or /friends.json
     def index
-      @pongs = Pong.all
+      @pongs = Pong.all.order(:updated_at).reverse
     end
   
     # GET /friends/1 or /friends/1.json

@@ -15,7 +15,7 @@ consumer.subscriptions.create("PongChannel", {
         console.log("PONG FETCH DONE")
       });
     } else if (data.content == "set") {
-      Transcendence.pongs.set(data.pong)
+      Transcendence.pongs.add(data.pong)
     }
   }
 });

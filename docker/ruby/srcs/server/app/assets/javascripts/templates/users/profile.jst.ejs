@@ -103,6 +103,15 @@
                         </form>
                     </td>
                     <td>
+                        <form action="/api/pongs/duel_demand" method="post" data-remote="true">
+                            <button type="submit" class="menu-option">duel request</button>
+                            <input value="<%= Transcendence.current_user.id %>" type="hidden" name="user_one_id">
+                            <input value="<%= user.id %>" type="hidden" name="user_two_id">
+                            <input type="hidden" value="false" type="hidden" name="war">
+                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                        </form>
+                    </td>
+                    <td>
                         <% if (Transcendence.current_user.toJSON().block_list.includes(user.id)) { %>
                             <% var action = "unblock" %>
                             <% } else { %>
