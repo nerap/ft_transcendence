@@ -57,7 +57,7 @@ class GuildWarsController < ApplicationController
     end
 
     def check_start_war
-        @guild_wars = GuildWar.all
+        @guild_wars = GuildWar.where(done: false)
         @guild_wars.each do |war|
             if (DateTime.now.change(:offset => "+0000").to_time > war.start.to_time && war.started == false)
                 if (war.pending == true)
@@ -96,6 +96,18 @@ class GuildWarsController < ApplicationController
                     if war.save && guild_one_id.save && guild_two_id.save
                         ActionCable.server.broadcast "guild_channel", content: "guild_war"
                     end
+                end
+            end
+
+            if (DateTime.now.change(:offset => "+0000").to_time > war.start_war_time.to_time && DateTime.now.change(:offset => "+0000").to_time < war.end_war_time.to_time && war.war_time == false)
+                war.war_time = true
+                if war.save
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
+                end
+            elsif (DateTime.now.change(:offset => "+0000").to_time > war.end_war_time.to_time && war.war_time == true)
+                war.war_time = false
+                if war.save
+                    ActionCable.server.broadcast "guild_channel", content: "guild_war"
                 end
             end
         end
@@ -238,6 +250,6 @@ class GuildWarsController < ApplicationController
     end
 
     def guild_war_params
-        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :tournaments, :ladder, :pending, :done, :started, :guild_forfeit, :unanswered_guild_one, :unanswered_guild_two)
+        params.permit(:start, :end, :prize, :guild_one_id, :guild_two_id, :guild_one_points, :guild_two_points, :unanswered_match, :tournaments, :ladder, :pending, :done, :started, :guild_forfeit, :unanswered_guild_one, :unanswered_guild_two, :start_war_time, :end_war_time, :war_time)
     end
 end
