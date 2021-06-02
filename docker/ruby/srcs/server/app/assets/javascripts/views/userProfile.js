@@ -16,8 +16,13 @@ Transcendence.Views.UserProfile = Backbone.View.extend ({
         if (!friend) {
             friend = Transcendence.friends.findWhere({ user_two_id: Transcendence.current_user.id, user_one_id: this.model.toJSON().id });
         }
+        var user_guild = null
+        if (this.model.toJSON().guild) {
+            user_guild = Transcendence.guilds.get(this.model.toJSON().guild).toJSON();
+        }
         this.$el.html(JST['templates/users/profile']({
             user: this.model.toJSON(),
+            user_guild: user_guild,
             friend: friend,
             guild_invitations: this.collection.where({ user_id: Transcendence.current_user.id, pending: true }),
         }));

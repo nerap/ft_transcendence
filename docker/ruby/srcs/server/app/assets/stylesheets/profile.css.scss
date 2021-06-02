@@ -3,6 +3,7 @@
     overflow: auto;
     white-space: nowrap;
     .friend-request {
+        position: absolute;
         font-style: italic;
         text-align: center;
         background-color: rgb(211, 211, 211);
@@ -81,14 +82,16 @@
         }
     }
     .games-history {
-        text-align: center;
         table {
+            text-align: center;
+            width: max-content;
+            min-width: 70%;
             border-radius: 10px;
             margin: auto;
-            width: 50%;
             border-collapse: collapse;
             background-color: rgba(250, 250, 250, 0.74);
             box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
             tr {
                 border-top: 1px solid rgba(0, 0, 0, 0.12);
                 &:first-child {

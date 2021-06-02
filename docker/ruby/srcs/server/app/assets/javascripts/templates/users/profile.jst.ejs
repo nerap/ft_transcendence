@@ -39,7 +39,43 @@
             </form>
         <% } %>
     </div>
+    <% } else { %>
+        <div id="users-index" style="position:absolute;">            
+            <table>
+                <tr>
+                    <th colspan="5">Guild invitations</th>
+                </tr>
+            <% if (guild_invitations.length == 0) { %>
+                <tr><td style="text-align:center;">You don't have guild invitations !</td></tr>
+            <% } %>
+            <% guild_invitations.forEach(function(guild_inv) { %>
+                <% guild = Transcendence.guilds.get(guild_inv.toJSON().guild_id).toJSON() %>
+                <tr class="users-list">
+                    <td onclick='document.location = "/#guilds/<%= guild.id %>"'>[<%= guild.anagram %>] <%= guild.name %></a></td>
+                    <td class="users-action">
+                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="put">
+                            <button type="submit" style="padding:1px;padding-left:5px;padding-right:5px;" class="accept-request">accept</button>
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
+                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
+                            <input value="false" type="hidden" name="pending">
+                        </form>
+                    </td>
+                    <td class="users-action">
+                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" style="padding:1px;padding-left:5px;padding-right:5px;" class="decline-request">decline</button>
+                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
+                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
+                            <input value="false" type="hidden" name="pending">
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+            </table>
+        </div>
     <% } %>
+
     <img src="<%= user.avatar %>">
     <h1>
         <%= user.username %>'s profile
@@ -54,45 +90,7 @@
             <a href="/#users/edit_account"><button>Edit account</button></a>
             <a href="/#users/edit_profile"><button>Edit profile</button></a>
             <a href="/#users/friends"><button>Friends</button></a>
-            <div id="users-index">
-            <br></br>
-            
-            <table>
-                <tr>
-                    <th colspan="5">Current guild Inv</th>
-                </tr>
-            <% if (guild_invitations.length == 0) { %>
-                <tr><td style="text-align:center;">You don't have guilds invitations !</td></tr>
-            <% } %>
-            
-            <% guild_invitations.forEach(function(guild_inv) { %>
-                <% guild = Transcendence.guilds.get(guild_inv.toJSON().guild_id).toJSON() %>
-                <tr class="users-list">
-                    <td style="width:15%;" onclick='document.location = "/#guilds/<%= guild.id %>"'><%= guild.name %></a></td>
-                    <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= guild.anagram %></b></td>
-                    <td style="width:15%;font-size: 30px;font-family: Georgia, 'Times New Roman', Times, serif"><b><%= guild.points %></b></td> 
-                    <td class="users-action">
-                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
-                            <input type="hidden" name="_method" value="put">
-                            <button type="submit" class="accept-request">accept</button>
-                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
-                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
-                            <input value="false" type="hidden" name="pending">
-                        </form>
-                    </td>
-                    <td class="users-action">
-                        <form action="/api/guild_invitations/<%= guild_inv.toJSON().id %>" method="post" data-remote="true">
-                            <input type="hidden" name="_method" value="delete">
-                            <button type="submit" class="decline-request">decline</button>
-                            <input value="<%= Transcendence.current_user.toJSON().id %>" type="hidden" name="user_id">
-                            <input value="<%= guild.id %>" type="hidden" name="guild_id">
-                            <input value="false" type="hidden" name="pending">
-                        </form>
-                    </td>
-                </tr>
-            <% }) %>
-            </table>
-            </div>
+            <br/>
         <% } else { %>
             <table style="margin:auto;">
                 <tr>
@@ -120,7 +118,16 @@
                 </tr>
             </table>
         <% } %>
+        <% if (user_guild != null) { %>
+            <br/>
+            <div style="font-size:30px;">Guild: <span style="font-family:Impact;"><a href="/#guilds/<%= user.guild %>" style="text-decoration:none;">[<%= user_guild.anagram %>] <%= user_guild.name %></a></span></div>
+        <% } %>
+        <br/>
         <div style="font-size:30px;">Score: <span style="font-family:Impact;"><%= user.score %></span></div>
+        <br/>
+        <div class="points-guild" style="padding:5px;font-size:20px">Games won: <span style="font-family:Impact;color:rgb(68, 146, 68);"><%= Transcendence.pongs.where({winner: user.id}).length %></span></div>
+        <div class="points-guild" style="padding:5px;font-size:20px">Games lost: <span style="font-family:Impact;color:rgb(207, 40, 40)"><%= Transcendence.pongs.where({looser: user.id}).length %></span></div>
+        <br/>
         <div class="games-history">
         <table>
         <% Transcendence.pongs.each(function(pong) { %>
@@ -139,9 +146,5 @@
         <% }) %>
         </table>
         </div>
-        <% if (user.guild != null) { %>
-            <a href="/#guilds/<%= user.guild %>"><button>Guild</button></a>
-        <% } %>
-
     </div>
 </div>
