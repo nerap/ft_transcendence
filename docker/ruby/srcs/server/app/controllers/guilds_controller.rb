@@ -125,7 +125,7 @@ class GuildsController < ApplicationController
         if user_params.member == true
           user_params.member = false
           user_params.officer = true
-        elsif user_params.officer == false && user_params.member == false
+        elsif !user_params.officer && !user_params.member
           user_params.member = true
         end
         if user_params.save

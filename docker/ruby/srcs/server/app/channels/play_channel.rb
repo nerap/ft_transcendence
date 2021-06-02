@@ -60,7 +60,7 @@ class PlayChannel < ApplicationCable::Channel
     game.playing = false
     if game.save && winner.save && looser.save
       ActionCable.server.broadcast data['room_name'], content: "end"
-      ActionCable.server.broadcast "pong_channel", content: "ok"
+      ActionCable.server.broadcast "pong_channel", content: "set", pong: game
       ActionCable.server.broadcast "guild_channel", content: "ok"
       ActionCable.server.broadcast "users_channel", content: "profile"
       ActionCable.server.broadcast "flash_admin_channel:#{winner.id}", type: "flash", flash: [[:notice, "You won this match !"]]
