@@ -7,7 +7,6 @@ let side = "none"
 let pong;
 let room_id;
 let inter;
-
 let xneg;
 let yneg;
 
