@@ -16,8 +16,10 @@ let down = false
 let canvas = null
 let contexte = null
 
-let  match = false
+let match = false
 let interv = null
+let interva = null
+
 
 let currentTime = Date.now();
 
@@ -57,10 +59,35 @@ document.addEventListener("keyup", event => {
   }
 })
 
+
+function form_f()
+{
+    remove_sub()
+    if (document.getElementById('ladder-id').checked == true) {
+      document.getElementById('ladder-id-check').value = "true"
+      document.getElementById('duel-id').value = "false"
+    }
+    else {
+      document.getElementById('ladder-id-check').value = "false"
+      document.getElementById('duel-id').value = "true"
+    }
+    if (game)
+      return false;
+    else
+      return true;
+}
+
 consumer.subscriptions.create("GameChannel", {
   connected() {
     interv = null
     match = false
+    interva = setInterval(() => {
+    if (document.getElementById("search_game")) {
+        document.getElementById("search_game").removeEventListener("submit", form_f);
+        document.getElementById("search_game").addEventListener("submit", form_f);
+        document.getElementById("search_game").hidden = false
+      }
+    }, 1000);
   },
 
   disconnected() {
@@ -71,11 +98,13 @@ consumer.subscriptions.create("GameChannel", {
     game = null
     room = null
     clearInterval(inter);
+    clearInterval(interva)
   },
 
   received(data) {
     console.log(data.content)
     if (data.content == "create a match") {
+      remove_sub()
       if (document.getElementById("matchmaking-index"))
         document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting"))
@@ -87,67 +116,32 @@ consumer.subscriptions.create("GameChannel", {
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
           console.log("Waiting for opponent 2")
-         // if (data.is_duel == false)
-         // {
-           setTimeout(() => {
+          // if (data.is_duel == false)
+          // {
+          if (document.getElementById("cancel-id"))
+            document.getElementById("cancel-id").removeEventListener("click", cancel)
+          setTimeout(() => {
             interv = setInterval(() => {
-              if (!document.getElementById("matchmaking-index") && room == null && side == "none")
-              {
+              if (!document.getElementById("matchmaking-index") && room == null && side == "none") {
                 console.log("hi")
                 game_perform()
-                if (game)
-                {
-                  consumer.subscriptions.remove(game)
-                  game = null
-                  if (room)
-                    consumer.subscriptions.remove(room)
-                  room = null
-                  if (document.getElementById("matchmaking-index"))
-                  {
-                    document.getElementById("matchmaking-index").hidden = false;
-                    document.getElementById("waiting").hidden = true;
-                    document.getElementById("found").hidden = true;
-                  }
-                  if (interv)
-                  {
-                    clearInterval(interv)
-                    interv = null
-                  }
+                remove_sub()
+                if (document.getElementById("matchmaking-index")) {
+                  document.getElementById("matchmaking-index").hidden = false;
+                  document.getElementById("waiting").hidden = true;
+                  document.getElementById("found").hidden = true;
+                }
+                if (interv) {
+                  clearInterval(interv)
+                  interv = null
                 }
               }
             }, 200)
           }, 2000);
-          if (document.getElementById("cancel-id")) {
-            setTimeout(function () {
-              document.getElementById("cancel-id").addEventListener("click", () => {
-                game_perform()
-                if (game) {
-                  consumer.subscriptions.remove(game)
-                  game = null
-                  if (room)
-                    consumer.subscriptions.remove(room)
-                  room = null
-                  if (location.hash != "#games") {
-                    location.hash = "#games"
-                  }
-                  else if (document.getElementById("matchmaking-index")){
-                    setTimeout(function () {
-                      document.getElementById("matchmaking-index").hidden = false;
-                      document.getElementById("waiting").hidden = true;
-                      document.getElementById("found").hidden = true;
-                    }, 2000)
-                  }
-                  if (interv)
-                  {
-                    clearInterval(interv)
-                    interv = null
-                  }
-                }
-              })
-            }, 2000);
-          }
-          //document.getElementById("found").hidden = true;
-
+          setTimeout(() => {
+            if (document.getElementById("cancel-id"))
+              document.getElementById("cancel-id").addEventListener("click", cancel)
+          }, 500);
         },
         disconnected() {
           console.log("disconnected matchmaking")
@@ -168,15 +162,10 @@ consumer.subscriptions.create("GameChannel", {
               Transcendence.pongs.set(data.pong)
               // Transcendence.current_user.set({pong: data.user.pong})
               // setTimeout(() =>{
-                location.hash = "#pongs/" + data.user.pong.toString()
+              location.hash = "#pongs/" + data.user.pong.toString()
               // }, 500);
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  // if (interv)
-                  // {
-                    // clearInterval(interv)
-                    // interv = null
-                  // }
                   console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
@@ -203,19 +192,13 @@ consumer.subscriptions.create("GameChannel", {
                 },
 
                 received(data) {
-                  if (contexte != null && document.getElementById("canvas-id") == null)
-                  { 
+                  if (contexte != null && document.getElementById("canvas-id") == null) {
                     forfeit()
                     return;
                   }
                   if (data.content && data.content == "end") {
                     console.log("ENDING GAME IN game_channel.js")
-                    if (game)
-                      consumer.subscriptions.remove(game)
-                    if (room)
-                      consumer.subscriptions.remove(room)
-                    game = null
-                    room = null
+                    remove_sub()
                     setTimeout(function () {
                       location.hash = "#games"
                     }, 200);
@@ -233,8 +216,6 @@ consumer.subscriptions.create("GameChannel", {
                 }
               });
             });
-            // });
-            // });
           }
         }
       });
@@ -271,12 +252,7 @@ consumer.subscriptions.create("GameChannel", {
             received(data) {
               if ((contexte != null && document.getElementById("canvas-id") == null) || (data.content && data.content == "end")) {
                 console.log("end")
-                if (game)
-                  consumer.subscriptions.remove(game)
-                if (room)
-                  consumer.subscriptions.remove(room)
-                game = null
-                room = null
+                remove_sub()
                 setTimeout(function () {
                   location.hash = "#games"
                 }, 200);
@@ -300,37 +276,60 @@ consumer.subscriptions.create("GameChannel", {
     else if (data.content == "disconnected") {
       console.log("data.content = disconnected")
       console.log(data.loc + " " + data.usr)
-      if (game)
-        consumer.subscriptions.remove(game)
-      game = null
-      if (room)
-        consumer.subscriptions.remove(room)
-      room = null
+      remove_sub()
       if (location.hash != "#games") {
         setTimeout(function () {
           location.hash = "#games"
         }, 200);
       }
-      else if (document.getElementById("matchmaking-index")){
-        document.getElementById("matchmaking-index").hidden = false;
-        document.getElementById("waiting").hidden = true;
-        document.getElementById("found").hidden = true;
-      }
+      // else if (document.getElementById("matchmaking-index")) {
+      //   setTimeout(function () {
+      //   document.getElementById("matchmaking-index").hidden = false;
+      //   document.getElementById("waiting").hidden = true;
+      //   document.getElementById("found").hidden = true;
+      //   }, 500);
+      // }
     }
   }
 });
 
-function forfeit() {
-  console.log("forfeited")
-  setTimeout(function () {
-    game_perform()
-  }, 200);
+function remove_sub() {
   if (game)
     consumer.subscriptions.remove(game)
   game = null
   if (room)
     consumer.subscriptions.remove(room)
   room = null
+}
+
+function cancel() {
+  document.getElementById("cancel-id").removeEventListener("click", cancel)
+  game_perform()
+  remove_sub()
+
+  if (location.hash != "#games") {
+    location.hash = "#games"
+  }
+  else if (document.getElementById("matchmaking-index")) {
+    setTimeout(function () {
+      document.getElementById("matchmaking-index").hidden = false;
+      document.getElementById("waiting").hidden = true;
+      document.getElementById("found").hidden = true;
+    }, 1000)
+  }
+  if (interv) {
+    clearInterval(interv)
+    interv = null
+  }
+
+}
+
+function forfeit() {
+  console.log("forfeited")
+  setTimeout(function () {
+    game_perform()
+  }, 200);
+  remove_sub()
   setTimeout(function () {
     location.hash = "#games"
   }, 200);
@@ -355,7 +354,7 @@ function leave() {
 
 function game_perform() {
   if (game) {
-      game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
+    game.perform("disconnected", { player_email: Transcendence.current_user.toJSON().email })
   }
 }
 

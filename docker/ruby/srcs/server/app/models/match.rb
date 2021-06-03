@@ -9,7 +9,7 @@ class Match < ApplicationRecord
                 Redis.current.set("matches_ladder", nil)
             end
         else
-            if Redis.current.get("matches").blank?
+            if Redis.current.get("matches").blank? && Redis.current.get('matches') != player_mail
                 Redis.current.set("matches", player_mail)
             else
                 opponent = Redis.current.get('matches')

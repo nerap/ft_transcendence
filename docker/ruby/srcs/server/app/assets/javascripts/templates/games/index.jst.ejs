@@ -1,5 +1,5 @@
 <div id="matchmaking-index" style="text-align:center;font-size:15px;">
-    <form action="/api/games" method="post" data-remote="true" id="search_game">
+    <form action="/api/games" method="post" data-remote="true" id="search_game" hidden="true">
         <input id="ladder-id" type="checkbox" name="ladder" style="vertical-align:middle;width:20px;height:20px;"> play a ranked match
         <br/><br/>
         <input type="hidden" name="pending" value="true">
@@ -10,19 +10,7 @@
     </form>
 </div>
 <script>
-    $('#search_game').submit(function() {
-        if (document.getElementById('ladder-id').checked == true)
-        {
-            document.getElementById('ladder-id-check').value = "true"
-            document.getElementById('duel-id').value = "false"
-        }
-        else
-        {
-            document.getElementById('ladder-id-check').value = "false"
-            document.getElementById('duel-id').value = "true"
-        }
-        return true;
-    });
+   
 </script>
 <div id="waiting" hidden="true" style="text-align:center;font-size:15px;">
     Waiting for opponent...
