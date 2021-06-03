@@ -102,7 +102,6 @@ consumer.subscriptions.create("GameChannel", {
   },
 
   received(data) {
-    console.log(data.content)
     if (data.content == "create a match") {
       remove_sub()
       if (document.getElementById("matchmaking-index"))
@@ -115,15 +114,11 @@ consumer.subscriptions.create("GameChannel", {
       }, 200);
       game = consumer.subscriptions.create({ channel: "GameChannel", is_matchmaking: data.is_matchmaking, ranked: data.ranked, is_duel: data.duel, user_one_email: data.user_one_email }, {
         connected() {
-          console.log("Waiting for opponent 2")
-          // if (data.is_duel == false)
-          // {
           if (document.getElementById("cancel-id"))
             document.getElementById("cancel-id").removeEventListener("click", cancel)
           setTimeout(() => {
             interv = setInterval(() => {
               if (!document.getElementById("matchmaking-index") && room == null && side == "none") {
-                console.log("hi")
                 game_perform()
                 remove_sub()
                 if (document.getElementById("matchmaking-index")) {
@@ -144,11 +139,9 @@ consumer.subscriptions.create("GameChannel", {
           }, 500);
         },
         disconnected() {
-          console.log("disconnected matchmaking")
           game_perform();
         },
         received(data) {
-          console.log(data)
           if (data.action === 'game_start') {
             if (document.getElementById("waiting"))
               document.getElementById("waiting").hidden = true;
@@ -156,17 +149,11 @@ consumer.subscriptions.create("GameChannel", {
             side = data.msg
             if (document.getElementById("found"))
               document.getElementById("found").hidden = false;
-            // Transcendence.users.fetch().done(() => {
             Transcendence.current_user.fetch().done(() => {
-              // Transcendence.pongs.fetch().done(() => {
               Transcendence.pongs.set(data.pong)
-              // Transcendence.current_user.set({pong: data.user.pong})
-              // setTimeout(() =>{
               location.hash = "#pongs/" + data.user.pong.toString()
-              // }, 500);
               room = consumer.subscriptions.create({ channel: "PlayChannel", game_room_id: data.user.pong, role: side }, {
                 connected() {
-                  console.log(data.user.username + " connected")
                   pong = new Game(room_id)
                   contexte = null
                   inter = setInterval(() => {
@@ -197,7 +184,6 @@ consumer.subscriptions.create("GameChannel", {
                     return;
                   }
                   if (data.content && data.content == "end") {
-                    console.log("ENDING GAME IN game_channel.js")
                     remove_sub()
                     setTimeout(function () {
                       location.hash = "#games"
@@ -251,7 +237,6 @@ consumer.subscriptions.create("GameChannel", {
 
             received(data) {
               if ((contexte != null && document.getElementById("canvas-id") == null) || (data.content && data.content == "end")) {
-                console.log("end")
                 remove_sub()
                 setTimeout(function () {
                   location.hash = "#games"
@@ -274,8 +259,6 @@ consumer.subscriptions.create("GameChannel", {
       // });
     }
     else if (data.content == "disconnected") {
-      console.log("data.content = disconnected")
-      console.log(data.loc + " " + data.usr)
       remove_sub()
       if (location.hash != "#games") {
         setTimeout(function () {
@@ -325,7 +308,6 @@ function cancel() {
 }
 
 function forfeit() {
-  console.log("forfeited")
   setTimeout(function () {
     game_perform()
   }, 200);
@@ -346,7 +328,6 @@ function leave() {
   }, 200);
   Transcendence.current_user.fetch().done(() => {
     setTimeout(function () {
-      console.log("inside leave game_channel.js")
       location.hash = "#games"
     }, 200);
   });
