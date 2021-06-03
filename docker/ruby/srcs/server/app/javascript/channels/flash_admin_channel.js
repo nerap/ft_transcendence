@@ -24,7 +24,6 @@ consumer.subscriptions.create("FlashAdminChannel", {
     }
     else if (data.war == true)
     {
-      console.log("war match")
       var flash = `<div class="flash-message notice"> ` +
       data.user_one_name + ` sent you a duel request ! ` +
       `<form action="/api/pongs/accept_duel" method="post" data-remote="true" class="flash-form" style="display:inline-block">` +

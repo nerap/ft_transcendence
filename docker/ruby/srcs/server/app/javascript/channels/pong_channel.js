@@ -12,7 +12,7 @@ consumer.subscriptions.create("PongChannel", {
   received(data) {
     if (data.content == "ok") {
       Transcendence.pongs.fetch().done(() => {
-        console.log("PONG FETCH DONE")
+        
       });
     } else if (data.content == "set") {
       Transcendence.pongs.add(data.pong)

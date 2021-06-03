@@ -28,32 +28,68 @@ class Registrations::RegistrationsController < Devise::RegistrationsController
   # DELETE /resource
   def destroy
     # ADD SUPER USER CONDITION TO DESTROY USER
-    user = User.find(param[:id])
+    super
+    userid = param[:id]
+
+    #destroy chatrooms (+ chats)
     @chatrooms = Chatroom.all
     @chatrooms.each do |chatroom|
-      chatroom.members.delete(user.id)
-      chatroom.banned.delete(user.id)
-      chatroom.muted.delete(user.id)
-      chatroom.admin.delete(user.id)
+      chatroom.members.delete(userid)
+      chatroom.banned.delete(userid)
+      chatroom.muted.delete(userid)
+      chatroom.admin.delete(userid)
       chatroom.save
     end
+    ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
+
+    #destroy private rooms (+ pms)
     @prs = PrivateRoom.all
     @prs.each do |pr|
-      if pr.users.detect{ |e| e == user.id }
+      if pr.users.detect{ |e| e == userid }
         pr.destroy
       end
     end
+    ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "update", updateType: "destroy"
+
+    #destroy guild if owner + reset guild params to all users
+    if guild = Guild.find_by_owner(userid)
+      User.where(guild: guild.id).each do |usr|
+        usr.guild = nil
+        usr.officer = false
+        usr.member = false
+        usr.save
+      end
+      GuildWar.where(guild_one_id: guild.id).destroy_all
+      GuildWar.where(guild_two_id: guild.id).destroy_all
+      guild.destroy
+      ActionCable.server.broadcast "guild_channel", content: "guild_war"
+    end
+
+    #remove user from block lists
     @users = User.all
     @users.each do |usr|
-      usr.block_list.delete(user.id)
+      usr.block_list.delete(userid)
       usr.save
     end
-    FileUtils.rm_rf("public/avatars/#{user.id}")
-    ActionCable.server.broadcast "room_channel", type: "chatrooms", action: "update"
-    ActionCable.server.broadcast "room_channel", type: "private_rooms", action: "update", updateType: "destroy"
-    user.destroy
+
+    #remove tournaments where winner is user
+    Tournament.where(winner: userid).destroy_all
+    ActionCable.server.broadcast "tournament_channel", content: "ok"
+
+    #remove friendships
+    Friend.where(user_one_id: userid).destroy_all
+    Friend.where(user_two_id: userid).destroy_all
+    ActionCable.server.broadcast "friend_channel", content: "ok"
+
+    #remove pongs
+    Pong.where(user_left_id: userid).destroy_all
+    Pong.where(user_right_id: userid).destroy_all
+    ActionCable.server.broadcast "pong_channel", content: "ok"
+
+    #remove avatar folder
+    FileUtils.rm_rf("public/avatars/#{userid}")
+
     ActionCable.server.broadcast "users_channel", content: "profile"
-    # super
   end
 
   # GET /resource/cancel

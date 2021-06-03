@@ -5,7 +5,7 @@
             <h1>Edit profile</h1>
         </div>
         <br/>
-        <form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data">
+        <form action="/api/users/edit_profile" method="post" data-remote="true" enctype="multipart/form-data" id="user-edit-profile">
             <input type="hidden" name="_method" value="put">
             Username<br/>
             <input autofocus="autofocus" type="text" value="<%= user.username %>" name="user[username]" id="user_username">

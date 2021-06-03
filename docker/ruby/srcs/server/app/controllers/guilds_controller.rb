@@ -169,6 +169,7 @@ class GuildsController < ApplicationController
       User.where(guild: params[:id]).each do |temp|
         temp.guild = nil
         temp.officer = false
+        temp.member = false
         temp.save
       end
       GuildWar.where(guild_one_id: @guild.id).destroy_all

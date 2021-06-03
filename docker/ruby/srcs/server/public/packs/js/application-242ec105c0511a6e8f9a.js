@@ -251,7 +251,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var game;
 var room;
-var side;
+var side = "none";
 var pong;
 var room_id;
 var inter;
@@ -261,7 +261,8 @@ var up = false;
 var down = false;
 var canvas = null;
 var contexte = null;
-var animation = null;
+var match = false;
+var interv = null;
 var currentTime = Date.now();
 
 var Game = function Game(room_id) {
@@ -301,7 +302,10 @@ document.addEventListener("keyup", function (event) {
   }
 });
 _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChannel", {
-  connected: function connected() {},
+  connected: function connected() {
+    interv = null;
+    match = false;
+  },
   disconnected: function disconnected() {
     if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
     if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
@@ -315,6 +319,9 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
     if (data.content == "create a match") {
       if (document.getElementById("matchmaking-index")) document.getElementById("matchmaking-index").hidden = true;
       if (document.getElementById("waiting")) document.getElementById("waiting").hidden = false;
+      setTimeout(function () {
+        if (location.hash != "#games") location.hash = "#games";
+      }, 200);
       game = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
         channel: "GameChannel",
         is_matchmaking: data.is_matchmaking,
@@ -323,27 +330,64 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
         user_one_email: data.user_one_email
       }, {
         connected: function connected() {
-          console.log("Waiting for opponent 2");
+          console.log("Waiting for opponent 2"); // if (data.is_duel == false)
+          // {
 
-          if (document.getElementById("cancel-id")) {
-            document.getElementById("cancel-id").addEventListener("click", function () {
-              game_perform();
+          setTimeout(function () {
+            interv = setInterval(function () {
+              if (!document.getElementById("matchmaking-index") && room == null && side == "none") {
+                console.log("hi");
+                game_perform();
 
-              if (game) {
-                _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
-                game = null;
-                if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
-                room = null;
+                if (game) {
+                  _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
+                  game = null;
+                  if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
+                  room = null;
 
-                if (location.hash != "#games") {
-                  location.hash = "#games";
-                } else if (document.getElementById("matchmaking-index")) {
-                  document.getElementById("matchmaking-index").hidden = false;
-                  document.getElementById("waiting").hidden = true;
-                  document.getElementById("found").hidden = true;
+                  if (document.getElementById("matchmaking-index")) {
+                    document.getElementById("matchmaking-index").hidden = false;
+                    document.getElementById("waiting").hidden = true;
+                    document.getElementById("found").hidden = true;
+                  }
+
+                  if (interv) {
+                    clearInterval(interv);
+                    interv = null;
+                  }
                 }
               }
-            });
+            }, 200);
+          }, 2000);
+
+          if (document.getElementById("cancel-id")) {
+            setTimeout(function () {
+              document.getElementById("cancel-id").addEventListener("click", function () {
+                game_perform();
+
+                if (game) {
+                  _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
+                  game = null;
+                  if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
+                  room = null;
+
+                  if (location.hash != "#games") {
+                    location.hash = "#games";
+                  } else if (document.getElementById("matchmaking-index")) {
+                    setTimeout(function () {
+                      document.getElementById("matchmaking-index").hidden = false;
+                      document.getElementById("waiting").hidden = true;
+                      document.getElementById("found").hidden = true;
+                    }, 2000);
+                  }
+
+                  if (interv) {
+                    clearInterval(interv);
+                    interv = null;
+                  }
+                }
+              });
+            }, 2000);
           } //document.getElementById("found").hidden = true;
 
         },
@@ -363,14 +407,21 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
             Transcendence.current_user.fetch().done(function () {
               // Transcendence.pongs.fetch().done(() => {
               Transcendence.pongs.set(data.pong); // Transcendence.current_user.set({pong: data.user.pong})
+              // setTimeout(() =>{
 
-              location.hash = "#pongs/" + data.user.pong.toString();
+              location.hash = "#pongs/" + data.user.pong.toString(); // }, 500);
+
               room = _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create({
                 channel: "PlayChannel",
                 game_room_id: data.user.pong,
                 role: side
               }, {
                 connected: function connected() {
+                  // if (interv)
+                  // {
+                  // clearInterval(interv)
+                  // interv = null
+                  // }
                   console.log(data.user.username + " connected");
                   pong = new Game(room_id);
                   contexte = null;
@@ -394,6 +445,11 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
                 },
                 disconnected: function disconnected() {},
                 received: function received(data) {
+                  if (contexte != null && document.getElementById("canvas-id") == null) {
+                    forfeit();
+                    return;
+                  }
+
                   if (data.content && data.content == "end") {
                     console.log("ENDING GAME IN game_channel.js");
                     if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
@@ -452,7 +508,7 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
             },
             disconnected: function disconnected() {},
             received: function received(data) {
-              if (data.content && data.content == "end") {
+              if (contexte != null && document.getElementById("canvas-id") == null || data.content && data.content == "end") {
                 console.log("end");
                 if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
                 if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
@@ -497,7 +553,9 @@ _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.create("GameChan
 
 function forfeit() {
   console.log("forfeited");
-  game_perform();
+  setTimeout(function () {
+    game_perform();
+  }, 200);
   if (game) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(game);
   game = null;
   if (room) _consumer__WEBPACK_IMPORTED_MODULE_1__["default"].subscriptions.remove(room);
@@ -526,7 +584,6 @@ function leave() {
 
 function game_perform() {
   if (game) {
-    console.log("in game_perform");
     game.perform("disconnected", {
       player_email: Transcendence.current_user.toJSON().email
     });
@@ -795,6 +852,8 @@ _consumer__WEBPACK_IMPORTED_MODULE_0__["default"].subscriptions.create("PongChan
       Transcendence.pongs.fetch().done(function () {
         console.log("PONG FETCH DONE");
       });
+    } else if (data.content == "set") {
+      Transcendence.pongs.add(data.pong);
     }
   }
 });
@@ -32421,4 +32480,4 @@ module.exports = function (module) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=application-efd4820fac78fcf1e848.js.map
+//# sourceMappingURL=application-242ec105c0511a6e8f9a.js.map

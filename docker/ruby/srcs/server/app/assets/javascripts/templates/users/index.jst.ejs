@@ -18,7 +18,7 @@
                     <span class="status offline"></span>
                 <% } %>
             </td>
-            <td><% if (model.toJSON().guild) { %>[<%= Transcendence.guilds.get(model.toJSON().guild).toJSON().anagram %>] <%= Transcendence.guilds.get(model.toJSON().guild).toJSON().name %><% } %></td>
+            <td><% if (model.toJSON().guild && Transcendence.guilds.get(model.toJSON().guild)) { %>[<%= Transcendence.guilds.get(model.toJSON().guild).toJSON().anagram %>] <%= Transcendence.guilds.get(model.toJSON().guild).toJSON().name %><% } %></td>
             <td><%= model.toJSON().score %></td>
             <td class="users-action">
                 <% if (model.toJSON().id != Transcendence.current_user.id) { %>

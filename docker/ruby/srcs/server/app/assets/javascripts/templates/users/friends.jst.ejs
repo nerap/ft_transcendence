@@ -15,7 +15,14 @@
             <% user2 = Transcendence.users.get(friendId).toJSON() %>
             <tr class="users-list">
                 <td style="width:40px;"><img style="width:30px;height:30px;border-radius:50%" src="<%= user2.avatar %>"></td>
-                <td onclick='document.location = "/#users/<%= user2.id %>"' style="text-align:left;"><%= user2.username %></td>
+                <td onclick='document.location = "/#users/<%= user2.id %>"' style="text-align:left;">
+                    <%= user2.username %>
+                    <% if (user2.online == true) { %>
+                        <span class="status online"></span>
+                    <% } else { %>
+                        <span class="status offline"></span>
+                    <% } %>
+                </td>
                 <td><% if (user2.guild) { %>[<%= Transcendence.guilds.get(user2.guild).toJSON().anagram %>] <%= Transcendence.guilds.get(user2.guild).toJSON().name %><% } %></td>
                 <td><%= user2.score %></td>
                 <td class="users-action">
@@ -35,14 +42,12 @@
                     </form>
                 </td>
                 <td class="users-action">
-                    <% if (friend.toJSON().id != Transcendence.current_user.id) { %>
-                        <% if (friend.toJSON().pong != 0) { %>
-                        <form action="/api/pongs/spectate" method="post" data-remote="true">
-                            <button type="submit" class="menu-option">watch game</button>
-                            <input value="<%= friend.toJSON().pong %>" type="hidden" name="room_id">
-                            <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
-                        </form>
-                        <% } %>
+                    <% if (user2.pong != 0) { %>
+                    <form action="/api/pongs/spectate" method="post" data-remote="true">
+                        <button type="submit" class="menu-option">watch game</button>
+                        <input value="<%= user2.pong %>" type="hidden" name="room_id">
+                        <input type="hidden" name="authenticity_token" value="<%= $(`meta[name='csrf-token']`).attr('content') %>">
+                    </form>
                     <% } %>
                 </td>
                 <td class="users-action">
